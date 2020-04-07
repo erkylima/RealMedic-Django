@@ -1,0 +1,111 @@
+{% extends 'core/base/layout_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    {% block campo_busca %}
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="card card-stats card-round">
+                    <div class="card-body ">
+                        <form method="get">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="input-placeholder"
+                                                placeholder="  {{ labels.CAMPO_BUSCA }}"
+                                                name="q"
+                                                value="{{ q }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-block sombra"
+                                                type="submit">
+                                                    <span class="btn-label">
+    												<i class="fa fa-search"></i>
+    											</span>
+                                            {{ labels.BUSCAR }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+
+
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="card">
+
+                <div class="card-header">
+                    {% block card_header %}
+                        <div class="row">
+                            <div class="col-md-10"><h2 class="left"> {{ NAME_MODEL_PLURAL }}</h2></div>
+                            {% if PAGE_CREATE_VIEW is not None %}
+                                <div class="col-lg-2">
+                                    <a class="btn btn-primary btn-block sombra"
+                                       href="{{ PAGE_CREATE_VIEW }}">
+                                        <span class="btn-label"><i class="fa fa-plus"></i></span>
+                                        {% block bt_nova %}
+                                            {{ labels.NOVA }}
+                                        {% endblock %}
+                                    </a>
+
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endblock %}
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% block tabela %}
+
+                            <table class="table  table-striped table-head-bg-primary mt-4">
+                                <thead>
+                                <tr>
+                                    {% for coluna in COLUMNS %}
+                                        <th scope="col">{{ coluna }}</th>
+                                    {% endfor %}
+                                    {% block column_acoes %}
+                                        <th scope="col"> {{ labels.ACOES }}</th>
+                                    {% endblock %}
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% block tbody %}
+
+                                {% endblock %}
+                                {#                                {% for row in ROWS %}#}
+                                {#                                    {% for item in row %}#}
+                                {#                                        <th scope="col">{{ item }}</th>#}
+                                {#                                    {% endfor %}#}
+                                {#                                {% endfor %}#}
+
+                                </tbody>
+                            </table>
+                        {% endblock %}
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

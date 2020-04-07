@@ -1,0 +1,38 @@
+
+:root {
+    --primary-color: #1572E8;
+    --primary2-color: #1269DB;
+    --primary2-color-sombra: #1a5abc;
+    --border_color: #000000;
+}
+
+.sombra {
+    box-shadow: 0px 10px 25px -11px var(--primary2-color-sombra) !important
+}
+
+.form-control {
+    border-color: var(--border_color)
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    -webkit-box-shadow: none;
+    background-color: white !important;
+    box-shadow: 0px 10px 25px -11px var(--primary2-color-sombra) !important
+}
+
+.select2-container--bootstrap .select2-selection {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+.has-error .select2-dropdown, .has-error .select2-selection {
+    border-color: #F25961 !important;
+}
+
+.errorlist {
+    color: black !important;
+    background: #ecb5b5;
+}
+

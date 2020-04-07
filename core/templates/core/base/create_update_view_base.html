@@ -1,0 +1,58 @@
+{% extends 'core/base/layout_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row " style="padding-top: 2%"></div>
+    {% block cabecalho %}
+        <div class="page-header">
+            <h4 class="page-title">
+                {% if object.pk %}
+                    {{ labels.EDITAR }}
+                {% else %}
+                    {% block label_nova %}
+                        {{ labels.NOVA }}
+                    {% endblock %}
+                {% endif %}
+                {{ NAME_MODEL }}
+            </h4>
+        </div>
+    {% endblock %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                {% block formulario %}
+                    <form id="exampleValidation"
+                          autocomplete="off"
+                          novalidate="novalidate"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            {% block corpo_formulario %}
+                                {% for field in form %}
+                                    <div class="form-group row form-show-validation">
+                                        {{ field.label_tag }}
+                                        <div class="col-md-12">
+                                            {{ field }}
+                                            <div class="errorList">
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endblock %}
+                        </div>
+
+                        <div class="card-action ">
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <button class="btn btn-success" type="submit">{{ labels.SALVAR }}</button>
+                                    {% block botoes %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

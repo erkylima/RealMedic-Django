@@ -1,0 +1,39 @@
+{% extends 'core/base/list_view_base.html' %}
+{% load static %}
+
+
+{% block tbody %}
+
+    <tbody>
+    {% for empresa in empresa_list %}
+        <tr>
+            {% for valor  in empresa.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a type="button"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'core:pages:empresa:update_view' empresa.id %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <input type="checkbox"
+                       checked
+                       data-toggle="toggle"
+                       data-onstyle="success"
+                       data-offstyle="danger"
+                       data-style="btn-round"
+                        {#                       data-on="&nbsp"#}
+                        {#                       data-on="Ativo"#}
+                       data-size="normal"
+                        {#                       data-off="&nbsp"#}
+                        {#                       data-off="Desativado"#}
+
+                >
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+{% endblock %}
+
