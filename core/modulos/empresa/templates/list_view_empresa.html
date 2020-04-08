@@ -37,3 +37,43 @@
     </tbody>
 {% endblock %}
 
+{% block campo_busca %}
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="card card-stats card-round">
+                <div class="card-body ">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input
+                                            type="text"
+                                            class="form-control text-uppercase"
+                                            id="input-placeholder"
+                                            placeholder="  {{ labels.CAMPO_BUSCA }}"
+                                            name="q"
+                                            value="{{ q }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block sombra"
+                                            type="submit">
+                                                <span class="btn-label">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        {{ labels.BUSCAR }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

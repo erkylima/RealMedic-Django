@@ -10,7 +10,7 @@ class Empresa(Timestampable):
         verbose_name_plural = 'EMPRESAS'
 
     nome_razao_social = UpperCaseCharField('Nome/Razão Social', max_length=255)
-    documento = models.IntegerField('Documento')
+    documento = models.IntegerField('Documento',unique=True)
 
     def __str__(self):
         return self.nome_razao_social.upper()
