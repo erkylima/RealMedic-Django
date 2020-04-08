@@ -1,22 +1,19 @@
 {% extends 'core/base/list_view_base.html' %}
 {% load static %}
 
-{% block bt_nova %}
-    {{ labels.NOVO }}
-{% endblock %}
-
 
 {% block tbody %}
+
     <tbody>
-    {% for usuario in userprofile_list %}
+    {% for empresa in empresa_list %}
         <tr>
-            {% for valor  in usuario.getListAtributes %}
+            {% for valor  in empresa.getListAtributes %}
                 <td>{{ valor }}</td>
             {% endfor %}
             <td>
                 <a type="button"
                    class="btn btn-rounded btn-primary"
-                   href="{% url 'core:modulo:usuario:update_view' usuario.id %}">
+                   href="{% url 'core:modulo:empresa:update_view' empresa.id %}">
                     <i class="fa fa-edit"></i>
                 </a>
                 <input type="checkbox"

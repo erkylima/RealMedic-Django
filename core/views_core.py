@@ -37,6 +37,6 @@ class LoginView(TemplateView):
         if user.is_superuser:
             return redirect('/admin/')
         else:
-            return redirect('/pages/')
+            return redirect('/core/')
         # message = 'Usuário sem permissão!!'
         # return self.render_to_response({'message': message})

@@ -22,8 +22,11 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 from sistema import settings
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', include('core.urls'), name='core_index'),
-                  path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False))
+                  path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
+                  path('controle_atendimento/', include('controle_atendimento.modulos.urls')),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + staticfiles_urlpatterns()
