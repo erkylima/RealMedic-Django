@@ -6,5 +6,6 @@ app_name = 'core'
 urlpatterns = [
     path('', views_core.index),
     path('login/', views_core.LoginView.as_view(), name='login'),
-    path('pages/', include('core.modulos.urls')),
+    path('core/', include('core.modulos.urls')),
+
 ]

@@ -38,7 +38,7 @@ class UserProfileListView(MyListViewUserProfile):
     COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.PERFIL]
     NAME_MODEL = UserProfile._meta.verbose_name
     NAME_MODEL_PLURAL = UserProfile._meta.verbose_name_plural
-    PAGE_CREATE_VIEW = reverse_lazy('core:pages:usuario:create_view')
+    PAGE_CREATE_VIEW = reverse_lazy('core:modulo:usuario:create_view')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -49,7 +49,7 @@ class UserProfileCreateView(MyCreateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
     model = UserProfile
     form_class = UserProfileForm
-    success_url = reverse_lazy('core:pages:usuario:list_view')
+    success_url = reverse_lazy('core:modulo:usuario:list_view')
     NAME_MODEL = UserProfile._meta.verbose_name
 
     def form_invalid(self, form):
@@ -76,7 +76,7 @@ class UserProfileUpdateView(MyUpdateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
     model = UserProfile
     form_class = UserProfileForm
-    success_url = reverse_lazy('core:pages:usuario:list_view')
+    success_url = reverse_lazy('core:modulo:usuario:list_view')
     NAME_MODEL = UserProfile._meta.verbose_name
 
     def form_invalid(self, form):
