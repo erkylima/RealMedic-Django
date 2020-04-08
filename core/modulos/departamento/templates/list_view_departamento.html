@@ -1,0 +1,79 @@
+{% extends 'core/base/list_view_base.html' %}
+{% load static %}
+
+
+{% block tbody %}
+
+    <tbody>
+    {% for departamento in departamento_list %}
+        <tr>
+            {% for valor  in departamento.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a type="button"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'core:modulo:departamento:update_view' departamento.id %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <input type="checkbox"
+                       checked
+                       data-toggle="toggle"
+                       data-onstyle="success"
+                       data-offstyle="danger"
+                       data-style="btn-round"
+                        {#                       data-on="&nbsp"#}
+                        {#                       data-on="Ativo"#}
+                       data-size="normal"
+                        {#                       data-off="&nbsp"#}
+                        {#                       data-off="Desativado"#}
+
+                >
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+{% endblock %}
+
+{% block campo_busca %}
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="card card-stats card-round">
+                <div class="card-body ">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input
+                                            type="text"
+                                            class="form-control text-uppercase"
+                                            id="input-placeholder"
+                                            placeholder="  {{ labels.CAMPO_BUSCA }}"
+                                            name="q"
+                                            value="{{ q }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block sombra"
+                                            type="submit">
+                                                <span class="btn-label">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        {{ labels.BUSCAR }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

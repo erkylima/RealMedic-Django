@@ -7,6 +7,8 @@ urlpatterns = [
     path('', views.DashBoard.as_view(), name='dashboard'),
     path('empresa/', include('core.modulos.empresa.urls_empresa')),
     path('usuario/', include('core.modulos.user_profile.urls_user_profile')),
+    path('departamento/', include('core.modulos.departamento.urls_departamento')),
+
     # path('professionals/', include('core.modulos.professional.urls')),
     # path('health_tips/', include('core.modulos.health_tips.urls')),
     # path('daily_newsletter/', include('core.modulos.daily_newsletter.urls')),
