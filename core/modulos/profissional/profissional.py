@@ -31,3 +31,5 @@ class DepartamentoProfissional(Timestampable):
     profissional = models.ForeignKey(Profissional, on_delete=models.PROTECT)
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT)
     tiposProfissionais = models.ManyToManyField(TipoProfissional)
+    #todo
+    # escala
