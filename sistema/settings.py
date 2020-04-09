@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'global_permissions',
     'rest_framework',
     'rest_framework.authtoken',
-    'core'
+    'core',
 ]
 
 MIDDLEWARE = [
