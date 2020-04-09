@@ -1,0 +1,63 @@
+{% extends 'core/base/create_update_view_base.html' %}
+{% load static %}
+
+{% block label_nova %}
+    {{ labels.NOVO }}
+{% endblock %}
+{% block corpo_formulario %}
+
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.departamento.label_tag }}
+            {{ form.departamento }}
+            {{ form.departamento.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
+            {{ form.nome.label_tag }}
+            {{ form.nome }}
+            {{ form.nome.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            {{ form.usuario.label_tag }}
+            {{ form.usuario }}
+            {{ form.usuario.errors }}
+        </div>
+        <div class="col-md-6 form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+    </div>
+    {#    <div class="row">#}
+    {#        <div class="col-md-6 form-group">#}
+    {#            {{ form.password.label_tag }}#}
+    {#            {{ form.password }}#}
+    {#            <div class="errorList">#}
+    {#                {{ form.password.errors }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="col-md-6 form-group">#}
+    {#            {{ form.confirmpassword.label_tag }}#}
+    {#            {{ form.confirmpassword }}#}
+    {#            <div class="errorList">#}
+    {#                {{ form.confirmpassword.errors }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    <div class="row">
+        <div class="col-md-12 form-group">
+            {{ form.perfil.label_tag }}
+            {{ form.perfil }}
+            {{ form.perfil.errors }}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block botoes %}
+    <a class="btn btn-danger" href="{% url 'core:modulo:atendente:list_view' %}">{{ labels.CANCELAR }}</a>
+{% endblock %}
