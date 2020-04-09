@@ -1,18 +1,16 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 from core.models import Atendente
+from core.modulos.departamento.departamento import Departamento
+from core.modulos.empresa.empresa import Empresa
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import adiciona_form_control
 
 
 class AtendenteForm(forms.ModelForm):
-    # password = forms.CharField(label="Senha",
-    #                            widget=forms.PasswordInput(
-    #                                attrs={"id": "password", }), )
-    # confirmpassword = forms.CharField(label="Confirme Senha",
-    #                                   widget=forms.PasswordInput(
-    #                                       attrs={"id": "confirmpassword", }), )
+    empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
 
     class Meta:
         model = Atendente
@@ -21,6 +19,21 @@ class AtendenteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AtendenteForm, self).__init__(*args, **kwargs)
+        instancia = self.instance
+
+        self.fields['empresa'].queryset = Empresa.objects.all()
+        if instancia:
+            self.fields['empresa'].initial = instancia.departamento.empresa
+
+        self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
+        self.fields['empresa'].widget.attrs[
+            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy("core:modulo:departamento:getDepartamentosPorIdEmpresa",
+                                                                     kwargs={'idEmpresa': '00'}).__str__() + '","id_empresa","id_departamento")'
+
+        # self.fields['departamento'].queryset = Departamento.objects.none()
+        self.fields['departamento'].widget.attrs['id'] = 'id_departamento'
+        self.fields['departamento'].required = True
+
         adiciona_form_control(self)
 
     def clean(self):

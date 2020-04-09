@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Departamento
@@ -62,3 +64,13 @@ class DepartamentoUpdateView(MyUpdateViewDepartamento):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+
+@login_required()
+def getDepartamentosPorIdEmpresa(request, idEmpresa):
+    subs = {}
+    departamentos = Departamento.objects.filter(empresa_id=idEmpresa)
+
+    for dep in departamentos:
+        subs[dep.id] = dep.nome
+    return JsonResponse(subs)

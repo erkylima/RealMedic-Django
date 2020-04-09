@@ -196,7 +196,7 @@
     var readyStateCheckInterval = setInterval(function () {
         console.log(document.readyState)
         if (document.readyState === "complete") {
-            console.log(document.readyState)
+            {#console.log(document.readyState)#}
             clearInterval(readyStateCheckInterval);
             var preloader = $('.preloader');
             if (preloader.length) {
@@ -205,7 +205,38 @@
         }
     }, 100);
 
+
+    function carregarElementoPorIdFK(url, id_item_selecionado, id_item_carregar) {
+        var id_item_selecionado = $('#' + id_item_selecionado);
+        var id_item_carregar = $('#' + id_item_carregar);
+        var valor = id_item_selecionado.val();
+        if (valor == '') {
+            valor = 0
+        }
+        var url = url
+        url = url.replace('00', valor);
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                id_item_carregar.empty();
+                id_item_carregar.append('<option value >TODOS...</option>');
+                $.each(data, function (key, value) {
+                    id_item_carregar.append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                {#id_sub_setor.selectpicker('refresh')#}
+                {#seelct_setor.selectpicker('refresh')#}
+            }
+        })
+
+    }
+
 </script>
+
+{% block extra_scripts %}
+
+{% endblock %}
 </body>
 
 <!-- Mirrored from themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/forms/formwidget.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2020 16:26:26 GMT -->
