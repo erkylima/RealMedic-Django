@@ -1,5 +1,6 @@
 from django.db import models
 
+from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.time_stampable import Timestampable
 from core.util.util_manager import UpperCaseCharField
 from core.models import Empresa
@@ -11,6 +12,7 @@ class Departamento(Timestampable):
         verbose_name_plural = 'DEPARTAMENTOS'
 
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='empresa', null=True, blank=True)
+    areaAtendimento = models.ForeignKey(AreaAtendimento, on_delete=models.PROTECT, related_name='empresas', null=True, blank=True)
     nome = UpperCaseCharField('Nome', max_length=255)
     descricao = UpperCaseCharField('Descricao', max_length=255)
 
