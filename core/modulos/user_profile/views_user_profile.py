@@ -8,24 +8,34 @@ from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
 
 
-class MyListViewUserProfile(LoginRequiredMixin,
+class MyGenericView(object):
+    model = UserProfile
+    form_class = UserProfileForm
+    success_url = reverse_lazy('core:modulo:usuario:list_view')
+    search_fields = ['nome', 'usuario']
+    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.PERFIL]
+    NAME_MODEL = UserProfile._meta.verbose_name
+    NAME_MODEL_PLURAL = UserProfile._meta.verbose_name_plural
+    PAGE_CREATE_VIEW = reverse_lazy('core:modulo:usuario:create_view')
+
+
+class MyListViewUserProfile(MyGenericView,LoginRequiredMixin,
                             MyListViewSearcheGeneric,
                             MyLabls,
                             ListView):
     allow_empty = True
-    paginate_by = 10
 
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
 
 
-class MyCreateViewUserProfile(LoginRequiredMixin, MyLabls, CreateView):
+class MyCreateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, CreateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
 
 
-class MyUpdateViewUserProfile(LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -33,12 +43,6 @@ class MyUpdateViewUserProfile(LoginRequiredMixin, MyLabls, UpdateView):
 
 class UserProfileListView(MyListViewUserProfile):
     template_name = 'user_profile/templates/list_view_user_profile.html'
-    model = UserProfile
-    search_fields = ['nome', 'usuario']
-    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.PERFIL]
-    NAME_MODEL = UserProfile._meta.verbose_name
-    NAME_MODEL_PLURAL = UserProfile._meta.verbose_name_plural
-    PAGE_CREATE_VIEW = reverse_lazy('core:modulo:usuario:create_view')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -47,17 +51,12 @@ class UserProfileListView(MyListViewUserProfile):
 
 class UserProfileCreateView(MyCreateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
-    model = UserProfile
-    form_class = UserProfileForm
-    success_url = reverse_lazy('core:modulo:usuario:list_view')
-    NAME_MODEL = UserProfile._meta.verbose_name
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
         return super(UserProfileCreateView, self).form_invalid(form)
 
     def form_valid(self, form):
-
         userProfile = form.save(commit=False)
         # TODO - Veriricar a estratégia de senha
         user = User.objects.create_user(
@@ -74,10 +73,6 @@ class UserProfileCreateView(MyCreateViewUserProfile):
 
 class UserProfileUpdateView(MyUpdateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
-    model = UserProfile
-    form_class = UserProfileForm
-    success_url = reverse_lazy('core:modulo:usuario:list_view')
-    NAME_MODEL = UserProfile._meta.verbose_name
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))

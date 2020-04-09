@@ -30,8 +30,20 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{% static 'core/base/assets/css/demo.css' %}">
     <link rel="stylesheet" href="{% static 'core/commum/novo_estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'core/commum/pre_loader.css' %}">
+
+
 </head>
-<body >
+<body>
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner-dots">
+        <span class="dot1"></span>
+        <span class="dot2"></span>
+        <span class="dot3"></span>
+    </div>
+</div>
 <div class="wrapper">
     {% include 'core/base/complementos/topbar.html' %}
     <!-- Sidebar -->
@@ -45,7 +57,7 @@
             </div>
         </div>
 
-    {% include 'core/base/complementos/footer.html' %}
+        {% include 'core/base/complementos/footer.html' %}
 
     </div>
     <!-- End Custom template -->
@@ -143,7 +155,6 @@
     });
 
 
-    console.log('{{ SAVE_MODEL }} ');
 
     {% if SAVE_MODEL is not None  %}
         {% if SAVE_MODEL is True %}
@@ -181,9 +192,18 @@
     {% endif %}
 
 
-
-
-    {#    {% endif %}#}
+    {#PRE_LOADER#}
+    var readyStateCheckInterval = setInterval(function () {
+        console.log(document.readyState)
+        if (document.readyState === "complete") {
+            console.log(document.readyState)
+            clearInterval(readyStateCheckInterval);
+            var preloader = $('.preloader');
+            if (preloader.length) {
+                preloader.fadeOut(1000);
+            }
+        }
+    }, 100);
 
 </script>
 </body>
