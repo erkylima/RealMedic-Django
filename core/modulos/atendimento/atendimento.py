@@ -12,8 +12,8 @@ from core.util.util_manager import UpperCaseCharField
 
 class Atendimento(Timestampable):
     class Meta:
-        verbose_name = 'ESCALA'
-        verbose_name_plural = 'ESCALAS'
+        verbose_name = 'ATENDIMENTO'
+        verbose_name_plural = 'ATENDIMENTOS'
 
     escalaIntervalo = models.OneToOneField(EscalaIntervalo, on_delete=models.PROTECT)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
