@@ -21,10 +21,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 form-group">
+        <div class="col-md-6 form-group">
             {{ form.nome.label_tag }}
             {{ form.nome }}
             {{ form.nome.errors }}
+        </div>
+        <div class="col-md-6 form-group">
+            {{ form.codigo.label_tag }}
+            {{ form.codigo }}
+            {{ form.codigo.errors }}
         </div>
     </div>
     <div class="row">
@@ -69,3 +74,12 @@
     <a class="btn btn-danger" href="{% url 'core:modulo:profissional:list_view' %}">{{ labels.CANCELAR }}</a>
 {% endblock %}
 
+{% block extra_scripts %}
+    <script>
+        if(document.getElementById('id_departamento').length > 1) {
+            document.getElementById('id_departamento').innerHTML = "<option value=\"\" data-select2-id=\"33\">---------</option>";
+        }
+
+    </script>
+
+{% endblock %}

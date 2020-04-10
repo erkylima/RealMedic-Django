@@ -74,10 +74,6 @@ class AtendenteCreateView(MyCreateViewAtendente):
 
 class AtendenteUpdateView(MyUpdateViewAtendente):
     template_name = 'atendente/templates/create_view_atendente.html'
-    model = Atendente
-    form_class = AtendenteForm
-    success_url = reverse_lazy('core:modulo:atendente:list_view')
-    NAME_MODEL = Atendente._meta.verbose_name
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))

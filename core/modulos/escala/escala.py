@@ -16,7 +16,7 @@ class Escala(Timestampable):
     dia = models.DateField()
 
 
-class EscalaIntervalo(Timestampable):
+class EscalaIntervalo(models.Model):
     escala = models.ForeignKey(Escala, on_delete=models.PROTECT)
     inicio = models.TimeField()
     fim = models.TimeField()
