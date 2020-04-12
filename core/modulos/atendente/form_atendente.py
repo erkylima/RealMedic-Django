@@ -20,17 +20,30 @@ class AtendenteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AtendenteForm, self).__init__(*args, **kwargs)
         instancia = self.instance
+        print('initi')
+        print(instancia)
+        print('initi')
 
         self.fields['empresa'].queryset = Empresa.objects.all()
-        if instancia:
-            self.fields['empresa'].initial = instancia
+        if instancia.pk :
+            self.fields['empresa'].initial = instancia.departamento.empresa
 
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
         self.fields['empresa'].widget.attrs[
             'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy("core:modulo:departamento:getDepartamentosPorIdEmpresa",
                                                                      kwargs={'idEmpresa': '00'}).__str__() + '","id_empresa","id_departamento")'
+        print(kwargs)
+        print(self.fields['departamento'])
 
-        # self.fields['departamento'].queryset = Departamento.objects.none()
+        data = kwargs.get('data', None)
+        if data and data.get('empresa', None):
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=data.get('empresa'))
+        else:
+            self.fields['departamento'].queryset = Departamento.objects.none()
+        if instancia.pk:
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
+            self.fields['departamento'].initial = instancia.departamento
+
         self.fields['departamento'].widget.attrs['id'] = 'id_departamento'
         self.fields['departamento'].required = True
 
@@ -39,6 +52,7 @@ class AtendenteForm(forms.ModelForm):
     def clean(self):
         instancia = self.instance
         print('clean')
+        print(self.cleaned_data)
         login = self.cleaned_data.get('usuario', None)
         email = self.cleaned_data.get('email', None)
         if instancia is None:
