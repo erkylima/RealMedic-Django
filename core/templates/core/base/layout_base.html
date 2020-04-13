@@ -227,7 +227,7 @@
             },
             success: function (data) {
                 id_item_carregar.empty();
-                id_item_carregar.append('<option value >TODOS...</option>');
+                id_item_carregar.append('<option value >---------</option>');
                 $.each(data, function (key, value) {
                     id_item_carregar.append('<option value="' + key + '">' + value + '</option>');
                 });

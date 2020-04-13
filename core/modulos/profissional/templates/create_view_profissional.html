@@ -73,13 +73,3 @@
 {% block botoes %}
     <a class="btn btn-danger" href="{% url 'core:modulo:profissional:list_view' %}">{{ labels.CANCELAR }}</a>
 {% endblock %}
-
-{% block extra_scripts %}
-    <script>
-        if(document.getElementById('id_departamento').length > 1) {
-            document.getElementById('id_departamento').innerHTML = "<option value=\"\" data-select2-id=\"33\">---------</option>";
-        }
-
-    </script>
-
-{% endblock %}

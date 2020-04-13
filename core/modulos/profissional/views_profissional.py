@@ -68,7 +68,6 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         userProfile.save()
         departamento_profissional = DepartamentoProfissional()
         departamento_profissional.departamento = Departamento.objects.get(pk=self.request.POST.get('departamento'))
-        # type(Departamento.objects.get(pk=self.request.POST.get('departamento')))
         departamento_profissional.profissional = userProfile
         departamento_profissional.save()
         self.request.session['save_model'] = 'true'
@@ -84,6 +83,12 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
+
+        # Atualiza varlores do Departamento Profissional
+        departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=self.object.id)
+        departamento_profissional.departamento_id =self.request.POST.get('departamento')
+        departamento_profissional.save()
+
         return super().form_valid(form)
 
 

@@ -22,19 +22,29 @@ class ProfissionalForm(forms.ModelForm):
         instancia = self.instance
         empresas = Empresa.objects.all()
         self.fields['empresa'].queryset = empresas
-        self.fields['departamento'].queryset = Departamento.objects.all()
-
-        if instancia.pk:
-            inicio = DepartamentoProfissional.objects.get(profissional=instancia.pk).departamento
-            dep = Departamento.objects.get(pk=inicio.id)
-
-            self.fields['empresa'].initial = dep.empresa
-            self.fields['departamento'].initial = dep
+        select_master = 'empresa'
 
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
         self.fields['empresa'].widget.attrs[
-            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy("core:modulo:departamento:getDepartamentosPorIdEmpresa",
-                                                                     kwargs={'idEmpresa': '00'}).__str__() + '","id_empresa","id_departamento")'
+            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
+            "core:modulo:departamento:getDepartamentosPorIdEmpresa",
+            kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master}")'
+
+        if select_master in self.data:
+            try:
+                empresa_id = int(self.data.get('empresa'))
+                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=empresa_id).order_by(
+                    'nome')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            inicio = DepartamentoProfissional.objects.get(profissional_id=instancia.pk).departamento
+            dep = Departamento.objects.get(pk=inicio.id)
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=dep.empresa).order_by(
+                'nome')
+            print(self.fields['departamento'].queryset)
+            self.fields['empresa'].initial = dep.empresa
+            self.fields['departamento'].initial = dep
 
         adiciona_form_control(self)
 
