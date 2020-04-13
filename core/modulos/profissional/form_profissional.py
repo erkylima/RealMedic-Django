@@ -10,7 +10,7 @@ from core.util.util_manager import adiciona_form_control
 
 class ProfissionalForm(forms.ModelForm):
     empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
-    departamento = forms.ModelChoiceField(label="Departamento", queryset=Departamento.objects.none(), widget=forms.Select())
+    departamento = forms.ModelChoiceField(label="Departamento", queryset=None, widget=forms.Select())
 
     class Meta:
         model = Profissional
@@ -42,7 +42,6 @@ class ProfissionalForm(forms.ModelForm):
             dep = Departamento.objects.get(pk=inicio.id)
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=dep.empresa).order_by(
                 'nome')
-            print(self.fields['departamento'].queryset)
             self.fields['empresa'].initial = dep.empresa
             self.fields['departamento'].initial = dep
 
