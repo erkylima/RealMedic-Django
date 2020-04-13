@@ -12,7 +12,7 @@ class UserProfile(Timestampable):
         verbose_name_plural = 'USUARIOS'
 
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userProfile')
-    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='usuarios', null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='usuarios', null=True)
     nome = UpperCaseCharField('Nome', max_length=255)
     usuario = UpperCaseCharField('Usuario', max_length=255, unique=True)
     email = models.EmailField('Email', max_length=255, unique=True)

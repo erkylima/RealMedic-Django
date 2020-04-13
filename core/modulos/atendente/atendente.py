@@ -13,7 +13,7 @@ class Atendente(Timestampable):
 
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userAtendente')
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT, related_name='atendentes',
-                                     null=True, blank=True)
+                                     null=True)
     nome = UpperCaseCharField('Nome', max_length=255)
     usuario = UpperCaseCharField('Usuario', max_length=255, unique=True)
     email = models.EmailField('Email', max_length=255, unique=True)

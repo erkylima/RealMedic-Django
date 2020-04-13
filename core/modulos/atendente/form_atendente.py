@@ -20,9 +20,8 @@ class AtendenteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AtendenteForm, self).__init__(*args, **kwargs)
         instancia = self.instance
-        print('initi')
-        print(instancia)
-        print('initi')
+
+        select_master = 'empresa'
 
         self.fields['empresa'].queryset = Empresa.objects.all()
         if instancia.pk :
@@ -31,20 +30,20 @@ class AtendenteForm(forms.ModelForm):
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
         self.fields['empresa'].widget.attrs[
             'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy("core:modulo:departamento:getDepartamentosPorIdEmpresa",
-                                                                     kwargs={'idEmpresa': '00'}).__str__() + '","id_empresa","id_departamento")'
-        print(kwargs)
-        print(self.fields['departamento'])
+                                                                     kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master}")'
 
-        data = kwargs.get('data', None)
-        if data and data.get('empresa', None):
-            self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=data.get('empresa'))
-        else:
-            self.fields['departamento'].queryset = Departamento.objects.none()
-        if instancia.pk:
+        self.fields['departamento'].queryset = Departamento.objects.none()
+
+        if select_master in self.data:
+            try:
+                empresa_id = int(self.data.get('empresa'))
+                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=empresa_id).order_by(
+                    'nome')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
-            self.fields['departamento'].initial = instancia.departamento
 
-        self.fields['departamento'].widget.attrs['id'] = 'id_departamento'
         self.fields['departamento'].required = True
 
         adiciona_form_control(self)

@@ -22,8 +22,8 @@
                 {% block formulario %}
                     <form id="exampleValidation"
                           autocomplete="off"
-                          novalidate="novalidate"
-                          method="post">
+                          method="post"
+                          novalidate>
                         {% csrf_token %}
                         <div class="card-body">
                             {% block corpo_formulario %}

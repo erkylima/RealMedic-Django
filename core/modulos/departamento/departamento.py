@@ -11,8 +11,8 @@ class Departamento(Timestampable):
         verbose_name = 'DEPARTAMENTO'
         verbose_name_plural = 'DEPARTAMENTOS'
 
-    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='empresa', null=True, blank=True)
-    areaAtendimento = models.ForeignKey(AreaAtendimento, on_delete=models.PROTECT, related_name='empresas', null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='empresa', null=True)
+    areaAtendimento = models.ForeignKey(AreaAtendimento, on_delete=models.PROTECT, related_name='empresas', null=True)
     nome = UpperCaseCharField('Nome', max_length=255)
     descricao = UpperCaseCharField('Descricao', max_length=255)
 
