@@ -2,7 +2,7 @@ from django import forms
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 
-from core.models import Profissional, Empresa, DepartamentoProfissional, Departamento
+from core.models import Profissional, Empresa, DepartamentoProfissional, Departamento,TipoProfissional
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import adiciona_form_control
 
@@ -10,7 +10,8 @@ from core.util.util_manager import adiciona_form_control
 
 class ProfissionalForm(forms.ModelForm):
     empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
-    departamento = forms.ModelChoiceField(label="Departamento", queryset=None, widget=forms.Select())
+    departamento = forms.ModelChoiceField(label="Departamento", queryset=Departamento.objects.none(), widget=forms.Select())
+    tipo_profissional = forms.ModelChoiceField(label="Tipo de Profissional", queryset=Empresa.objects.none(), widget=forms.Select())
 
     class Meta:
         model = Profissional
@@ -22,28 +23,52 @@ class ProfissionalForm(forms.ModelForm):
         instancia = self.instance
         empresas = Empresa.objects.all()
         self.fields['empresa'].queryset = empresas
-        select_master = 'empresa'
 
+        # Select masters são as strings de retorno do ajax
+        select_master_empresa = 'empresa'
+        select_master_departamento = 'departamento'
+
+        # Request Requisição Ajax Empresa
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
         self.fields['empresa'].widget.attrs[
             'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
             "core:modulo:departamento:getDepartamentosPorIdEmpresa",
-            kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master}")'
+            kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master_empresa}")'
 
-        if select_master in self.data:
+        # Request Requisição Ajax Departamento
+        self.fields['departamento'].widget.attrs[
+            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
+            "core:modulo:tipo_profissional:getTipoProfissionalPorIdDepartamento",
+            kwargs={'idDepartamento': '00'}).__str__() + f'","id_departamento","id_tipo_profissional","{select_master_departamento}")'
+
+        # Se o campo empresa possui algum dado atualizar o queryset
+        if select_master_empresa in self.data:
             try:
                 empresa_id = int(self.data.get('empresa'))
                 self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=empresa_id).order_by(
                     'nome')
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
+        # Se estiver editando o profissional recuperar dados já cadastrados inicialmente
         elif self.instance.pk:
-            inicio = DepartamentoProfissional.objects.get(profissional_id=instancia.pk).departamento
-            dep = Departamento.objects.get(pk=inicio.id)
+            inicio = DepartamentoProfissional.objects.get(profissional=instancia)
+            dep = Departamento.objects.get(pk=inicio.departamento.pk)
+            tipo = TipoProfissional.objects.get(pk=inicio.tipo_profissional_id)
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=dep.empresa).order_by(
                 'nome')
+            self.fields['tipo_profissional'].queryset = inicio.tipo_profissional.departamento.tipoprofissional_set
             self.fields['empresa'].initial = dep.empresa
             self.fields['departamento'].initial = dep
+            self.fields['tipo_profissional'].initial = tipo
+
+        # Se o campo departamento possui algum dado atualizar o queryset
+        if select_master_departamento in self.data:
+            try:
+                departamento_id = int(self.data.get('departamento'))
+                self.fields['tipo_profissional'].queryset = TipoProfissional.objects.filter(departamento_id=departamento_id).order_by(
+                    'descricao')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
 
         adiciona_form_control(self)
 

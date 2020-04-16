@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission, User, Group
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
@@ -65,9 +65,13 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         # user.groups.add(userProfile.group)
         # user.save()
         userProfile.user = user
+        user.get_group_permissions()
+        # userProfile.perfil_id = 3 # Perfil do Profissional Padrão
         userProfile.save()
+        # Criar e popular os campos DepartamentoProfissional
         departamento_profissional = DepartamentoProfissional()
-        departamento_profissional.departamento = Departamento.objects.get(pk=self.request.POST.get('departamento'))
+        departamento_profissional.departamento_id = self.request.POST.get('departamento')
+        departamento_profissional.tipo_profissional_id = self.request.POST.get('tipo_profissional')
         departamento_profissional.profissional = userProfile
         departamento_profissional.save()
         self.request.session['save_model'] = 'true'
@@ -83,10 +87,11 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
-
         # Atualiza varlores do Departamento Profissional
         departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=self.object.id)
         departamento_profissional.departamento_id =self.request.POST.get('departamento')
+        departamento_profissional.tipo_profissional_id =self.request.POST.get('tipo_profissional')
+
         departamento_profissional.save()
 
         return super().form_valid(form)

@@ -1,0 +1,13 @@
+{% extends 'core/base/create_update_view_base.html' %}
+{% load static %}
+
+<div id="calendar" class="fc fc-unthemed fc-ltr">
+</div>
+{% block botoes %}
+    <a class="btn btn-danger" href="{% url 'core:modulo:escala:list_view' %}">{{ labels.CANCELAR }}</a>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'core/base/assets/js/plugin/fullcalendar/fullcalendar.min.js' %}"></script>
+
+{% endblock %}

@@ -39,13 +39,14 @@ def adiciona_form_control(self):
             # field.widget.attrs['data-size '] = '10'
             # field.widget.attrs['multiple'] = 'true'
         elif field and isinstance(field, forms.DateField):
-            pass
-            # field.widget.attrs['data-provide'] = 'datepicker2'
-            # field.widget.attrs['class'] = 'form-control datepicker2'
+
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['id'] = 'datepicker'
+            field.widget.attrs['name'] = 'datepicker'
         elif field and isinstance(field, forms.DateTimeField):
-            pass
-            # field.widget.attrs['data-provide'] = 'datepicker2'
-            # field.widget.attrs['class'] = 'form-control datepicker2'
+
+            field.widget.attrs['data-provide'] = 'datepicker2'
+            field.widget.attrs['class'] = 'form-control datepicker2'
         elif field and isinstance(field, forms.TimeField):
             pass
         elif field and isinstance(field, forms.CharField):

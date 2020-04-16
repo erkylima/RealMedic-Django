@@ -76,9 +76,30 @@
                 </li>
 
                 <li class="nav-item active">
+                    <a href="{% url 'core:modulo:tipo_atendimento:list_view' %}">
+                        <i class="fas fa-user"></i>
+                        <p>{{ labels.TIPO_ATENDIMENTO }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="{% url 'core:modulo:tipo_profissional:list_view' %}">
+                        <i class="fas fa-user"></i>
+                        <p>{{ labels.TIPO_PROFISSIONAL }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
                     <a href="{% url 'core:modulo:profissional:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.PROFISSIONAL }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="{% url 'core:modulo:escala:list_view' %}">
+                        <i class="fas fa-user"></i>
+                        <p>{{ labels.ESCALA }}</p>
                     </a>
                 </li>
             </ul>

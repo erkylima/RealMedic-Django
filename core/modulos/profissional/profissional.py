@@ -43,9 +43,9 @@ class DepartamentoProfissional(models.Model):
 
     profissional = models.ForeignKey(Profissional, on_delete=models.PROTECT)
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT)
-    tiposProfissionais = models.ManyToManyField(TipoProfissional)
+    tipo_profissional = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "Departamento: " + self.departamento.nome + " Profissional: " + self.profissional.nome
+        return self.profissional.nome
     #todo
     # escala
