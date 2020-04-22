@@ -15,7 +15,6 @@ class TipoProfissionalForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TipoProfissionalForm, self).__init__(*args, **kwargs)
-
         select_master_empresa = 'empresa'
         print(self.fields)
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'

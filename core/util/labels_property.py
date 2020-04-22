@@ -29,6 +29,8 @@ class LabesProperty(object):
     NOVO = "NOVO"
     DESCRICAO = "DESCRIÇÃO"
 
+    VOLTAR = "VOLTAR"
+
 
     EDITAR = "EDITAR"
     BUSCAR = 'BUSCAR'

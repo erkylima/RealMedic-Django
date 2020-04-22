@@ -1,13 +1,525 @@
 {% extends 'core/base/create_update_view_base.html' %}
 {% load static %}
 
-<div id="calendar" class="fc fc-unthemed fc-ltr">
-</div>
+{% block corpo_formulario %}
+
+    {% if not idProfissional %}
+    <div class="row">
+        <div class="col-md-12 form-group">
+            {{ form.departamentoProfissional.label_tag }}
+            {{ form.departamentoProfissional }}
+            {{ form.departamentoProfissional.errors }}
+        </div>
+    </div>
+    {% endif %}
+{#    <div class="row">#}
+{#        <div class="col-md-12 form-group">#}
+{#            {{ form.dia.label_tag }}#}
+{#            {{ form.dia }}#}
+{#            {{ form.dia.errors }}#}
+{#        </div>#}
+{#    </div>#}
+
+    <div id="calendar"></div>
+{% endblock %}
+{% block botao_save %}
+{% endblock %}
 {% block botoes %}
-    <a class="btn btn-danger" href="{% url 'core:modulo:escala:list_view' %}">{{ labels.CANCELAR }}</a>
+    <a class="btn btn-info" href="{% url 'core:modulo:escala:list_view' %}">{{ labels.VOLTAR }}</a>
+{% endblock %}
+
+{% block modals %}
+
+    <!-- Modal - Add new event -->
+    <div class="modal modal-right fade" id="modal-add-event" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Criar Nova Escala</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body form-type-material">
+                    <form id="addeditescala"
+                          autocomplete="off"
+                          method="post"
+                          action="{% url 'core:modulo:escala:add_edit_escala' %}"
+                          novalidate>
+                        {% csrf_token %}
+                        {% include 'escala/templates/form_add_escala.html' %}
+                    </form>
+              </div>
+          </div>
+        </div>
+    </div>
+    <!-- END Modal - Add new event -->
+
+    <!-- Modal - Edit event -->
+    <!--<div class="modal modal-right fade" id="modal-edit-event" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit event</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+                </div>
+
+                <div class="modal-body form-type-material">
+                    <div class="form-group">
+                        <input type="text" class="form-control" value="Birthday Party">
+                        <label>Title</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="datastarte" name="datastarte">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar-check"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <label>Data Início</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="horastarte" name="horastarte">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-clock"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <label>Hora Início</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="dataende" name="dataende">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar-check"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <label>Data Fim</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="horaende" name="horaende">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-clock"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <label>Hora Fim</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" value="Los Angeles, CA">
+                        <label>Location</label>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                        <label>Description</label>
+                    </div>
+
+                    <br>
+                    <div class="text-center">
+                        <div class="color-selector color-selector-sm">
+                            <label>
+                              <input type="radio" name="color-label" checked>
+                              <span class="bg-primary"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-success"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-info"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-warning"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-danger"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-purple"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label" checked>
+                              <span class="bg-pink"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-yellow"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-brown"></span>
+                            </label>
+
+                            <label>
+                              <input type="radio" name="color-label">
+                              <span class="bg-dark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-bold btn-pure btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!-- END Modal - Edit event -->
+
+    <!-- Modal - View event -->
+    <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="title-view">Detalhes da Escala</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+              <div id="vizi">
+                <dl class="row">
+                    <dt class="col-sm-3">Titulo</dt>
+                    <dd class="col-sm-9" id="title">Data Removida</dd>
+                    <dt class="col-sm-3">Inicio</dt>
+                    <dd class="col-sm-9" id="start"></dd>
+                    <dt class="col-sm-3" id="labelfim"></dt>
+                    <dd class="col-sm-9" id="end"></dd>
+                    <dt class="col-sm-3" id="labeldesc"></dt>
+                    <dd class="col-sm-9" id="desc"></dd>
+                </dl>
+                <hr>
+                <button class="btn btn-flat btn-primary ml-3" id="open-modal-edit">Editar</button>
+
+              </div>
+                <div id="editform" style="display: none">
+                    <form id="addeditescala"
+                          autocomplete="off"
+                          method="post"
+                          action="{% url 'core:modulo:escala:add_edit_escala' %}"
+                          novalidate>
+                        {% csrf_token %}
+                        {% include 'escala/templates/form_edit_escala.html' %}
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- END Modal - View event -->
+
 {% endblock %}
 
 {% block extra_scripts %}
+    <script src="{% static 'core/base/assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
     <script src="{% static 'core/base/assets/js/plugin/fullcalendar/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/locale-all.js' %}"></script>
+
+
+    <script>
+        $("#id_departamentoProfissional").change(function () {
+
+              var valor = $(this).val();  // get the selected country ID from the HTML input
+              $('#profissional').val(valor);
+
+        });
+
+        $(document).ready(function () {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
+
+        $calendar = $('#calendar');
+        $calendar.fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
+            },
+            locale: 'pt-br', // Definir tradução do calendário
+            selectable : true, // Definir se datas são selecionáveis
+            selectHelper: true,
+            viewRender: function(view, element) {
+                    $('.quick-sidebar-toggler').toggle();
+                $('#calendar-title').text( view.title );
+              }, // Ao renderizar view
+            dayClick: function(date, jsEvent, view) {
+                // Abrir janela para adicionar nova escala
+                $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                $('#horastart').val(moment(date.start).format('H:mm')); // Preenche horastart
+                var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
+
+                $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                $('#horaend').val(moment(Date.now()+3600000).format('H:mm')); // Preenche horastart
+
+            $('#modal-add-event').modal('show'); // Mostra janela de criação
+          }, // Ao clicar em um dia
+            eventClick: function(date, jsEvent, view) {
+                  // Abrir janela para visualizar escala
+                  $('#vizi').attr('style','display:block');
+                  $('#editform').attr('style','display:none');
+                  $('#modal-view-event #title').text(date.title); // Preenche campo titulo
+                  $('#idbd').val(date.id);
+                  $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
+                  $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY -> H:mm')); // Preenche data start
+                  if(date.end) { // Se tiver data final
+                      $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
+                      $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY -> H:mm')); // Preenche data end
+                  }else{
+                      $('#labelfim').text(''); // Reseta labelfim
+                      $('#modal-view-event #end').text(''); // Reseta data end
+                  }
+                  if(date.description) { // Se tiver descrição
+                      $('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
+                      $('#modal-view-event #desc').text(date.description); // Preenche descrição
+                  }else{
+                      $('#labeldesc').text(''); // Reseta labeldesc
+                      $('#modal-view-event #desc').text(''); // Reseta descrição
+                  }
+                  $('#modal-view-event').modal('show'); // Mostra janela de visalização
+            }, // Ao clicar em um evento
+            events:
+                {{ intervalos|safe }}
+            , // Popular escalas existentes no calendário
+
+
+        });
+
+
+        /* handle change view
+            -----------------------------------------------------------------*/
+
+            $('[data-calendar-view]').on('click', function() {
+                var view = $(this).data('calendar-view');
+                calendar.fullCalendar('changeView', view);
+
+                makeViewActive($(this));
+            });
+
+            var makeViewActive = function(e) {
+                $(e).closest('.nav').find('.nav-link.active, .dropdown-item.active').removeClass('active');
+                $(e).addClass('active');
+                if ($(e).hasClass('dropdown-item')) {
+                    $(e).closest('.dropdown').children('.nav-link').addClass('active');
+                }
+            }
+
+
+
+            /* handle caledar actions
+            -----------------------------------------------------------------*/
+
+            $('[data-calendar]').on('click', function() {
+                var action = $(this).data('calendar');
+
+                switch (action) {
+                    case 'today':
+                        calendar.fullCalendar('today');
+                        break;
+
+                    case 'next':
+                        calendar.fullCalendar('next');
+                        break;
+
+                    case 'prev':
+                        calendar.fullCalendar('prev');
+                        break;
+                }
+            });
+
+
+
+            // Once edit button clicked, close the event details modal and open edit modal
+            //
+            $('#open-modal-edit').on('click', function() {
+                $('#vizi').attr('style','display:none'); // Define visualização invisível
+                var titulo = $('#modal-view-event #title').text(); // Definir variável titulo
+                var datainicio = $('#modal-view-event #start').text(); // Definir variável datainicio
+                var datafim = $('#modal-view-event #end').text(); // Definir variável datafim
+                var description = $('#modal-view-event #desc').text(); // Definir variável description
+                datainicio = datainicio.split(" -> "); // Fazer separação entre data e hora
+                datafim = datafim.split(" -> "); // Fazer separação entre data e hora
+                $('#title-edit').val(titulo); // Preencher title-edit
+                $('#datastarte').val(datainicio[0]); // Preencher datastarte data inicial
+                $('#dataende').val(datafim[0]); // Preencher dataende data final
+                $('#horastarte').val(datainicio[1]); // Preencher horastarte hora inicial
+                $('#horaende').val(datafim[1]); // Preencher horaende hora final
+                $('#desc-edit').val(description); // Preencher desc-edit descrição
+                {#alert($('#title').attr('className'));#}
+                switch ($('#title').attr('className')) {
+                    case 'fc-black':
+                        $('#color-dark').attr('checked','checked');
+                        break;
+                    case 'fc-primary':
+                        $('#color-primary').attr('checked','checked');
+                        break;
+                    case 'fc-secondary':
+                        $('#color-secondary').attr('checked','checked');
+                        break;
+                    case 'fc-info':
+                        $('#color-info').attr('checked','checked');
+                        break;
+                    case 'fc-success':
+                        $('#color-success').attr('checked','checked');
+                        break;
+                    case 'fc-danger':
+                        $('#color-danger').attr('checked','checked');
+                        break;
+                    case 'fc-warning':
+                        $('#color-warning').attr('checked','checked');
+                        break;
+                } // Verificar qual é a cor do evento e realizar o checke correspondente
+
+                $('#editform').attr('style','display:block'); // Define formulário de edição visível
+            });
+
+            $('#save_escala').on('click',function () {
+                var titulo = $('#tituloadd').val();
+                var descricao = $('#descriptionadd').val();
+                var datestart = $('#datastart').val().split('/');
+                var horastart = $('#horastart').val().split(':');
+                var start = new Date(datestart[2],datestart[1]-1,datestart[0],horastart[0],horastart[1]);
+                var dateend = $('#dataend').val().split('/');
+                var horaend = $('#horaend').val().split(':');
+                var end = new Date(dateend[2],dateend[1]-1,dateend[0],horaend[0],horaend[1]);
+                var checked = document.querySelector('input[name="color"]:checked').value;
+                var cor = '';
+                switch (checked) {
+                    case 'dark':
+                        cor = 'fc-black';
+                        break;
+                    case 'primary':
+                        cor = 'fc-primary';
+                        break;
+                    case 'secondary':
+                        cor = 'fc-secondary';
+                        break;
+                    case 'info':
+                        cor = 'fc-info';
+                        break;
+                    case 'success':
+                        cor = 'fc-success';
+                        break;
+                    case 'danger':
+                        cor = 'fc-danger';
+                        break;
+                    case 'warning':
+                        cor = 'fc-warning';
+                        break;
+                    default:
+                        $('body').notify({
+                            message: 'Hello World',
+                            type: 'danger'
+                        });
+                } // Verificar qual é a cor selecionada
+                // alert(datestart[2] + "A" +datestart[1] + 'M' + datestart[0] +"D"+ horastart[0] + "H" +horastart[1] + "m"+cor+"C");
+                $calendar.fullCalendar('addEventSource', {
+                  title: titulo,
+                  start: start,
+                  end: end,
+                  description: descricao,
+                  className: cor,
+                });
+                $calendar.fullCalendar('refetchEvents');
+                $calendar.fullCalendar('renderEvent', {
+                  title: titulo,
+                  start: start,
+                  end: end,
+                  description: descricao,
+                  className: cor,
+                });
+
+                $('#addeditescala').submit();
+
+                $('#modal-add-event').modal('hide');
+            });
+    });
+
+        $('#datastart').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horastart').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#dataend').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horaend').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#datastarte').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horastarte').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#dataende').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horaende').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+    </script>
 
 {% endblock %}

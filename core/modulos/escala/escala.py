@@ -21,7 +21,7 @@ class Escala(Timestampable):
 
     @property
     def getListAtributes(self):
-        atributos = [ 'getNamePerfil','dia',]
+        atributos = [ 'getNamePerfil',]
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)
@@ -32,6 +32,8 @@ class EscalaIntervalo(models.Model):
     escala = models.ForeignKey(Escala, on_delete=models.PROTECT)
     inicio = models.TimeField()
     fim = models.TimeField()
+    descricao = models.CharField(max_length=255)
+    cor = models.CharField(max_length=20)
 
     @property
     def getListAtributes(self):

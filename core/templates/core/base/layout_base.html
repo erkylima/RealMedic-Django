@@ -27,12 +27,14 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{% static 'core/base/assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'core/base/assets/css/atlantis.css' %}">
+
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{% static 'core/base/assets/css/demo.css' %}">
     <link rel="stylesheet" href="{% static 'core/commum/novo_estilo.css' %}">
     <link rel="stylesheet" href="{% static 'core/commum/pre_loader.css' %}">
+    {% block extra_css %}
 
-
+    {% endblock %}
 </head>
 <body>
 
@@ -61,6 +63,10 @@
 
     </div>
     <!-- End Custom template -->
+
+    {% block modals %}
+
+    {% endblock %}
 </div>
 <!--   Core JS Files   -->
 <script src="{% static 'core/base/assets/js/core/jquery.3.2.1.min.js' %}"></script>
@@ -87,16 +93,17 @@
 <!-- Atlantis JS -->
 <script src="{% static 'core/base/assets/js/plugin/jquery.validate/jquery.validate.min.js' %}"></script>
 
+
 <script src="{% static 'core/base/assets/js/atlantis.min.js' %}"></script>
 <!-- Atlantis DEMO methods, don't include it in your project! -->
 <script src="{% static 'core/base/assets/js/setting-demo2.js' %}"></script>
 <script>
 
     $('#datetime').datetimepicker({
-        format: 'MM/DD/YYYY H:mm',
+        format: 'DD/MM/YYYY H:mm',
     });
     $('#datepicker').datetimepicker({
-        format: 'MM/DD/YYYY',
+        format: 'DD/MM/YYYY',
     });
     $('#timepicker').datetimepicker({
         format: 'h:mm A',
@@ -205,6 +212,31 @@
         }
     }, 100);
 
+    function retornarElementoId(url, id_item_selecionado, select_master) {
+        var id_item_selecionado = $('#' + id_item_selecionado);
+        var valor = id_item_selecionado.val();
+        if (valor == '') {
+            valor = 0
+        }
+        if (select_master == '') {
+            select_master = ''
+        }
+
+        var url = url
+        url = url.replace('00', valor);
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                select_master: valor       // add the select_master id to the GET parameters
+            },
+            success: function (data) {
+                alert(data);
+            }
+        })
+
+    }
+
 
     function carregarElementoPorIdFK(url, id_item_selecionado, id_item_carregar, select_master) {
         var id_item_selecionado = $('#' + id_item_selecionado);
@@ -238,6 +270,7 @@
         })
 
     }
+
 
 </script>
 

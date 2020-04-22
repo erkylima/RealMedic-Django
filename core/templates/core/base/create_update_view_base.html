@@ -44,7 +44,9 @@
                         <div class="card-action ">
                             <div class="row ">
                                 <div class="col-md-12">
-                                    <button class="btn btn-success" type="submit">{{ labels.SALVAR }}</button>
+                                    {% block botao_save %}
+                                        <button class="btn btn-success" type="submit">{{ labels.SALVAR }}</button>
+                                    {% endblock %}
                                     {% block botoes %}
                                     {% endblock %}
                                 </div>

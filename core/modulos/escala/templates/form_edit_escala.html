@@ -1,0 +1,126 @@
+<div class="form-group">
+    <input type="hidden" class="form-control" id="idbd" name="idbd" value="">
+    <input type="hidden" class="form-control" id="profissional" name="profissional" value="{{ idProfissional }}">
+</div>
+<div class="form-group">
+    <input type="text" class="form-control" id="title-edit" name="title-edit" value="Birthday Party">
+    <label>Titulo</label>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" readonly id="datastarte" name="datastarte">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fa fa-calendar-check"></i>
+                    </span>
+                </div>
+            </div>
+            <label>Data Início</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" id="horastarte" name="horastarte">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fa fa-clock"></i>
+                    </span>
+                </div>
+            </div>
+            <label>Hora Início</label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" readonly id="dataende" name="dataende">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fa fa-calendar-check"></i>
+                    </span>
+                </div>
+            </div>
+            <label>Data Fim</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" id="horaende" name="horaende">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fa fa-clock"></i>
+                    </span>
+                </div>
+            </div>
+            <label>Hora Fim</label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <textarea class="form-control" id="desc-edit" name="descricao" rows="3"></textarea>
+    <label>Descrição</label>
+</div>
+
+<br>
+
+<div class="form-group">
+<div class="row gutters-xs">
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-dark" name="color" type="radio" value="black" class="colorinput-input">
+            <span class="colorinput-color bg-black"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-primary" name="color" type="radio" value="primary" class="colorinput-input">
+            <span class="colorinput-color bg-primary"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-secondary" name="color"  type="radio" value="secondary" class="colorinput-input">
+            <span class="colorinput-color bg-secondary"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-info" name="color" type="radio" value="info" class="colorinput-input">
+            <span class="colorinput-color bg-info"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-success" name="color" type="radio" value="success" class="colorinput-input">
+            <span class="colorinput-color bg-success"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-danger" name="color" type="radio" value="danger" class="colorinput-input">
+            <span class="colorinput-color bg-danger"></span>
+        </label>
+    </div>
+    <div class="col-auto">
+        <label class="colorinput">
+            <input id="color-warning" name="color" type="radio" value="warning" class="colorinput-input">
+            <span class="colorinput-color bg-warning"></span>
+        </label>
+    </div>
+    </div>
+    <label class="form-label">Cor do Evento</label>
+</div>
+
+<hr>
+
+<button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Cancelar</button>
+<button class="btn btn-flat btn-success float-right" id="concluir-edit">Confirmar</button>

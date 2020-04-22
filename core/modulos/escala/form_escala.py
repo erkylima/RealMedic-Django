@@ -1,4 +1,5 @@
 from django import forms
+from django.urls import reverse_lazy
 
 from core.models import Escala
 from core.util.util_manager import adiciona_form_control
@@ -8,11 +9,12 @@ class EscalaForm(forms.ModelForm):
     class Meta:
         model = Escala
         fields = '__all__'
-        # exclude = ('latLng',)
+        # exclude = ('dia')
 
     def __init__(self, *args, **kwargs):
         super(EscalaForm, self).__init__(*args, **kwargs)
-        self.fields['dia'].input_formats  = ['%Y-%m-%d',
+
+        """self.fields['dia'].input_formats  = ['%Y-%m-%d',
                                              '%m/%d/%Y',
                                              '%m/%d/%y',
                                              '%b %d %Y',
@@ -22,7 +24,7 @@ class EscalaForm(forms.ModelForm):
                                              '%B %d %Y',
                                              '%B %d, %Y',
                                              '%d %B %Y',
-                                             '%d %B, %Y']
+                                             '%d %B, %Y']"""
 
 
         adiciona_form_control(self)
