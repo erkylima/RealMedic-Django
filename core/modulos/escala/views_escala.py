@@ -117,7 +117,8 @@ def addEditEscala(request):
             escala_intervalo.descricao = descricao
             escala_intervalo.inicio = start
             escala_intervalo.fim = end
-            escala_intervalo.save()
+            if start.timestamp() < end.timestamp():
+                escala_intervalo.save()
 
     except: # Criando pela primeira vez
         profissional = request.POST['profissional']
@@ -130,9 +131,10 @@ def addEditEscala(request):
         start = datetime.strptime(datastart + " " + horastart , '%d/%m/%Y %H:%M')
         end = datetime.strptime(dataend + " " + horaend , '%d/%m/%Y %H:%M')
 
-        escala = Escala(departamentoProfissional_id=profissional,dia=start)
-        escala.save()
-        escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala.pk,descricao=descricao,cor=cor)
-        escala_intervalo.save()
+        if start.timestamp() < end.timestamp():
+            escala = Escala(departamentoProfissional_id=profissional,dia=start)
+            escala.save()
+            escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala.pk,descricao=descricao,cor=cor)
+            escala_intervalo.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
