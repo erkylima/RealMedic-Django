@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
 from django.http import JsonResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView
 from rest_framework.utils import json
 
@@ -38,17 +38,6 @@ class MyUpdateViewEscala(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView)
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
-
-
-class EscalaListView(MyListViewEscala):
-    template_name = 'escala/templates/list_view_escala.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        return context
-
-    def get_queryset(self):
-        return super().get_queryset()
 
 
 class EscalaCreateView(MyCreateViewEscala):
@@ -112,7 +101,6 @@ def addEditEscala(request):
             # escala = Escala.objects.get(pk=id)
             id = request.POST['idbd']
             profissional = request.POST['profissional']
-            titulo = request.POST['title-edit']
             datastart = request.POST['datastarte']
             dataend = request.POST['dataende']
             horastart = request.POST['horastarte']
@@ -130,11 +118,9 @@ def addEditEscala(request):
             escala_intervalo.inicio = start
             escala_intervalo.fim = end
             escala_intervalo.save()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    except:
+    except: # Criando pela primeira vez
         profissional = request.POST['profissional']
-        titulo = request.POST['title']
         datastart = request.POST['datastart']
         dataend = request.POST['dataend']
         horastart = request.POST['horastart']
@@ -148,7 +134,5 @@ def addEditEscala(request):
         escala.save()
         escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala.pk,descricao=descricao,cor=cor)
         escala_intervalo.save()
-        print(request.POST)
-        return HttpResponseRedirect(reverse_lazy('core:modulo:escala:list_view'))
 
-
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

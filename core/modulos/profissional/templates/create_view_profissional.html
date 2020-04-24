@@ -1,5 +1,24 @@
 {% extends 'core/base/create_update_view_base.html' %}
 {% load static %}
+{% block header %}
+    {% if profissional %}
+        <div class="panel-header">
+            <div class="page-inner border-bottom pb-0 mb-3">
+                <div class="d-flex align-items-left flex-column">
+                    <h2 class="pb-2 fw-bold">{{ profissional.nome }}</h2>
+                    <div class="nav-scroller d-flex">
+                        <div class="nav nav-line nav-color-info d-flex align-items-center justify-contents-center">
+                            <a class="nav-link active" href="#">Editar Cadastro</a>
+                            <a class="nav-link" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
 
 {% block label_nova %}
     {{ labels.NOVO }}

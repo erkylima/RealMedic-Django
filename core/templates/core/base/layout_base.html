@@ -52,6 +52,9 @@
     {% include 'core/base/complementos/menus.html' %}
     <div class="main-panel">
         <div class="container">
+            {% block header %}
+            
+            {% endblock %}
             <div class="page-inner">
                 {% block content %}
 
@@ -198,6 +201,33 @@
 
     {% endif %}
 
+    function mensagem_erro(mensagem) {
+         $.notify({
+                        // options
+                        icon: 'flaticon-alarm-1',
+                        title: 'Opss...',
+                        message: mensagem,
+                    }, {
+                        // settings
+                        element: 'body',
+                        position: null,
+                        type: "danger",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 3000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                    });
+    }
 
     {#PRE_LOADER#}
     var readyStateCheckInterval = setInterval(function () {

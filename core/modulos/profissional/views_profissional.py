@@ -5,7 +5,7 @@ from django.contrib.auth.models import Permission, User, Group
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
-from core.models import Profissional,Departamento,DepartamentoProfissional
+from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
 from core.modulos.profissional.form_profissional import ProfissionalForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -96,6 +96,37 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
         return super().form_valid(form)
 
+class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
+    template_name = 'escala/templates/create_view_escala.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # print(self.object.pk)
+        context['idProfissional'] = self.object.pk
+        escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
+        intervalos = []
+        for escala in escalas:
+            intervalo = escala.escalaintervalo_set.get(escala_id=escala.pk)
+
+            b = {'id': escala.pk,
+                'title': self.object.nome,
+                 'start':str(escala.dia) + "T" + str(intervalo.inicio),
+                 'end': str(escala.dia) + "T" + str(intervalo.fim),
+                 'description': intervalo.descricao,
+                 'className': "fc-"+intervalo.cor
+                 }
+            intervalos.append(b)
+        context['intervalos'] = intervalos
+        return context
+
+    def form_invalid(self, form):
+        print(form.errors, len(form.errors))
+        return super(ProfissionalEscalaUpdateView, self).form_invalid(form)
+
+    def form_valid(self, form):
+        self.request.session['update_model'] = 'true'
+        print(self.request.POST)
+        return super().form_valid(form)
 
 @login_required()
 def getDepartamentosPorIdEmpresa(request, idEmpresa):
