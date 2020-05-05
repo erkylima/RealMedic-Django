@@ -17,7 +17,6 @@ class TipoProfissional(Timestampable):
                                         on_delete=models.PROTECT)
     departamento = models.ForeignKey(Departamento,
                                         on_delete=models.PROTECT)
-    tiposAtendimentos = models.ManyToManyField(TipoAtendimento)
 
     def __str__(self):
         return self.descricao

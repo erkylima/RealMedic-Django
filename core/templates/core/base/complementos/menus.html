@@ -95,7 +95,12 @@
                         <p>{{ labels.PROFISSIONAL }}</p>
                     </a>
                 </li>
-
+                <li class="nav-item active">
+                    <a href="{% url 'core:modulo:atendimento:list_view' %}">
+                        <i class="fas fa-user"></i>
+                        <p>{{ labels.ATENDIMENTO }}</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

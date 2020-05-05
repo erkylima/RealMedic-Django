@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import TipoAtendimento
@@ -48,12 +49,15 @@ class TipoAtendimentoListView(MyListViewTipoAtendimento):
 class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
 
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
         return super(TipoAtendimentoCreateView, self).form_invalid(form)
 
     def form_valid(self, form):
         self.request.session['save_model'] = 'true'
+        form.save(commit=False)
+
         return super().form_valid(form)
 
 

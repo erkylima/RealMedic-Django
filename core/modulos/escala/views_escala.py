@@ -63,7 +63,7 @@ class EscalaUpdateView(MyUpdateViewEscala):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.object.departamentoProfissional_id)
+        # print(self.object.departamentoProfissional_id)
         profissional = Profissional.objects.get(pk=self.object.departamentoProfissional_id)
         context['idProfissional'] = profissional.pk
         escalas = Escala.objects.filter(departamentoProfissional_id=profissional.pk)
@@ -79,7 +79,7 @@ class EscalaUpdateView(MyUpdateViewEscala):
                  'className': "fc-"+intervalo.cor
                  }
             intervalos.append(b)
-        print(intervalos)
+        # print(intervalos)
         context['intervalos'] = intervalos
         return context
 

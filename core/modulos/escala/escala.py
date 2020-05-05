@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User, Group
 from django.db import models
 
-from core.models import Departamento
+from core.models import DepartamentoProfissional
+from core.modulos.atendimento.atendimento import Atendimento
+
 from core.models.base.time_stampable import Timestampable
-from core.modulos.profissional.profissional import DepartamentoProfissional
 from core.util.util_manager import UpperCaseCharField
 
 
@@ -34,6 +35,7 @@ class EscalaIntervalo(models.Model):
     fim = models.TimeField()
     descricao = models.CharField(max_length=255)
     cor = models.CharField(max_length=20)
+    atendimento = models.OneToOneField(Atendimento, on_delete=models.PROTECT, null=True, blank=True)
 
     @property
     def getListAtributes(self):

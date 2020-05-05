@@ -14,6 +14,7 @@ urlpatterns = [
     path('tipo_profissional/', include('core.modulos.tipo_profissional.urls_tipo_profissional')),
     path('tipo_atendimento/', include('core.modulos.tipo_atendimento.urls_tipo_atendimento')),
     path('escala/', include('core.modulos.escala.urls_escala')),
+    path('atendimento/', include('core.modulos.atendimento.urls_atendimento')),
 
     # path('professionals/', include('core.modulos.professional.urls')),
     # path('health_tips/', include('core.modulos.health_tips.urls')),

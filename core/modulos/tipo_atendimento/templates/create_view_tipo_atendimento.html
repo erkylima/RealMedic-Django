@@ -1,6 +1,38 @@
 {% extends 'core/base/create_update_view_base.html' %}
 {% load static %}
 
+{% block corpo_formulario %}
+
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.descricao.label_tag }}
+            {{ form.descricao }}
+            {{ form.descricao.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.areaAtendimento.label_tag }}
+            {{ form.areaAtendimento }}
+            {{ form.areaAtendimento.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.tempo_padrao.label_tag }}
+            {{ form.tempo_padrao }}
+            {{ form.tempo_padrao.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.valor_padrao.label_tag }}
+            {{ form.valor_padrao }}
+            {{ form.valor_padrao.errors }}
+        </div>
+    </div>
+
+{% endblock %}
 
 {% block botoes %}
     <a class="btn btn-danger" href="{% url 'core:modulo:tipo_atendimento:list_view' %}">{{ labels.CANCELAR }}</a>

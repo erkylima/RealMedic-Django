@@ -93,7 +93,6 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
         departamento_profissional.tipo_profissional_id =self.request.POST.get('tipo_profissional')
 
         departamento_profissional.save()
-
         return super().form_valid(form)
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):

@@ -2,12 +2,12 @@
 {% load static %}
 {% block header %}
     {% if profissional %}
-        <div class="panel-header">
+        <div class="panel-header bg-primary-gradient">
             <div class="page-inner border-bottom pb-0 mb-3">
                 <div class="d-flex align-items-left flex-column">
                     <h2 class="pb-2 fw-bold">{{ profissional.nome }}</h2>
                     <div class="nav-scroller d-flex">
-                        <div class="nav nav-line nav-color-info d-flex align-items-center justify-contents-center">
+                        <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
                             <a class="nav-link active" href="#">Editar Cadastro</a>
                             <a class="nav-link" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
                         </div>
@@ -44,6 +44,13 @@
             {{ form.tipo_profissional.label_tag }}
             {{ form.tipo_profissional }}
             {{ form.tipo_profissional.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.tiposAtendimentos.label_tag }}
+            {{ form.tiposAtendimentos }}
+            {{ form.tiposAtendimentos.errors }}
         </div>
     </div>
     <div class="row">
