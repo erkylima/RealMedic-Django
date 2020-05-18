@@ -1,14 +1,11 @@
 from datetime import datetime
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import Permission, User
-from django.http import JsonResponse, HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
-from rest_framework.utils import json
-
+import calendar
 from core.models import Escala,EscalaIntervalo, Profissional
 from core.modulos.escala.form_escala import EscalaForm
 from core.util.labels_property import LabesProperty
@@ -136,5 +133,55 @@ def addEditEscala(request):
             escala.save()
             escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala.pk,descricao=descricao,cor=cor)
             escala_intervalo.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def marcarMes(request):
+    print(calendar.monthrange(2012,1)[1])
+    profissional = 1
+
+    for dia in range(calendar.monthrange(2012,6)[1]):
+        start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
+        escala = Escala(departamentoProfissional_id=profissional, dia=start)
+        escala.save()
+        for j in range(8):
+            for k in range(2):
+                if k == 1:
+                    start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00",
+                                              '%Y-%m-%d %H:%M')
+                    end = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30", '%Y-%m-%d %H:%M')
+                else:
+                    start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30",
+                                              '%Y-%m-%d %H:%M')
+                    end = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00", '%Y-%m-%d %H:%M')
+
+                escala_intervalo = EscalaIntervalo(inicio=start, fim=end, escala_id=escala.pk, descricao="desc", cor="success")
+                escala_intervalo.save()
+
+    """if request.POST['idbd'] != '':
+        # escala = Escala.objects.get(pk=id)
+        id = request.POST['idbd']
+        profissional = request.POST['profissional']
+        datastart = request.POST['datastarte']
+        dataend = request.POST['dataende']
+        horastart = request.POST['horastarte']
+        horaend = request.POST['horaende']
+        descricao = request.POST['descricao']
+        cor = request.POST['color']
+
+        #Editar Model
+        escala = Escala.objects.get(pk=id)
+        escala_intervalo = EscalaIntervalo.objects.get(escala_id=escala.pk)
+        start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M')
+        end = datetime.strptime(dataend + " " + horaend, '%d/%m/%Y %H:%M')
+        escala_intervalo.cor = cor
+        escala_intervalo.descricao = descricao
+        escala_intervalo.inicio = start
+        escala_intervalo.fim = end
+        if start.timestamp() < end.timestamp():
+            escala_intervalo.save()
+"""
+
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

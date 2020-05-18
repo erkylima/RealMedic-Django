@@ -105,16 +105,16 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
         intervalos = []
         for escala in escalas:
-            intervalo = escala.escalaintervalo_set.get(escala_id=escala.pk)
-
-            b = {'id': escala.pk,
-                'title': self.object.nome,
-                 'start':str(escala.dia) + "T" + str(intervalo.inicio),
-                 'end': str(escala.dia) + "T" + str(intervalo.fim),
-                 'description': intervalo.descricao,
-                 'className': "fc-"+intervalo.cor
-                 }
-            intervalos.append(b)
+            intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
+            for inter in intervalo:
+                b = {'id': escala.pk,
+                    'title': self.object.nome,
+                     'start':str(escala.dia) + "T" + str(inter.inicio),
+                     'end': str(escala.dia) + "T" + str(inter.fim),
+                     'description': inter.descricao,
+                     'className': "fc-"+inter.cor
+                     }
+                intervalos.append(b)
         context['intervalos'] = intervalos
         return context
 

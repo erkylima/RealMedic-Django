@@ -19,6 +19,7 @@
                         <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
                             <a class="nav-link" href="{% url 'core:modulo:profissional:update_view' profissional.pk %}">Editar Cadastro</a>
                             <a class="nav-link active" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
+                            <a class="nav-link" href="{% url 'core:modulo:escala:marcar' %}">Marcar</a>
                         </div>
                     </div>
                 </div>
@@ -153,6 +154,11 @@
             selectable : true, // Definir se datas são selecionáveis
             selectHelper: true,
             eventLimit: true,
+            views: {
+                 month: {
+                   eventLimit: 4
+                 }
+            },
             viewRender: function(view, element) {
                     $('.quick-sidebar-toggler').toggle();
                 $('#calendar-title').text( view.title );

@@ -8,4 +8,5 @@ urlpatterns = [
     path('list', views_atendimento.AtendimentoListView.as_view(), name='list_view'),
     path('create', views_atendimento.AtendimentoCreateView.as_view(), name='create_view'),
     path('update/<int:pk>', views_atendimento.AtendimentoUpdateView.as_view(), name='update_view'),
+    path('add_atendimento', views_atendimento.addAtendimento, name="add_atendimento"),
 ]

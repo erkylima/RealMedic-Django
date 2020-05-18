@@ -35,7 +35,7 @@ class EscalaIntervalo(models.Model):
     fim = models.TimeField()
     descricao = models.CharField(max_length=255)
     cor = models.CharField(max_length=20)
-    atendimento = models.OneToOneField(Atendimento, on_delete=models.PROTECT, null=True, blank=True)
+    atendimento = models.ForeignKey(Atendimento, on_delete=models.PROTECT, null=True, blank=True)
 
     @property
     def getListAtributes(self):

@@ -1,11 +1,16 @@
+from datetime import datetime, timedelta
+
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, View
 from django.views.generic.base import View
-
-from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala
+from django.forms.models import model_to_dict
+import json
+from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Cliente, EscalaIntervalo
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -79,21 +84,33 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
         context = super().get_context_data(**kwargs)
         profissional = Profissional.objects.get(pk=self.object.pk)
         context['profissional'] = profissional
-
+        print(profissional.tiposAtendimentos.values_list())
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
+        clientes = Cliente.objects.all()
         intervalos = []
         for escala in escalas:
-            intervalo = escala.escalaintervalo_set.get(escala_id=escala.pk)
+            intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
+            for inter in intervalo:
+                if inter.atendimento_id != None:
+                    b = {'id': inter.pk,
+                         'title': profissional.nome,
+                         'start': str(escala.dia) + "T" + str(inter.inicio),
+                         'end': str(escala.dia) + "T" + str(inter.fim),
+                         'description': inter.descricao,
+                         'className': "fc-danger"
+                         }
+                else:
+                    b = {'id': inter.pk,
+                         'title': profissional.nome,
+                         'start': str(escala.dia) + "T" + str(inter.inicio),
+                         'end': str(escala.dia) + "T" + str(inter.fim),
+                         'description': inter.descricao,
+                         'className': "fc-success"
+                         }
+                intervalos.append(b)
 
-            b = {'id': escala.pk,
-                 'title': profissional.nome,
-                 'start': str(escala.dia) + "T" + str(intervalo.inicio),
-                 'end': str(escala.dia) + "T" + str(intervalo.fim),
-                 'description': intervalo.descricao,
-                 'className': "fc-" + intervalo.cor
-                 }
-            intervalos.append(b)
-        print(intervalos)
+        # print(intervalos)
+        context['clientes'] = clientes
         context['intervalos'] = intervalos
         return context
 
@@ -104,3 +121,37 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+
+@login_required
+def addAtendimento(request):
+    atendimento = Atendimento()
+    atendimento.cliente_id = request.POST['cliente']
+    profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST['profissional'])
+    atendimento.departamentoProfissional = profissional
+    atendimento.tipoAtendimento_id = request.POST['tipo_atendimento'].split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
+    if request.POST['retorno'] == 1:
+        atendimento.retorno = True
+    else:
+        atendimento.retorno = False
+    atendimento.valor = request.POST['valor']
+    atendimento.tempo = request.POST['tipo_atendimento'].split('-')[2]
+    # atendimento.pk = 1
+    atendimento.save()
+    escala_intervalo_inicio = EscalaIntervalo.objects.filter(pk=request.POST['id_escala_intervalo'])
+    for inter in escala_intervalo_inicio:
+        inicio = datetime.strptime(inter.escala.dia.strftime("%Y-%m-%d") + " " + inter.inicio.strftime("%H:%M:%S") , '%Y-%m-%d %H:%M:%S')
+
+        horas = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])
+        minutos = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1])
+        fim = inicio+timedelta(minutes=(horas*60+minutos)-30)
+        escalas_intervalo = EscalaIntervalo.objects.filter(escala_id=inter.escala_id,inicio__range=[inicio,fim])
+        print(inter.escala_id)
+        for intervalo in escalas_intervalo:
+            intervalo.atendimento_id = atendimento.pk
+            intervalo.save()
+    dict_obj = model_to_dict(atendimento)
+
+    subs = json.dumps(dict_obj)
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponse(subs)

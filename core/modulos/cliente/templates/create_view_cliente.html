@@ -7,6 +7,20 @@
 {% block corpo_formulario %}
     <div class="row">
         <div class="col-md-12 form-group">
+            {{ form.empresa.label_tag }}
+            {{ form.empresa }}
+            {{ form.empresa.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
+            {{ form.departamento.label_tag }}
+            {{ form.departamento }}
+            {{ form.departamento.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
             {{ form.nome.label_tag }}
             {{ form.nome }}
             {{ form.nome.errors }}

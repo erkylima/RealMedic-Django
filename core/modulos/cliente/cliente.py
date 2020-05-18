@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.db import models
 
+from core.models import Departamento
 from core.models.base.time_stampable import Timestampable
 from core.util.util_manager import UpperCaseCharField
 
@@ -17,7 +18,7 @@ class Cliente(Timestampable):
     senha = UpperCaseCharField('Senha', max_length=255)
     perfil = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name='Perfil', related_name='clientes')
     ativo = models.BooleanField(default=True)
-
+    departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT,default=1)
     # hasSuperAdministrador = models.BooleanField('Super', default=False)
 
     def __str__(self):

@@ -1,12 +1,12 @@
 from django import forms
 
-from core.models import DepartamentoProfissional
+from core.models import Atendimento
 from core.util.util_manager import adiciona_form_control
 
 
 class AtendimentoForm(forms.ModelForm):
     class Meta:
-        model = DepartamentoProfissional
+        model = Atendimento
         fields = '__all__'
         # exclude = ('latLng',)
 

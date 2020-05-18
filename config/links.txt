@@ -5,3 +5,6 @@ https://themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/
 https://www.devinterface.com/en/blog/how-to-implement-two-dropdowns-dependent-on-each-other-using-django-and-jquery
 
 https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+
+// Correção do problema de um select dentro de um modal
+https://select2.org/troubleshooting/common-problems
