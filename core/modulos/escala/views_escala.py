@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -141,20 +141,20 @@ def marcarMes(request):
     print(calendar.monthrange(2012,1)[1])
     profissional = 1
 
-    for dia in range(calendar.monthrange(2012,6)[1]):
-        start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
+    for dia in range(calendar.monthrange(2012,5)[1]):
+        start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
         escala = Escala(departamentoProfissional_id=profissional, dia=start)
         escala.save()
         for j in range(8):
             for k in range(2):
                 if k == 1:
-                    start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00",
+                    start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00",
                                               '%Y-%m-%d %H:%M')
-                    end = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30", '%Y-%m-%d %H:%M')
+                    end = start + timedelta(minutes=30)
                 else:
-                    start = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30",
+                    start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30",
                                               '%Y-%m-%d %H:%M')
-                    end = datetime.strptime("2020-06-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00", '%Y-%m-%d %H:%M')
+                    end = start + timedelta(minutes=30)
 
                 escala_intervalo = EscalaIntervalo(inicio=start, fim=end, escala_id=escala.pk, descricao="desc", cor="success")
                 escala_intervalo.save()

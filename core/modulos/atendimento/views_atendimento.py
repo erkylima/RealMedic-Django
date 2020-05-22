@@ -84,20 +84,32 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
         context = super().get_context_data(**kwargs)
         profissional = Profissional.objects.get(pk=self.object.pk)
         context['profissional'] = profissional
-        print(profissional.tiposAtendimentos.values_list())
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
         clientes = Cliente.objects.all()
         intervalos = []
+
         for escala in escalas:
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
             for inter in intervalo:
                 if inter.atendimento_id != None:
+                    inicio = datetime.strptime(inter.inicio.strftime(
+                        "%Y-%m-%d") + " " + inter.inicio.strftime("%H:%M:%S"),
+                                               '%Y-%m-%d %H:%M:%S')
+                    fim = inicio + timedelta(hours=int(inter.atendimento.tempo.strftime("%H")),minutes=int(inter.atendimento.tempo.strftime("%M")))
+                    print("==============")
+                    print("Inicio " + inter.inicio.strftime("%Hm%M"))
+                    print("Fim " + fim.strftime("%Hh%M"))
+
                     b = {'id': inter.pk,
                          'title': profissional.nome,
                          'start': str(escala.dia) + "T" + str(inter.inicio),
                          'end': str(escala.dia) + "T" + str(inter.fim),
                          'description': inter.descricao,
-                         'className': "fc-danger"
+                         'className': "fc-danger",
+                         'cliente': inter.atendimento.cliente.nome,
+                         'inicio': inter.inicio.strftime("%Hh%M"),
+                         'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
+                         'fim': fim.strftime("%Hh%M")
                          }
                 else:
                     b = {'id': inter.pk,
@@ -136,22 +148,48 @@ def addAtendimento(request):
         atendimento.retorno = False
     atendimento.valor = request.POST['valor']
     atendimento.tempo = request.POST['tipo_atendimento'].split('-')[2]
-    # atendimento.pk = 1
     atendimento.save()
-    escala_intervalo_inicio = EscalaIntervalo.objects.filter(pk=request.POST['id_escala_intervalo'])
-    for inter in escala_intervalo_inicio:
+    escala_intervalo_inicial = EscalaIntervalo.objects.get(pk=request.POST['id_escala_intervalo'])
+    escalas_intervalo = None
+
+    """for inter in escala_intervalo_inicio:
+        print(inter.inicio)
         inicio = datetime.strptime(inter.escala.dia.strftime("%Y-%m-%d") + " " + inter.inicio.strftime("%H:%M:%S") , '%Y-%m-%d %H:%M:%S')
 
         horas = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])
         minutos = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1])
         fim = inicio+timedelta(minutes=(horas*60+minutos)-30)
-        escalas_intervalo = EscalaIntervalo.objects.filter(escala_id=inter.escala_id,inicio__range=[inicio,fim])
-        print(inter.escala_id)
-        for intervalo in escalas_intervalo:
+        escalas_intervalo = EscalaIntervalo.objects.filter(escala_id=inter.escala_id,inicio__range=[inicio,fim])"""
+
+    inicio = datetime.strptime(escala_intervalo_inicial.escala.dia.strftime("%Y-%m-%d") + " " + escala_intervalo_inicial.inicio.strftime("%H:%M:%S"),
+                               '%Y-%m-%d %H:%M:%S')
+    horas = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])
+    minutos = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1])
+    fim = inicio + timedelta(minutes=(horas * 60 + minutos) - 30)
+
+    # Calcula quantidade de intervalos disponíveis necessários para completar a operação
+    quantidade_intervalos_necessarios = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])*2
+    if int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) == 30:
+        quantidade_intervalos_necessarios += 1
+
+
+    escalas_todos_intervalos = EscalaIntervalo.objects.filter(escala_id=escala_intervalo_inicial.escala_id,
+                                                              inicio__range=[inicio, fim],atendimento_id=None).order_by(
+                                                              "inicio")  # Filtrar os intervalos de tempo de acordo com o atendimento
+
+    if escalas_todos_intervalos.count() >= quantidade_intervalos_necessarios:
+        for intervalo in escalas_todos_intervalos:
             intervalo.atendimento_id = atendimento.pk
             intervalo.save()
+        messages.success(request, 'Atendimento marcado com sucesso')
+
+    else:
+        atendimento.delete()
+        messages.error(request, "Para marcar este tipo de consulta você precisa de " +
+                       request.POST['tipo_atendimento'].split('-')[2] + " disponíveis")
     dict_obj = model_to_dict(atendimento)
 
     subs = json.dumps(dict_obj)
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    return HttpResponse(subs)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # return HttpResponse(subs)

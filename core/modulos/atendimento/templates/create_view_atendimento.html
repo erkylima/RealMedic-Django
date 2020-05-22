@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block header %}
+
     {% if profissional %}
         <div class="panel-header bg-primary-gradient">
             <div class="page-inner border-bottom pb-0 mb-3">
@@ -27,6 +28,22 @@
 {% endblock %}
 {% block corpo_formulario %}
 
+
+    {% if messages %}
+        {% for message in messages %}
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function(){
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        mensagem_erro("{{ message }}");
+                    {% else %}
+                        mensagem_sucesso("{{ message }}");
+                    {% endif %}
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+
     <div id="calendar"></div>
 
 {% endblock %}
@@ -38,38 +55,12 @@
 
 {% block modals %}
 
-    <!-- Modal - Add new event -->
-    <div class="modal modal-right fade" id="modal-add-event" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Criar Nova Escala</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body form-type-material">
-                    <form id="addeditescala"
-                          autocomplete="off"
-                          method="post"
-                          action="{% url 'core:modulo:escala:add_edit_escala' %}"
-                          novalidate>
-                        {% csrf_token %}
-                        {% include 'escala/templates/form_add_escala.html' %}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END Modal - Add new event -->
-
     <!-- Modal - View event -->
     <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="title-view">Detalhes da Escala</h5>
+                <div class="modal-header  bg-primary">
+                    <h5 class="modal-title" id="title-view">Marcar Atendimento</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -78,12 +69,12 @@
                 <div class="modal-body">
                     <div id="visualizar">
                         <dl class="row">
-                            <dt class="col-sm-3">Titulo</dt>
-                            <dd class="col-sm-9" id="title">Data Removida</dd>
+                            <dt class="col-sm-3"></dt>
+                            <dd class="col-sm-9" id="title"></dd>
                             <dt class="col-sm-3">Inicio</dt>
-                            <dd class="col-sm-9" id="start"></dd>
+                            <dd class="col-sm-9"><span  id="start" class="badge badge-info"></span></dd>
                             <dt class="col-sm-3" id="labelfim"></dt>
-                            <dd class="col-sm-9" id="end"></dd>
+                            <dd class="col-sm-9"><span  id="end" class="badge badge-info"></span></dd>
                             <dt class="col-sm-3" id="labeldesc"></dt>
                             <dd class="col-sm-9" id="desc"></dd>
                         </dl>
@@ -103,25 +94,24 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control form-control select2" style="display: block" name="cliente" id="cliente">
-                                        <option value="">---------</option>
-                                        {% for cliente in clientes %}
-                                            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <label for="cliente">Cliente</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <a class="btn btn-primary stretched-link" href="{% url 'core:modulo:cliente:create_view' %}">Adicionar Cliente</a>
+                                        </div>
+                                        <select class="form-control select2" name="cliente" id="cliente">
+                                            <option value="">---------</option>
+                                            {% for cliente in clientes %}
+                                                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-check">
-
-
-                                                <label class="form-check-label">
-                                                    <label for="valor">Valor</label>
-                                                    <input class="form-check-input" type="checkbox" id="editar-valor">
-                                                    <span class="form-check-sign">Editar valor?</span>
-                                                </label>
-                                            </div>
+                                            <label for="valor">Valor</label>
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">R$</span>
@@ -130,7 +120,14 @@
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">,00</span>
                                                 </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" id="editar-valor">
+                                                        <span class="form-check-sign">Editar valor?</span>
+                                                    </label>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -156,6 +153,40 @@
         </div>
     </div>
     <!-- END Modal - View event -->
+
+    <!-- Modal - View Atendimento -->
+    <div class="modal modal-top fade" id="modal-view-atendimento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" style="text-align: center" id="title-view">Detalhes do Atendimento</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="atendimento">
+                        <dl class="row">
+                            <dt class="col-sm-3">Cliente</dt>
+                            <dd class="col-sm-9" id="cliente">Data Removida</dd>
+                            <dt class="col-sm-3">Inicio</dt>
+                            <dd class="col-sm-9"><span  id="start" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labelfim">Fim</dt>
+                            <dd class="col-sm-9"><span id="end" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labeldesc">Atendimento</dt>
+                            <dd class="col-sm-9" id="desc"></dd>
+                        </dl>
+
+                        <hr>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal - View Atendimento -->
 
 {% endblock %}
 
@@ -192,72 +223,74 @@
                 selectHelper: true,
                 eventLimit: true,
                 views: {
-                     month: {
-                       eventLimit: 4
-                     }
+                    month: {
+                        eventLimit: 4
+                    }
                 },
                 viewRender: function(view, element) {
                     $('.quick-sidebar-toggler').toggle();
                     $('#calendar-title').text( view.title );
                 }, // Ao renderizar view
                 dayClick: function(date, jsEvent, view) {
-                    // Abrir janela para adicionar nova escala
-                    $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                    $('#horastart').val(moment(date.start).format('H:mm')); // Preenche horastart
-                    var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
 
-                    $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                    $('#horaend').val(moment(Date.now()+3600000).format('H:mm')); // Preenche horastart
-
-                    $('#modal-add-event').modal('show'); // Mostra janela de criação
                 }, // Ao clicar em um dia
                 eventClick: function(date, jsEvent, view) {
-                    // Abrir janela para visualizar escala
-                    $('#visualizar').attr('style','display:block');
-                    $('#editform').attr('style','display:none');
-                    tipo_atendimento = $('#tipo_atendimento');
-                    editar_valor = $('#editar-valor');
-                    tipo_atendimento.val("");
-                    editar_valor.prop('checked',false);
-                    valor = $('#valor');
-                    valor.val(0);
-                    $('#cliente').val($('#cliente2').val());
-                    valor.attr("readonly",true);
-                    $('#id_escala_intervalo').val(date.id);
-                    $('#retorno').val(0);
-                    $('#modal-view-event #title').text(date.title); // Preenche campo titulo
-                    tipo_atendimento.on('change', function(){
-                        id_tipo_atendimento = $( "#tipo_atendimento" ).val().split('-')[0];
-                        valor_tipo_atendimento = $( '#tipo_atendimento' ).val().split('-')[1];
-                        $('#valor').val(valor_tipo_atendimento.split(',')[0]);
-                    });
+                    switch (date.className.toLocaleString()) {
+                        case "fc-success": // Abrir janela para visualizar escala
+                            $('#visualizar').attr('style', 'display:block');
+                            $('#editform').attr('style', 'display:none');
+                            tipo_atendimento = $('#tipo_atendimento');
+                            editar_valor = $('#editar-valor');
+                            tipo_atendimento.val("");
+                            editar_valor.prop('checked', false);
+                            valor = $('#valor');
+                            valor.val(0);
+                            $('#cliente').val($('#cliente2').val());
+                            valor.attr("readonly", true);
+                            $('#id_escala_intervalo').val(date.id);
+                            $('#retorno').val(0);
+                            tipo_atendimento.on('change', function () {
+                                id_tipo_atendimento = $("#tipo_atendimento").val().split('-')[0];
+                                valor_tipo_atendimento = $('#tipo_atendimento').val().split('-')[1];
+                                $('#valor').val(valor_tipo_atendimento.split(',')[0]);
+                            });
 
-                    editar_valor.on('click',function () {
-                        if(valor.attr('readonly')) {
-                            valor.removeAttr("readonly");
-                        }else{
-                            valor.attr("readonly",true);
-                        }
-                    });
+                            editar_valor.on('click', function () {
+                                if (valor.attr('readonly')) {
+                                    valor.removeAttr("readonly");
+                                } else {
+                                    valor.attr("readonly", true);
+                                }
+                            });
 
-                    $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
-                    $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY -> H:mm')); // Preenche data start
-                    if(date.end) { // Se tiver data final
-                        $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
-                        $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY -> H:mm')); // Preenche data end
-                    }else{
-                        $('#labelfim').text(''); // Reseta labelfim
-                        $('#modal-view-event #end').text(''); // Reseta data end
+                            $('#title').attr('className', date.className);// Armazena informação da cor para recuperar na edição
+                            $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY [às] H:mm')); // Preenche data start
+                            if (date.end) { // Se tiver data final
+                                $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
+                                $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY [às] H:mm')); // Preenche data end
+                            } else {
+                                $('#labelfim').text(''); // Reseta labelfim
+                                $('#modal-view-event #end').text(''); // Reseta data end
+                            }
+                            /*if (date.description) { // Se tiver descrição
+                                {#$('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc#}
+                                {#$('#modal-view-event #desc').text(date.description); // Preenche descrição#}
+                            } else {
+                                $('#labeldesc').text(''); // Reseta labeldesc
+                                $('#modal-view-event #desc').text(''); // Reseta descrição
+                            }*/
+
+                            $('#modal-view-event').modal('show'); // Mostra janela de visalização
+                            break;
+                        case "fc-danger": // Abrir janela para visualizar atendimento
+                            $('#atendimento').attr('style', 'display:block');
+                            $('#modal-view-atendimento #cliente').text(date.cliente.toLocaleString()); // Preenche campo titulo
+                            $('#modal-view-atendimento #start').text(date.inicio); // Preenche campo inicio
+                            $('#modal-view-atendimento #end').text(date.fim); // Preenche campo inicio
+                            $('#modal-view-atendimento #desc').text(date.tipo_atendimento); // Preenche campo inicio
+                            $('#modal-view-atendimento').modal('show'); // Mostra janela de visalização
                     }
-                    if(date.description) { // Se tiver descrição
-                        $('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
-                        $('#modal-view-event #desc').text(date.description); // Preenche descrição
-                    }else{
-                        $('#labeldesc').text(''); // Reseta labeldesc
-                        $('#modal-view-event #desc').text(''); // Reseta descrição
-                    }
 
-                    $('#modal-view-event').modal('show'); // Mostra janela de visalização
                 }, // Ao clicar em um evento
                 events:
                 {{ intervalos|safe }}
@@ -266,6 +299,15 @@
 
             });
 
+            $('#retorno').on("change", function () {
+                if($('#retorno').val() == 1){
+                    $('#editar-valor').attr('disabled', true);
+                    $('#valor').val("0");
+                } else {
+                    $("#editar-valor").removeAttr("disabled");
+                    $('#valor').val($('#tipo_atendimento').val().split('-')[1]);
+                }
+            });
 
             /* handle change view
                 -----------------------------------------------------------------*/
@@ -307,6 +349,13 @@
                 }
             });
 
+        });
+
+        $('#send_atendimento').on('click', function () {
+            alert();
+            if($('#tipo_atendimento').val()){
+                mensagem_erro("Você precisa ")
+            }
         });
 
         $('#datastart').datetimepicker({
