@@ -40,62 +40,71 @@
             </div>
             <ul class="nav nav-primary">
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/usuario/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:usuario:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.USUARIO }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
-                    <a href="{% url 'core:modulo:empresa:list_view' %}">
+                {% url 'core:modulo:dashboard' as index %}
+                <li class="nav-item {% if request.path == index %} active {% endif %}">
+                    <a href="{% url 'core:modulo:dashboard' %}">
                         <i class="fas fa-desktop"></i>
+                        <p>{{ labels.PAINEL }}</p>
+                    </a>
+                </li>
+
+                <li class="nav-item {% if "/empresa/" in request.path %} active {% endif %}">
+                    <a href="{% url 'core:modulo:empresa:list_view' %}">
+                        <i class="fas fa-hotel"></i>
                         <p>{{ labels.EMPRESA }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/departamento/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:departamento:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.DEPARTAMENTO }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/atendente/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:atendente:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.ATENDENTE }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/cliente/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:cliente:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.CLIENTE }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/tipo_atendimento/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:tipo_atendimento:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.TIPO_ATENDIMENTO }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/tipo_profissional/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:tipo_profissional:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.TIPO_PROFISSIONAL }}</p>
                     </a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item {% if "/profissional/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:profissional:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.PROFISSIONAL }}</p>
                     </a>
                 </li>
-                <li class="nav-item active">
+
+                <li class="nav-item {% if "/atendimento/" in request.path %} active {% endif %}">
                     <a href="{% url 'core:modulo:atendimento:list_view' %}">
                         <i class="fas fa-user"></i>
                         <p>{{ labels.ATENDIMENTO }}</p>

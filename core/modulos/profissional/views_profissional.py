@@ -108,7 +108,7 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
             for inter in intervalo:
                 b = {'id': escala.pk,
-                    'title': self.object.nome,
+                    'title': "Disponível",
                      'start':str(escala.dia) + "T" + str(inter.inicio),
                      'end': str(escala.dia) + "T" + str(inter.fim),
                      'description': inter.descricao,

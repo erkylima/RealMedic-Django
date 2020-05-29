@@ -5,7 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
+from django.core import serializers
 
+from core.models import Atendimento
 from core.util.util_manager import MyLabls
 
 
@@ -15,9 +17,14 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         print('get_context_data')
         context = super().get_context_data(**kwargs)
+        atendimentos = Atendimento.objects.all()
         dados = {}
+        test = list(Atendimento.objects.values())
+
+        context['atendimentos'] = test
+        print(context['atendimentos'])
         context.update(dados)
-        print('context', context)
+
         return context
 
 @login_required

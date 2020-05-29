@@ -69,7 +69,7 @@ class EscalaUpdateView(MyUpdateViewEscala):
             intervalo = escala.escalaintervalo_set.get(escala_id=escala.pk)
 
             b = {'id': escala.pk,
-                'title': profissional.nome,
+                'title': "Disponível",
                  'start':str(escala.dia) + "T" + str(intervalo.inicio),
                  'end': str(escala.dia) + "T" + str(intervalo.fim),
                  'description': intervalo.descricao,
@@ -93,75 +93,9 @@ class EscalaUpdateView(MyUpdateViewEscala):
 @login_required
 def addEditEscala(request):
     subs = {}
-    try:
-        if request.POST['idbd'] != '':
-            # escala = Escala.objects.get(pk=id)
-            id = request.POST['idbd']
-            profissional = request.POST['profissional']
-            datastart = request.POST['datastarte']
-            dataend = request.POST['dataende']
-            horastart = request.POST['horastarte']
-            horaend = request.POST['horaende']
-            descricao = request.POST['descricao']
-            cor = request.POST['color']
-
-            #Editar Model
-            escala = Escala.objects.get(pk=id)
-            escala_intervalo = EscalaIntervalo.objects.get(escala_id=escala.pk)
-            start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M')
-            end = datetime.strptime(dataend + " " + horaend, '%d/%m/%Y %H:%M')
-            escala_intervalo.cor = cor
-            escala_intervalo.descricao = descricao
-            escala_intervalo.inicio = start
-            escala_intervalo.fim = end
-            if start.timestamp() < end.timestamp():
-                escala_intervalo.save()
-
-    except: # Criando pela primeira vez
-        profissional = request.POST['profissional']
-        datastart = request.POST['datastart']
-        dataend = request.POST['dataend']
-        horastart = request.POST['horastart']
-        horaend = request.POST['horaend']
-        descricao = request.POST['descricao']
-        cor = request.POST['color']
-        start = datetime.strptime(datastart + " " + horastart , '%d/%m/%Y %H:%M')
-        end = datetime.strptime(dataend + " " + horaend , '%d/%m/%Y %H:%M')
-
-        if start.timestamp() < end.timestamp():
-            escala = Escala(departamentoProfissional_id=profissional,dia=start)
-            escala.save()
-            escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala.pk,descricao=descricao,cor=cor)
-            escala_intervalo.save()
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def marcarMes(request):
-    print(calendar.monthrange(2012,1)[1])
-    profissional = 1
-
-    for dia in range(calendar.monthrange(2012,5)[1]):
-        start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
-        escala = Escala(departamentoProfissional_id=profissional, dia=start)
-        escala.save()
-        for j in range(8):
-            for k in range(2):
-                if k == 1:
-                    start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":00",
-                                              '%Y-%m-%d %H:%M')
-                    end = start + timedelta(minutes=30)
-                else:
-                    start = datetime.strptime("2020-05-" + str(dia+1).zfill(2) + " " + str(j + 8).zfill(2) + ":30",
-                                              '%Y-%m-%d %H:%M')
-                    end = start + timedelta(minutes=30)
-
-                escala_intervalo = EscalaIntervalo(inicio=start, fim=end, escala_id=escala.pk, descricao="desc", cor="success")
-                escala_intervalo.save()
-
-    """if request.POST['idbd'] != '':
-        # escala = Escala.objects.get(pk=id)
+    if request.POST['editando'] == '1':
         id = request.POST['idbd']
+        escala = Escala.objects.get(pk=id)
         profissional = request.POST['profissional']
         datastart = request.POST['datastarte']
         dataend = request.POST['dataende']
@@ -181,7 +115,45 @@ def marcarMes(request):
         escala_intervalo.fim = end
         if start.timestamp() < end.timestamp():
             escala_intervalo.save()
-"""
+        else:
+            pass
+    # Criando pela primeira vez
+    elif request.POST['editando'] == '0':
+        profissional = request.POST['profissional']
+        datastart = request.POST['datastart']
+        dataend = request.POST['dataend']
+        horastart = request.POST['horastart']
+        horaend = request.POST['horaend']
+        descricao = request.POST['descricao']
+        cor = request.POST['color']
+        start = datetime.strptime(datastart + " " + horastart , '%d/%m/%Y %H:%M')
+        end = datetime.strptime(dataend + " " + horaend , '%d/%m/%Y %H:%M')
+
+        if start.timestamp() < end.timestamp():
+            escala = Escala.objects.get_or_create(dia=start)
+            print(escala[0])
+            escala[0].departamentoProfissional_id=profissional
+            escala[0].save()
+
+            escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala[0].pk,descricao=descricao,cor=cor)
+            escala_intervalo.save()
+
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def marcarMes(request):
+    print(calendar.monthrange(2012,6)[1])
+    profissional = 1
+    mes = 6
+    for dia in range(calendar.monthrange(2012, mes)[1]):
+        start = datetime.strptime("2020-" + str(mes).zfill(2) + "-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
+        escalas = Escala.objects.filter(departamentoProfissional_id=profissional, dia=start)
+
+        escala_intervalo = EscalaIntervalo.objects.filter(escala=escala)
+        for escala in escalas:
+            for intervalo in escala_intervalo:
+                escala = Escala
 
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

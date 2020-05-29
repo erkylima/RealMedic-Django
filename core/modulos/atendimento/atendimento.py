@@ -22,6 +22,8 @@ class Atendimento(Timestampable):
     retorno = models.BooleanField(default=False)
     valor = models.DecimalField(verbose_name='Preço',decimal_places=2,max_digits=5, default=0)
     tempo = models.TimeField(default=datetime.now())
+    inicio_atendimento = models.TimeField(null=True, blank=True) # Horario de inicialização do atendimento
+    fim_atendimento = models.TimeField(null=True, blank=True) # Horario de finalização do atendimento
 
     def __str__(self):
         return self.cliente.nome
