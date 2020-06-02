@@ -1,12 +1,15 @@
+import calendar
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
-import calendar
-from core.models import Escala,EscalaIntervalo, Profissional
+
+from core.models import Escala, EscalaIntervalo, Profissional, Atendimento
 from core.modulos.escala.form_escala import EscalaForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -95,7 +98,7 @@ def addEditEscala(request):
     subs = {}
     if request.POST['editando'] == '1':
         id = request.POST['idbd']
-        escala = Escala.objects.get(pk=id)
+        escala_intervalo = EscalaIntervalo.objects.get(pk=id)
         profissional = request.POST['profissional']
         datastart = request.POST['datastarte']
         dataend = request.POST['dataende']
@@ -105,8 +108,7 @@ def addEditEscala(request):
         cor = request.POST['color']
 
         #Editar Model
-        escala = Escala.objects.get(pk=id)
-        escala_intervalo = EscalaIntervalo.objects.get(escala_id=escala.pk)
+        escala = Escala.objects.get(pk=escala_intervalo.escala_id)
         start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M')
         end = datetime.strptime(dataend + " " + horaend, '%d/%m/%Y %H:%M')
         escala_intervalo.cor = cor
@@ -130,30 +132,40 @@ def addEditEscala(request):
         end = datetime.strptime(dataend + " " + horaend , '%d/%m/%Y %H:%M')
 
         if start.timestamp() < end.timestamp():
-            escala = Escala.objects.get_or_create(dia=start)
-            print(escala[0])
-            escala[0].departamentoProfissional_id=profissional
+            escala = Escala.objects.get_or_create(dia=start.date(),departamentoProfissional_id=profissional)
             escala[0].save()
+            intervalostart = start.hour*2
+            intervalostart = intervalostart+(start.minute/30)
+            intervaloend = end.hour * 2
+            intervaloend = intervaloend + (end.minute / 30)
+            diferenca_intervalo = int(intervaloend) - int(intervalostart)
+            if(diferenca_intervalo > 1):
+                messages.success(request, "Escalas adicionadas com sucesso")
+            elif(diferenca_intervalo == 1):
+                messages.success(request, "Escala adicionada com sucesso")
+            else:
+                messages.error(request, "O intervalo da escala precisa ter no mínimo 30 minutos")
 
-            escala_intervalo = EscalaIntervalo(inicio=start,fim=end,escala_id=escala[0].pk,descricao=descricao,cor=cor)
-            escala_intervalo.save()
 
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def marcarMes(request):
-    print(calendar.monthrange(2012,6)[1])
-    profissional = 1
-    mes = 6
-    for dia in range(calendar.monthrange(2012, mes)[1]):
-        start = datetime.strptime("2020-" + str(mes).zfill(2) + "-" + str(dia+1).zfill(2) + " " + "08:00", '%Y-%m-%d %H:%M')
-        escalas = Escala.objects.filter(departamentoProfissional_id=profissional, dia=start)
-
-        escala_intervalo = EscalaIntervalo.objects.filter(escala=escala)
-        for escala in escalas:
-            for intervalo in escala_intervalo:
-                escala = Escala
-
+            for i in range(int(diferenca_intervalo)):
+                inicio = (start + timedelta(minutes=(i * 30)))
+                fim = (start + timedelta(minutes=(i * 30)+30))
+                EscalaIntervalo(inicio=inicio.strftime('%H:%M'),fim=fim.strftime('%H:%M'),escala_id=escala[0].pk,descricao=descricao,cor=cor).save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required()
+def limparIntervaloDia(request):
+    intervalo = request.POST['intervalolimpar']
+
+    intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
+    if(intervalo_obj.atendimento != None):
+        atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento_id)
+        intervalos_obj = EscalaIntervalo.objects.filter(atendimento_id=intervalo_obj.atendimento)
+        for inter in intervalos_obj:
+            inter.delete()
+        atendimento.delete()
+    else:
+        intervalo_obj.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+

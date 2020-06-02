@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" style="display: none" >
     <input type="hidden" class="form-control" id="editando" name="editando" value="0">
 </div>
 
@@ -6,9 +6,16 @@
     <input type="hidden" class="form-control" id="profissional" name="profissional" value="{{ idProfissional }}">
 </div>
 
-<div class="form-group">
+<div class="form-group" style="display: none" >
   <textarea class="form-control" rows="3" autofocus id="descriptionadd" name="descricao"></textarea>
   <label>Descrição</label>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p class="text-center">Selecione o horário de início e fim da escala</p>
+        <div id="slider-range" class="slider-primary"></div>
+    </div>
 </div>
 
 <div class="row">
@@ -28,7 +35,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="horastart" name="horastart">
+                <input type="text" class="form-control slider-time" value="08:00 AM" readonly id="horastart" name="horastart">
                 <div class="input-group-append">
                     <span class="input-group-text">
                         <i class="fa fa-clock"></i>
@@ -57,7 +64,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="horaend" name="horaend">
+                <input type="text" class="form-control slider-time2" value="12:00 PM" readonly id="horaend" name="horaend">
                 <div class="input-group-append">
                     <span class="input-group-text">
                         <i class="fa fa-clock"></i>
@@ -70,7 +77,7 @@
 </div>
 
 <br>
-<div class="form-group">
+<div class="form-group" style="display: none" >
     <div class="row gutters-xs">
         <div class="col-auto">
             <label class="colorinput">
@@ -119,4 +126,5 @@
 </div>
 <hr>
 <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Cancelar</button>
+
 <button type="button" class="btn btn-bold btn-pure btn-primary float-right" id="save_escala">Salvar</button>

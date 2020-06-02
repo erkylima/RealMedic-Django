@@ -59,7 +59,7 @@
     <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header  bg-primary">
+                <div class="modal-header bg-primary">
                     <h5 class="modal-title" id="title-view">Marcar Atendimento</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
@@ -179,7 +179,16 @@
                         </dl>
 
                         <hr>
+                        <button type="button" onclick="desmarcarAtendimento()" class="btn btn-danger">Desmarcar Atendimento</button>
+                        <form id="desmarcaratendimento"
+                              autocomplete="off"
+                              method="post"
+                              action="{% url 'core:modulo:atendimento:desmarcar_atendimento' %}"
+                              novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="intervalolimpar" id="intervalolimpar">
 
+                        </form>
                     </div>
                 </div>
 
@@ -197,6 +206,46 @@
 
 
     <script>
+
+        function desmarcarAtendimento(){
+            swal({
+                title: 'Tem certeza que quer desmarcar esse atendimento?',
+                text: "Isso não pode ser revertido!",
+                type: 'warning',
+                buttons:{
+                    cancel: {
+                        visible: true,
+                        text : 'Não, cancelar!',
+                        className: 'btn btn-danger'
+                    },
+                    confirm: {
+                        text : 'Sim, desmarcar!',
+                        className : 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Esse atendimento foi desmarcado!", {
+                        icon: "success",
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                    $('#desmarcaratendimento').submit();
+                } else {
+                    swal("Esse atendimento não foi desmarcado!", {
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         $("#id_departamentoProfissional").change(function () {
 
             var valor = $(this).val();  // get the selected country ID from the HTML input
@@ -253,6 +302,9 @@
                                 id_tipo_atendimento = $("#tipo_atendimento").val().split('-')[0];
                                 valor_tipo_atendimento = $('#tipo_atendimento').val().split('-')[1];
                                 $('#valor').val(valor_tipo_atendimento.split(',')[0]);
+                                var horapadrao = parseInt($('#tipo_atendimento').val().split('-')[2].split(':')[0]);
+                                var minutopadrao = parseInt($('#tipo_atendimento').val().split('-')[2].split(':')[1]);
+                                $('#modal-view-event #end').text(moment(date.start).add(horapadrao,'hours').add(minutopadrao,'minutes').format('DD/MM/YYYY [àss] H:mm')); // Preenche data end
                             });
 
                             editar_valor.on('click', function () {
@@ -273,8 +325,8 @@
                                 $('#modal-view-event #end').text(''); // Reseta data end
                             }
                             /*if (date.description) { // Se tiver descrição
-                                {#$('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc#}
-                                {#$('#modal-view-event #desc').text(date.description); // Preenche descrição#}
+                                #$('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
+                                #$('#modal-view-event #desc').text(date.description); // Preenche descrição
                             } else {
                                 $('#labeldesc').text(''); // Reseta labeldesc
                                 $('#modal-view-event #desc').text(''); // Reseta descrição
@@ -283,6 +335,7 @@
                             $('#modal-view-event').modal('show'); // Mostra janela de visalização
                             break;
                         case "fc-danger": // Abrir janela para visualizar atendimento
+                            $('#intervalolimpar').val(date.id);
                             $('#atendimento').attr('style', 'display:block');
                             $('#modal-view-atendimento #cliente').text(date.cliente.toLocaleString()); // Preenche campo titulo
                             $('#modal-view-atendimento #start').text(date.inicio); // Preenche campo inicio

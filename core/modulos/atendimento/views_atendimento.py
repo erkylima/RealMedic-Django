@@ -194,3 +194,18 @@ def addAtendimento(request):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     # return HttpResponse(subs)
+
+@login_required()
+def desmarcarAtendimento(request):
+    intervalo = request.POST['intervalolimpar']
+
+    intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
+    if (intervalo_obj.atendimento != None):
+        atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento_id)
+        intervalos_obj = EscalaIntervalo.objects.filter(atendimento_id=intervalo_obj.atendimento)
+        for inter in intervalos_obj:
+            inter.atendimento_id = None
+            inter.save()
+        atendimento.delete()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" style="display: none" >
     <input type="hidden" class="form-control" id="editando" name="editando" value="1">
 </div>
 
@@ -7,9 +7,16 @@
     <input type="hidden" class="form-control" id="profissional" name="profissional" value="{{ idProfissional }}">
 </div>
 
-<div class="form-group">
+<div class="form-group" style="display: none" >
     <textarea class="form-control" id="desc-edit" name="descricao" rows="3"></textarea>
     <label>Descrição</label>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p class="text-center">Selecione o horário de início e fim da escala</p>
+        <div id="slider-range-edit" class="slider-primary"></div>
+    </div>
 </div>
 
 <div class="row">
@@ -29,7 +36,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="horastarte" name="horastarte">
+                <input type="text" class="form-control slider-time" readonly id="horastarte" name="horastarte">
                 <div class="input-group-append">
                     <span class="input-group-text">
                         <i class="fa fa-clock"></i>
@@ -58,7 +65,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="horaende" name="horaende">
+                <input type="text" class="form-control slider-time2" readonly id="horaende" name="horaende">
                 <div class="input-group-append">
                     <span class="input-group-text">
                         <i class="fa fa-clock"></i>
@@ -72,7 +79,7 @@
 
 <br>
 
-<div class="form-group">
+<div class="form-group" style="display: none" >
 <div class="row gutters-xs">
     <div class="col-auto">
         <label class="colorinput">

@@ -14,12 +14,11 @@
         <div class="panel-header bg-primary-gradient">
             <div class="page-inner border-bottom pb-0 mb-3">
                 <div class="d-flex align-items-left flex-column">
-                    <h2 class="pb-2 fw-bold">{{ profissional.nome }}</h2>
+                    <h2 class="pb-2 fw-bold text-white">{{ profissional.nome }}</h2>
                     <div class="nav-scroller d-flex">
                         <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
                             <a class="nav-link" href="{% url 'core:modulo:profissional:update_view' profissional.pk %}">Editar Cadastro</a>
                             <a class="nav-link active" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
-                            <a class="nav-link" href="{% url 'core:modulo:escala:marcar' %}">Marcar</a>
                         </div>
                     </div>
                 </div>
@@ -30,13 +29,13 @@
 {% block corpo_formulario %}
 
     {% if not idProfissional %}
-    <div class="row">
-        <div class="col-md-12 form-group">
-            {{ form.departamentoProfissional.label_tag }}
-            {{ form.departamentoProfissional }}
-            {{ form.departamentoProfissional.errors }}
+        <div class="row">
+            <div class="col-md-12 form-group">
+                {{ form.departamentoProfissional.label_tag }}
+                {{ form.departamentoProfissional }}
+                {{ form.departamentoProfissional.errors }}
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <div id="calendar"></div>
@@ -51,16 +50,16 @@
 
     <!-- Modal - Add new event -->
     <div class="modal modal-right fade" id="modal-add-event" tabindex="-1">
-          <div class="modal-dialog">
+        <div class="modal-dialog">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Criar Nova Escala</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">Criar Nova Escala</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-              <div class="modal-body form-type-material">
+                <div class="modal-body form-type-material">
                     <form id="addeditescala"
                           autocomplete="off"
                           method="post"
@@ -69,54 +68,64 @@
                         {% csrf_token %}
                         {% include 'escala/templates/form_add_escala.html' %}
                     </form>
-              </div>
-          </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- END Modal - Add new event -->
 
     <!-- Modal - View event -->
     <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="title-view">Detalhes da Escala</h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-          <div class="modal-body">
-              <div id="visualizar">
-                <dl class="row">
-                    <dt class="col-sm-3">Titulo</dt>
-                    <dd class="col-sm-9" id="title">Data Removida</dd>
-                    <dt class="col-sm-3">Inicio</dt>
-                    <dd class="col-sm-9" id="start"></dd>
-                    <dt class="col-sm-3" id="labelfim"></dt>
-                    <dd class="col-sm-9" id="end"></dd>
-                    <dt class="col-sm-3" id="labeldesc"></dt>
-                    <dd class="col-sm-9" id="desc"></dd>
-                </dl>
-                <hr>
-                <button class="btn btn-flat btn-primary ml-3" id="open-modal-edit">Editar</button>
-
-              </div>
-                <div id="editform" style="display: none">
-                    <form id="addeditescala"
-                          autocomplete="off"
-                          method="post"
-                          action="{% url 'core:modulo:escala:add_edit_escala' %}"
-                          novalidate>
-                        {% csrf_token %}
-                        {% include 'escala/templates/form_edit_escala.html' %}
-                    </form>
-
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" id="title-view">Detalhes da Escala</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
 
+                <div class="modal-body">
+                    <div id="visualizar">
+                        <dl class="row">
+                            <dt class="col-sm-3">Titulo</dt>
+                            <dd class="col-sm-9" id="title">Data Removida</dd>
+                            <dt class="col-sm-3">Inicio</dt>
+                            <dd class="col-sm-9" id="start"></dd>
+                            <dt class="col-sm-3" id="labelfim"></dt>
+                            <dd class="col-sm-9" id="end"></dd>
+                            <dt class="col-sm-3" id="labeldesc"></dt>
+                            <dd class="col-sm-9" id="desc"></dd>
+                        </dl>
+                        <hr>
+                        <button class="btn btn-flat btn-primary ml-3" id="open-modal-edit">Editar</button>
+                        <button type="button" onclick="apagarinvervalo()" class="btn btn-danger">Apagar</button>
+                        <form id="limparintervalo"
+                              autocomplete="off"
+                              method="post"
+                              action="{% url 'core:modulo:escala:limpar_intervalo' %}"
+                              novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="intervalolimpar" id="intervalolimpar">
+
+                        </form>
+
+                    </div>
+                    <div id="editform" style="display: none">
+                        <form id="addeditescala"
+                              autocomplete="off"
+                              method="post"
+                              action="{% url 'core:modulo:escala:add_edit_escala' %}"
+                              novalidate>
+                            {% csrf_token %}
+                            {% include 'escala/templates/form_edit_escala.html' %}
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
     </div>
     <!-- END Modal - View event -->
 
@@ -129,85 +138,203 @@
 
 
     <script>
+        function apagarinvervalo(){
+            swal({
+                title: 'Tem certeza que quer apagar essa escala?',
+                text: "Isso não pode ser revertido!",
+                type: 'warning',
+                buttons:{
+                    cancel: {
+                        visible: true,
+                        text : 'Não, cancelar!',
+                        className: 'btn btn-danger'
+                    },
+                    confirm: {
+                        text : 'Sim, apague isso!',
+                        className : 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Essa escala foi apagada!", {
+                        icon: "success",
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                    $('#limparintervalo').submit();
+                } else {
+                    swal("Essa escala não foi apagada!", {
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        $( function() {
+            $("#slider-range-edit").slider({
+                range: false,
+                min: 0,
+                max: 1411,
+                step: 30,
+                values: [600],
+                slide: function (e, ui) {
+                    var hours1 = Math.floor(ui.values[0] / 60);
+                    var minutes1 = ui.values[0] - (hours1 * 60);
+
+
+
+                    var hours2 = Math.floor(ui.values[1] / 60);
+                    var minutes2 = minutes1 + 30;
+
+                    if(hours1.length < 10) hours1= '0' + hours;
+                    if(minutes1.length < 10) minutes1 = '0' + minutes;
+
+                    if(minutes1 == 0){
+                        minutes1 = '00';
+                        hours2 = hours1;
+                        minutes2 = '30';
+                    } else {
+                        hours2 = hours1 + 1;
+                        minutes2 = '00';
+                        console.log('Hora 1: ' +  hours1+":" +minutes1);
+                        console.log('Hora 2: ' +  hours2+":" +minutes2);
+                    }
+
+
+
+
+                    $('.slider-time').val(hours1 + ':' + minutes1);
+
+                    $('.slider-time2').val(hours2 + ':' + minutes2);
+                }
+            });
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: 1411,
+                step: 30,
+                values: [600, 720],
+                slide: function (e, ui) {
+                    console.log(ui.values[0]);
+                    var hours1 = Math.floor(ui.values[0] / 60);
+                    var minutes1 = ui.values[0] - (hours1 * 60);
+
+
+
+                    var hours2 = Math.floor(ui.values[1] / 60);
+                    var minutes2 = ui.values[1] - (hours2 * 60);
+
+                    if(hours1.length < 10) hours1= '0' + hours;
+                    if(minutes1.length < 10) minutes1 = '0' + minutes;
+
+                    if(minutes1 == 0) minutes1 = '00';
+
+                    if(hours2.length < 10) hours2= '0' + hours;
+                    if(minutes2.length < 10) minutes2 = '0' + minutes;
+
+                    if(minutes2 == 0) minutes2 = '00';
+
+                    $('.slider-time').val(hours1 + ':' + minutes1);
+
+                    $('.slider-time2').val(hours2 + ':' + minutes2);
+                }
+            });
+        });
+
         $("#id_departamentoProfissional").change(function () {
 
-              var valor = $(this).val();  // get the selected country ID from the HTML input
-              $('#profissional').val(valor);
+            var valor = $(this).val();  // get the selected country ID from the HTML input
+            $('#profissional').val(valor);
 
         });
+
 
         $(document).ready(function () {
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-        var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
 
-        $calendar = $('#calendar');
-        $calendar.fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay,listWeek'
-            },
-            locale: 'pt-br', // Definir tradução do calendário
-            selectable : true, // Definir se datas são selecionáveis
-            selectHelper: true,
-            eventLimit: true,
-            views: {
-                 month: {
-                   eventLimit: 4
-                 }
-            },
-            viewRender: function(view, element) {
+            $calendar = $('#calendar');
+            $calendar.fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listWeek'
+                },
+                locale: 'pt-br', // Definir tradução do calendário
+                selectable : true, // Definir se datas são selecionáveis
+                selectHelper: true,
+                eventLimit: true,
+                views: {
+                    month: {
+                        eventLimit: 4
+                    }
+                },
+                viewRender: function(view, element) {
                     $('.quick-sidebar-toggler').toggle();
-                $('#calendar-title').text( view.title );
-              }, // Ao renderizar view
-            dayClick: function(date, jsEvent, view) {
-                // Abrir janela para adicionar nova escala
-                $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                $('#horastart').val(moment(date.start).format('H:mm')); // Preenche horastart
-                var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
+                    $('#calendar-title').text( view.title );
+                }, // Ao renderizar view
+                dayClick: function(date, jsEvent, view) {
+                    // Abrir janela para adicionar nova escala
+                    $( "#slider-range" ).slider('values',0,480);
+                    $( "#slider-range" ).slider('values',1,720);
+                    $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                    $('#horastart').val($('.slider-time').val()); // Preenche horastart
+                    var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
 
-                $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                $('#horaend').val(moment(Date.now()+3600000).format('H:mm')); // Preenche horastart
+                    $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                    $('#horaend').val($('.slider-time2').val()); // Preenche horastart
 
-                $('#modal-add-event').modal('show'); // Mostra janela de criação
-          }, // Ao clicar em um dia
-            eventClick: function(date, jsEvent, view) {
-                  // Abrir janela para visualizar escala
-                  $('#visualizar').attr('style','display:block');
-                  $('#editform').attr('style','display:none');
-                  $('#modal-view-event #title').text(date.title); // Preenche campo titulo
-                  $('#idbd').val(date.id);
-                  $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
-                  $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY -> H:mm')); // Preenche data start
-                  if(date.end) { // Se tiver data final
-                      $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
-                      $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY -> H:mm')); // Preenche data end
-                  }else{
-                      $('#labelfim').text(''); // Reseta labelfim
-                      $('#modal-view-event #end').text(''); // Reseta data end
-                  }
-                  if(date.description) { // Se tiver descrição
-                      $('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
-                      $('#modal-view-event #desc').text(date.description); // Preenche descrição
-                  }else{
-                      $('#labeldesc').text(''); // Reseta labeldesc
-                      $('#modal-view-event #desc').text(''); // Reseta descrição
-                  }
-                  $('#modal-view-event').modal('show'); // Mostra janela de visalização
-            }, // Ao clicar em um evento
-            events:
+                    $('#modal-add-event').modal('show'); // Mostra janela de criação
+
+                }, // Ao clicar em um dia
+                eventClick: function(date, jsEvent, view) {
+                    // Abrir janela para visualizar escala
+                    $('#visualizar').attr('style','display:block');
+                    $('#editform').attr('style','display:none');
+                    $('#modal-view-event #title').text(date.title); // Preenche campo titulo
+                    $('#idbd').val(date.id);
+                    $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
+                    $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY -> H:mm')); // Preenche data start
+                    var horareversa = Math.floor(moment(date.start).format('H') * 60);
+                    var minutesreverso = Math.floor(moment(date.start).format('m')) + (horareversa);
+                    $( "#slider-range-edit" ).slider('values',0,minutesreverso);
+                    $('#intervalolimpar').val(date.id);
+                    if(date.end) { // Se tiver data final
+                        $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
+                        $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY -> H:mm')); // Preenche data end
+                    }else{
+                        $('#labelfim').text(''); // Reseta labelfim
+                        $('#modal-view-event #end').text(''); // Reseta data end
+                    }
+                    if(date.description) { // Se tiver descrição
+                        $('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
+                        $('#modal-view-event #desc').text(date.description); // Preenche descrição
+                    }else{
+                        $('#labeldesc').text(''); // Reseta labeldesc
+                        $('#modal-view-event #desc').text(''); // Reseta descrição
+                    }
+                    $('#modal-view-event').modal('show'); // Mostra janela de visalização
+                }, // Ao clicar em um evento
+                events:
                 {{ intervalos|safe }}
-            , // Popular escalas existentes no calendário
+                , // Popular escalas existentes no calendário
 
 
-        });
+            });
 
 
-        /* handle change view
-            -----------------------------------------------------------------*/
+            /* handle change view
+                -----------------------------------------------------------------*/
 
             $('[data-calendar-view]').on('click', function() {
                 var view = $(this).data('calendar-view');
@@ -216,13 +343,15 @@
                 makeViewActive($(this));
             });
 
+
+
             var makeViewActive = function(e) {
                 $(e).closest('.nav').find('.nav-link.active, .dropdown-item.active').removeClass('active');
                 $(e).addClass('active');
                 if ($(e).hasClass('dropdown-item')) {
                     $(e).closest('.dropdown').children('.nav-link').addClass('active');
                 }
-            }
+            };
 
 
 
@@ -338,6 +467,7 @@
                         });
                 } // Verificar qual é a cor selecionada
 
+
                 // alert(!dataFimMaiorQueDataInicio(horastart[0]+":"+horastart[1], horaend[0]+":"+horaend[1]));
                 if(!dataFimMaiorQueDataInicio(horastart[0]+":"+horastart[1], horaend[0]+":"+horaend[1])){ // verifica se a data inicial é maior que data final
                     $calendar.fullCalendar('addEventSource', {
@@ -361,7 +491,7 @@
                     mensagem_erro('A data final precisa ser menor que a final!')
                 }
             });
-    });
+        });
 
         $('#datastart').datetimepicker({
             format: 'DD/MM/YYYY',
@@ -406,8 +536,8 @@
             return toTimestamp('1998-01-01T'+inicio) >= toTimestamp('1998-01-01T'+fim);
         }
         function toTimestamp(strDate){
-             var datum = Date.parse(strDate);
-             return datum/1000;
+            var datum = Date.parse(strDate);
+            return datum/1000;
         }
 
     </script>

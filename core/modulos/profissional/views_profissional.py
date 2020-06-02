@@ -107,13 +107,41 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         for escala in escalas:
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
             for inter in intervalo:
-                b = {'id': escala.pk,
+                if inter.atendimento_id != None:
+                    """inicio = datetime.strptime(inter.inicio.strftime(
+                        "%Y-%m-%d") + " " + inter.inicio.strftime("%H:%M:%S"),
+                                               '%Y-%m-%d %H:%M:%S')
+                    fim = inicio + timedelta(hours=int(inter.atendimento.tempo.strftime("%H")),minutes=int(inter.atendimento.tempo.strftime("%M")))
+"""  # print("==============")
+                    # print("Inicio " + inter.inicio.strftime("%Hm%M"))
+                    # print("Fim " + fim.strftime("%Hh%M"))
+
+                    b = {'id': inter.pk,
+                         'title': inter.atendimento.cliente.nome.split(" ")[0],
+                         'start': str(escala.dia) + "T" + str(inter.inicio),
+                         'end': str(escala.dia) + "T" + str(inter.fim),
+                         'description': inter.descricao,
+                         'className': "fc-danger",
+                         'cliente': inter.atendimento.cliente.nome.split(" ")[0],
+                         'inicio': inter.atendimento.inicio_atendimento.strftime("%Hh%M"),
+                         'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
+                         'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")
+                         }
+                else:
+                    b = {'id': inter.pk,
+                         'title': "Disponível",
+                         'start': str(escala.dia) + "T" + str(inter.inicio),
+                         'end': str(escala.dia) + "T" + str(inter.fim),
+                         'description': inter.descricao,
+                         'className': "fc-success"
+                         }
+                """b = {'id': escala.pk,
                     'title': "Disponível",
                      'start':str(escala.dia) + "T" + str(inter.inicio),
                      'end': str(escala.dia) + "T" + str(inter.fim),
                      'description': inter.descricao,
                      'className': "fc-"+inter.cor
-                     }
+                     }"""
                 intervalos.append(b)
         context['intervalos'] = intervalos
         return context

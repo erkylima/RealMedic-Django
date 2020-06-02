@@ -13,9 +13,9 @@ class TipoAtendimentoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TipoAtendimentoForm, self).__init__(*args, **kwargs)
-        CHOICES = ([('00:30:00', '00h30 de Atendimento'), ('01:00:00', '01h00 de Atendimento'),
-                   ('01:30:00', '01h30 de Atendimento'), ('02:00:00', '02h00 de Atendimento'),])
-        self.fields['tempo_padrao'] = forms.ChoiceField(choices=CHOICES,label='Tempo Padrão')
+        CHOICES = ([('00:30:00', '00h'), ('01:00:00', '01h'),
+                   ('01:30:00', '01h'), ('02:00:00', '02h'),])
+        self.fields['tempo_padrao'] = forms.ChoiceField(choices=CHOICES,label='Tempo Padrão', widget=forms.RadioSelect)
         if self.instance.pk:
             print(self.instance.tempo_padrao.strftime('%H:%M'))
             self.fields['tempo_padrao'].default = self.instance.tempo_padrao

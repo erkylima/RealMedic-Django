@@ -31,6 +31,9 @@ def adiciona_form_control(self):
             # field.widget.attrs['data-live-search'] = 'true'
             # field.widget.attrs['data-provide'] = 'selectpicker'
             # field.widget.attrs['data-size '] = '10'
+        elif field and isinstance(field, forms.ChoiceField):
+            field.widget.attrs['class'] = 'form-control selectgroup w-100'
+
         elif field and isinstance(field, forms.ModelMultipleChoiceField):
             pass
             # field.widget.attrs['class'] = 'selectpicker form-control'

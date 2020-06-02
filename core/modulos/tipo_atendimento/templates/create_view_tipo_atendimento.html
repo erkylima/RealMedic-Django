@@ -18,9 +18,27 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 form-group ">
+        <div class="col-md-12 form-group">
             {{ form.tempo_padrao.label_tag }}
-            {{ form.tempo_padrao }}
+{#            {{ form.tempo_padrao }}#}
+            <div class="form-control selectgroup w-100 pt-3" id="id_tempo_padrao">
+                <label class="selectgroup-item">
+                    <input type="radio" name="tempo_padrao" required value="00:30:00" class="form-control selectgroup-input" {% if form.tempo_padrao.value|stringformat:"s" == "00:30:00" %} checked="" {% endif %}>
+                    <span class="selectgroup-button">30m</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input type="radio" name="tempo_padrao" required value="01:00:00" class="form-control selectgroup-input" {% if form.tempo_padrao.value|stringformat:"s" == "01:00:00" %} checked="" {% endif %}>
+                    <span class="selectgroup-button">1h</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input type="radio" name="tempo_padrao" required value="01:30:00" class="form-control selectgroup-input" {% if form.tempo_padrao.value|stringformat:"s" == "01:30:00" %} checked="" {% endif %}>
+                    <span class="selectgroup-button">1h30</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input type="radio" name="tempo_padrao" required value="02:00:00" class="form-control selectgroup-input" {% if form.tempo_padrao.value|stringformat:"s" == "02:00:00" %} checked="" {% endif %}>
+                    <span class="selectgroup-button">2h</span>
+                </label>
+            </div>
             {{ form.tempo_padrao.errors }}
         </div>
     </div>
