@@ -27,15 +27,18 @@
                     <div class="card-category">Diariamente informações estatísticas do sistema</div>
                     <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
                         <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-1"><div class="circles-wrp" style="position: relative; display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><path fill="transparent" stroke="#f1f1f1" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 1 1 44.942357332570026 3.500040032273624 Z" class="circles-maxValueStroke"></path><path fill="transparent" stroke="#FF9E27" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 1 1 20.644357636259837 78.60137921350231 " class="circles-valueStroke"></path></svg><div class="circles-text" style="position: absolute; top: 0px; left: 0px; text-align: center; width: 100%; font-size: 31.5px; height: 90px; line-height: 90px;">5</div></div></div>
+                            <h6 class="fw-bold mt-3 mb-2">Meta de Clientes: <span class="badge badge-info">10</span></h6>
+                            <div id="novos-clientes"></div>
                             <h6 class="fw-bold mt-3 mb-0">Novos Clientes</h6>
                         </div>
                         <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-2"><div class="circles-wrp" style="position: relative; display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><path fill="transparent" stroke="#f1f1f1" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 1 1 44.942357332570026 3.500040032273624 Z" class="circles-maxValueStroke"></path><path fill="transparent" stroke="#2BB930" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 1 1 5.5495771787290025 57.88076625138973 " class="circles-valueStroke"></path></svg><div class="circles-text" style="position: absolute; top: 0px; left: 0px; text-align: center; width: 100%; font-size: 31.5px; height: 90px; line-height: 90px;">36</div></div></div>
+                            <h6 class="fw-bold mt-3 mb-2">Meta de Atendimentos: <span class="badge badge-info">500</span></h6>
+                            <div id="atendimentos"></div>
                             <h6 class="fw-bold mt-3 mb-0">Atendimentos</h6>
                         </div>
                         <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-3"><div class="circles-wrp" style="position: relative; display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><path fill="transparent" stroke="#f1f1f1" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 1 1 44.942357332570026 3.500040032273624 Z" class="circles-maxValueStroke"></path><path fill="transparent" stroke="#F25961" stroke-width="7" d="M 44.99154756204665 3.500000860767564 A 41.5 41.5 0 0 1 69.44267714510887 78.53812060894248 " class="circles-valueStroke"></path></svg><div class="circles-text" style="position: absolute; top: 0px; left: 0px; text-align: center; width: 100%; font-size: 31.5px; height: 90px; line-height: 90px;">12</div></div></div>
+                            <h6 class="fw-bold mt-3 mb-2">Meta de Inscrições: <span class="badge badge-info">20</span></h6>
+                            <div id="inscritos"></div>
                             <h6 class="fw-bold mt-3 mb-0">Inscritos</h6>
                         </div>
                     </div>
@@ -84,78 +87,88 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title fw-mediumbold">Corpo Clínico</div>
-                    <div class="card-list">
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/jm_denis.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                    <div id="clinico"  class="card-list">
+                        <div class="input-group">
+                            <input class="form-control search mb-3" type="search" placeholder="Insira um nome...">
+                            <div class="input-append">
+                                <button class="sort btn btn-secondary" data-sort="username">
+                                    Pesquisar
+                                </button>
                             </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr .Denis Almeida</div>
-                                <div class="status">Cirurgião Plástico</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
                         </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/chadengle.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                        <div class="list">
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/jm_denis.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr .Denis Almeida</div>
+                                    <div class="status">Cirurgião Plástico</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr. Laécio Carvalho</div>
-                                <div class="status">Pediátra</div>
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/chadengle.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr. Laécio Carvalho</div>
+                                    <div class="status">Pediátra</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr. José Ramalho</div>
+                                    <div class="status">Oftamologista</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr. José Ramalho</div>
-                                <div class="status">Oftamologista</div>
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/mlane.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr. Thalles</div>
+                                    <div class="status">Dentista</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/mlane.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr. Joelson Alemão</div>
+                                    <div class="status">Cardiologista</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr. Thalles</div>
-                                <div class="status">Dentista</div>
+                            <div class="item-list">
+                                <div class="avatar">
+                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                                <div class="info-user ml-3">
+                                    <div class="username">Dr. Pedro Lins</div>
+                                    <div class="status">Cardiologista</div>
+                                </div>
+                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr. Joelson Alemão</div>
-                                <div class="status">Cardiologista</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Dr. Pedro Lins</div>
-                                <div class="status">Cardiologista</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                <i class="fa fa-plus"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -171,7 +184,57 @@
 
     <script src="{% static 'core/base/assets/js/plugin/chart.js/chart.min.js' %}"></script>
     <script src="{% static 'core/base/assets/js/plugin/chart-circle/circles.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/plugin/list.js/list.min.js' %}"></script>
     <script>
+
+        var corpo = new List('clinico', {
+            valueNames: ['username', 'status']
+        });
+
+        Circles.create({
+            id:           'novos-clientes',
+            radius:       45,
+            value:        3,
+            maxValue:     20,
+            width:        7,
+            text:         function(value){return value + '';},
+            colors:       ['#eee', '#ffa13c'],
+            duration:     400,
+            wrpClass:     'circles-wrp',
+            textClass:    'circles-text',
+            styleWrapper: true,
+            styleText:    true
+        });
+
+        Circles.create({
+            id:           'atendimentos',
+            radius:       45,
+            value:        346,
+            maxValue:     500,
+            width:        7,
+            text:         function(value){return value + '';},
+            colors:       ['#eee', '#ff6662'],
+            duration:     400,
+            wrpClass:     'circles-wrp',
+            textClass:    'circles-text',
+            styleWrapper: true,
+            styleText:    true
+        });
+
+        Circles.create({
+            id:           'inscritos',
+            radius:       45,
+            value:        13,
+            maxValue:     20,
+            width:        7,
+            text:         function(value){return value + '';},
+            colors:       ['#eee', '#5eaeff'],
+            duration:     400,
+            wrpClass:     'circles-wrp',
+            textClass:    'circles-text',
+            styleWrapper: true,
+            styleText:    true
+        });
 
         var barChart = document.getElementById('barChart');
 
@@ -203,42 +266,42 @@
 
         var totalIncomeChart = document.getElementById('totalIncomeChart');
 
-		var mytotalIncomeChart = new Chart(totalIncomeChart, {
-			type: 'bar',
-			data: {
-				labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-				datasets : [{
-					label: "Total Income",
-					backgroundColor: '#ff9e27',
-					borderColor: 'rgb(23, 125, 255)',
-					data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-				}],
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: false,
-				legend: {
-					display: false,
-				},
-				scales: {
-					yAxes: [{
-						ticks: {
-							display: false //this will remove only the label
-						},
-						gridLines : {
-							drawBorder: false,
-							display : false
-						}
-					}],
-					xAxes : [ {
-						gridLines : {
-							drawBorder: false,
-							display : false
-						}
-					}]
-				},
-			}
-		});
+        var mytotalIncomeChart = new Chart(totalIncomeChart, {
+            type: 'bar',
+            data: {
+                labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
+                datasets : [{
+                    label: "Total Income",
+                    backgroundColor: '#ff9e27',
+                    borderColor: 'rgb(23, 125, 255)',
+                    data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            display: false //this will remove only the label
+                        },
+                        gridLines : {
+                            drawBorder: false,
+                            display : false
+                        }
+                    }],
+                    xAxes : [ {
+                        gridLines : {
+                            drawBorder: false,
+                            display : false
+                        }
+                    }]
+                },
+            }
+        });
 
     </script>
 {% endblock %}

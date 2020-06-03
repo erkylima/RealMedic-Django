@@ -19,6 +19,11 @@
                    href="{% url 'core:modulo:profissional:update_view' profissional.id %}">
                     <i class="fa fa-edit"></i>
                 </a>
+                <a type="button"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.id %}">
+                    <i class="fa fa-clock"></i>
+                </a>
                 <input type="checkbox"
                        checked
                        data-toggle="toggle"

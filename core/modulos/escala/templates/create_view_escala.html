@@ -91,9 +91,9 @@
                             <dt class="col-sm-3">Titulo</dt>
                             <dd class="col-sm-9" id="title">Data Removida</dd>
                             <dt class="col-sm-3">Inicio</dt>
-                            <dd class="col-sm-9" id="start"></dd>
+                            <dd class="col-sm-9"><span  id="start" class="badge badge-info"></span></dd>
                             <dt class="col-sm-3" id="labelfim"></dt>
-                            <dd class="col-sm-9" id="end"></dd>
+                            <dd class="col-sm-9"><span id="end" class="badge badge-info"></span></dd>
                             <dt class="col-sm-3" id="labeldesc"></dt>
                             <dd class="col-sm-9" id="desc"></dd>
                         </dl>
@@ -304,21 +304,21 @@
                     $('#modal-view-event #title').text(date.title); // Preenche campo titulo
                     $('#idbd').val(date.id);
                     $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
-                    $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY -> H:mm')); // Preenche data start
+                    $('#modal-view-event #start').text(date.inicio); // Preenche data start
                     var horareversa = Math.floor(moment(date.start).format('H') * 60);
                     var minutesreverso = Math.floor(moment(date.start).format('m')) + (horareversa);
                     $( "#slider-range-edit" ).slider('values',0,minutesreverso);
                     $('#intervalolimpar').val(date.id);
                     if(date.end) { // Se tiver data final
                         $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
-                        $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY -> H:mm')); // Preenche data end
+                        $('#modal-view-event #end').text(date.fim); // Preenche data end
                     }else{
                         $('#labelfim').text(''); // Reseta labelfim
                         $('#modal-view-event #end').text(''); // Reseta data end
                     }
-                    if(date.description) { // Se tiver descrição
-                        $('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
-                        $('#modal-view-event #desc').text(date.description); // Preenche descrição
+                    if(date.className == 'fc-danger') { // Se tiver descrição
+                        $('#labeldesc').text('Atendimento'); // Escreve texto dentro do labeldesc
+                        $('#modal-view-event #desc').text(date.tipo_atendimento); // Preenche descrição
                     }else{
                         $('#labeldesc').text(''); // Reseta labeldesc
                         $('#modal-view-event #desc').text(''); // Reseta descrição

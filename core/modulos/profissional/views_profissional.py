@@ -106,20 +106,13 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         intervalos = []
         for escala in escalas:
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
+            atendimento_anterior = None
             for inter in intervalo:
                 if inter.atendimento_id != None:
-                    """inicio = datetime.strptime(inter.inicio.strftime(
-                        "%Y-%m-%d") + " " + inter.inicio.strftime("%H:%M:%S"),
-                                               '%Y-%m-%d %H:%M:%S')
-                    fim = inicio + timedelta(hours=int(inter.atendimento.tempo.strftime("%H")),minutes=int(inter.atendimento.tempo.strftime("%M")))
-"""  # print("==============")
-                    # print("Inicio " + inter.inicio.strftime("%Hm%M"))
-                    # print("Fim " + fim.strftime("%Hh%M"))
-
                     b = {'id': inter.pk,
                          'title': inter.atendimento.cliente.nome.split(" ")[0],
                          'start': str(escala.dia) + "T" + str(inter.inicio),
-                         'end': str(escala.dia) + "T" + str(inter.fim),
+                         'end': str(escala.dia) + "T" + inter.atendimento.fim_atendimento.strftime("%H:%M"),
                          'description': inter.descricao,
                          'className': "fc-danger",
                          'cliente': inter.atendimento.cliente.nome.split(" ")[0],
@@ -127,6 +120,11 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
                          'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
                          'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")
                          }
+                    if (
+                            inter.atendimento_id == atendimento_anterior):  # Verifica se é um atendimento em sequência de intervalos
+                        continue
+
+                    atendimento_anterior = inter.atendimento_id  # Armazena o primeiro e id de um atendimento em sequencia de intervalos
                 else:
                     b = {'id': inter.pk,
                          'title': "Disponível",
@@ -135,13 +133,7 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
                          'description': inter.descricao,
                          'className': "fc-success"
                          }
-                """b = {'id': escala.pk,
-                    'title': "Disponível",
-                     'start':str(escala.dia) + "T" + str(inter.inicio),
-                     'end': str(escala.dia) + "T" + str(inter.fim),
-                     'description': inter.descricao,
-                     'className': "fc-"+inter.cor
-                     }"""
+
                 intervalos.append(b)
         context['intervalos'] = intervalos
         return context
