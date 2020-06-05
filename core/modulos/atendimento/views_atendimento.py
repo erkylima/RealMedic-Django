@@ -55,11 +55,26 @@ class AtendimentoListView(MyListViewAtendimento):
         atendimentos = []
         for prof in context['departamentoprofissional_list']:
             atendimento = Atendimento.objects.filter(departamentoProfissional_id=prof.pk)
-            atendimentos.append(atendimento)
+            if atendimento.exists():
+                atendimentos.append(atendimento)
+            else:
+                atend = Atendimento()
+                atend.pk = 99999999
+                atend.cliente_id = 1
+                profissional = prof.pk
+                atend.departamentoProfissional_id = profissional
+                atend.tipoAtendimento_id = 0
+
+                atend.retorno = False
+                atendimento.valor = Decimal(10)
+                atends = []
+                atends.append(atend)
+                atendimentos.append(atends)
         # print(context['departamentoprofissional_list'][0].tipo_profissional)
         # print(context['departamentoprofissional_list'][0].profissional.tiposAtendimentos.values_list)
         # print(atendimentos[0].last().escalaIntervalo)
         context['atendimentos'] = atendimentos
+        print(context['atendimentos'])
         # context['profissionais'] = DepartamentoProfissional.objects.select_related('')
         # print(dir(context['profissionais'][1].tipo_profissional))
         # # print(context)

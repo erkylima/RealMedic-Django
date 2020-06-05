@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User, Group
 from django.db import models
+from django.utils import timezone
 
 from core.models import Departamento
 from core.models.base.time_stampable import Timestampable
@@ -21,7 +22,7 @@ class Atendimento(Timestampable):
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
     retorno = models.BooleanField(default=False)
     valor = models.DecimalField(verbose_name='Preço',decimal_places=2,max_digits=5, default=0)
-    tempo = models.TimeField(default=datetime.now())
+    tempo = models.TimeField(default=timezone.now)
     inicio_atendimento = models.TimeField(null=True, blank=True) # Horario de inicialização do atendimento
     fim_atendimento = models.TimeField(null=True, blank=True) # Horario de finalização do atendimento
 

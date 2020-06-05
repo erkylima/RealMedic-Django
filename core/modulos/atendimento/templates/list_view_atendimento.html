@@ -11,7 +11,7 @@
                             <div class="card-header" style="background-image: url({% static 'core/base/assets/img/blogpost.jpg'%})">
                                 <div class="profile-picture">
                                     <div class="avatar avatar-xl">
-                                        <img src="{% static 'core/base/assets/img/profile.jpg'%}" alt="..." class="avatar-img rounded-circle">
+                                        <img src="{% static 'core/base/assets/img/profile2.jpg'%}" alt="..." class="avatar-img rounded-circle">
                                     </div>
                                 </div>
                             </div>
@@ -47,22 +47,21 @@
                                 <div class="row user-stats text-center">
                                     <div class="col">
                                         {% for atendimento in atendimentos %}
-                                                {% for atend in atendimento %}
-                                                    {% if atend.departamentoProfissional.pk == profissional.profissional.pk and forloop.last%}
-                                                        <div class="number">
-                                                            {{ forloop.counter }}
-                                                        </div>
-                                                        <div class="title">{% if forloop.counter > 1 %}Atendimentos {% else %} Atendimento {% endif %}</div>
-                                                    {% elif forloop.last %}
-                                                        <div class="number">
-                                                            0
-                                                        </div>
-                                                        <div class="title">Atendimento</div>
-                                                    {% endif %}
-                                                    {{ break }}
-                                                {% endfor %}
+                                            {% for atend in atendimento %}
+                                                {% if atend.departamentoProfissional.pk == profissional.profissional.pk and forloop.last and atend.pk != 99999999 %}
+                                                    <div class="number">
+                                                        {{ forloop.counter }}
+                                                    </div>
+                                                    <div class="title">{% if forloop.counter > 1 %}Atendimentos {% else %} Atendimento {% endif %}</div>
 
+                                                {% elif atend.departamentoProfissional.pk == profissional.profissional.pk and atend.pk == 99999999 %}
+                                                    <div class="number">
+                                                        0
+                                                    </div>
+                                                    <div class="title">Atendimento</div>
+                                                {% endif %}
                                             {% endfor %}
+                                        {% endfor %}
 
                                     </div>
                                 </div>

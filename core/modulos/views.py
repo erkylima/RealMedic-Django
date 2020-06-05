@@ -1,13 +1,16 @@
+import datetime
+
 from django.contrib import auth
 from django.contrib.auth import user_logged_out
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.core import serializers
 
-from core.models import Atendimento
+from core.models import Atendimento, Cliente
 from core.util.util_manager import MyLabls
 
 
@@ -19,10 +22,18 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         atendimentos = Atendimento.objects.all()
         dados = {}
-        test = list(Atendimento.objects.values())
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-        context['atendimentos'] = test
-        print(context['atendimentos'])
+        clientes = Cliente.objects.filter(data_cadastro__gt=yesterday)
+        tclientes = Cliente.objects.all()
+
+        test = list(Atendimento.objects.values())
+        context['clientes'] = clientes
+        context['tclientes'] = tclientes
+        context['total'] = atendimentos.aggregate(sum= Sum('valor'))
+        print(atendimentos.aggregate(sum= Sum('valor')))
+        context['atendimentos'] = atendimentos
+        # print(context['atendimentos'])
         context.update(dados)
 
         return context
