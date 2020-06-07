@@ -99,8 +99,6 @@ class MyLabls(object):
         if edit_model:
             context['SAVE_MODEL'] = False
 
-
-
         return context
 
 

@@ -33,6 +33,7 @@ class AtendenteForm(forms.ModelForm):
                                                                      kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master}")'
 
         self.fields['departamento'].queryset = Departamento.objects.none()
+        self.fields['perfil'].initial = 2 # Atendente id 2
 
         if select_master in self.data:
             try:

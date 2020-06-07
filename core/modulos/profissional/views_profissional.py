@@ -62,8 +62,8 @@ class ProfissionalCreateView(MyCreateViewProfissional):
             username=userProfile.usuario,
             password='admin123admin',
         )
-        # user.groups.add(userProfile.group)
-        # user.save()
+        user.groups.add(userProfile.perfil_id)
+        user.save()
         userProfile.user = user
         user.get_group_permissions()
         # userProfile.perfil_id = 3 # Perfil do Profissional Padrão
@@ -87,6 +87,12 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
+        # solução abaixo está incompleta para atualizar grupo de usuário
+        """userProfile = form.save(commit=False)
+        user = User.objects.get(pk=userProfile.pk)
+        print(dir(userProfile))
+        user.groups.add(userProfile.perfil_id)
+        user.save()"""
         # Atualiza varlores do Departamento Profissional
         departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=self.object.id)
         departamento_profissional.departamento_id =self.request.POST.get('departamento')
@@ -135,6 +141,7 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
                          }
 
                 intervalos.append(b)
+
         context['intervalos'] = intervalos
         return context
 

@@ -74,7 +74,7 @@ class AtendimentoListView(MyListViewAtendimento):
         # print(context['departamentoprofissional_list'][0].profissional.tiposAtendimentos.values_list)
         # print(atendimentos[0].last().escalaIntervalo)
         context['atendimentos'] = atendimentos
-        print(context['atendimentos'])
+        # print(context['atendimentos'])
         # context['profissionais'] = DepartamentoProfissional.objects.select_related('')
         # print(dir(context['profissionais'][1].tipo_profissional))
         # # print(context)

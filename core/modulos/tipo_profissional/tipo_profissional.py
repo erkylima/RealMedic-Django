@@ -3,7 +3,7 @@ from django.db import models
 
 from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.time_stampable import Timestampable
-from core.models import TipoAtendimento,Departamento
+from core.models import Departamento
 from core.util.util_manager import UpperCaseCharField
 
 
@@ -27,7 +27,7 @@ class TipoProfissional(Timestampable):
         inter_lista = []
         for row in atributos:
             field_name = row
-            field_object = TipoAtendimento._meta.get_field(field_name)
+            field_object = TipoProfissional._meta.get_field(field_name)
             field_value = getattr(self, field_object.attname)
             inter_lista.append(field_value)
         return inter_lista

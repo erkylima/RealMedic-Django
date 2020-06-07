@@ -31,9 +31,11 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         context['clientes'] = clientes
         context['tclientes'] = tclientes
         context['total'] = atendimentos.aggregate(sum= Sum('valor'))
-        print(atendimentos.aggregate(sum= Sum('valor')))
+        # print(atendimentos.aggregate(sum= Sum('valor')))
         context['atendimentos'] = atendimentos
-        # print(context['atendimentos'])
+
+        # print(dir(self.request.user.perfil_id))
+
         context.update(dados)
 
         return context

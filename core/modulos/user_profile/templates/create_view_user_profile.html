@@ -50,9 +50,10 @@
     {#    </div>#}
     <div class="row">
         <div class="col-md-12 form-group">
-            {{ form.perfil.label_tag }}
-            {{ form.perfil }}
-            {{ form.perfil.errors }}
+            <input type="hidden" name="perfil" id="id_perfil" value="{{ form.perfil.value }}">
+{#            {{ form.perfil.label_tag }}#}
+{#            {{ form.perfil }}#}
+{#            {{ form.perfil.errors }}#}
         </div>
     </div>
 

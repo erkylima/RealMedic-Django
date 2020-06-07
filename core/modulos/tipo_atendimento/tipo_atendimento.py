@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.time_stampable import Timestampable
+from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 from core.util.util_manager import UpperCaseCharField
 
 
@@ -13,6 +14,7 @@ class TipoAtendimento(Timestampable):
         verbose_name = 'TIPO DE ATENDIMENTO'
         verbose_name_plural = 'TIPOS DE ATENDIMENTOS'
 
+    tipo_profissional = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, default=1)
     descricao = UpperCaseCharField('Descrição', max_length=255)
     areaAtendimento = models.ForeignKey(AreaAtendimento,
                                         on_delete=models.PROTECT, verbose_name='Area de Atendimento')

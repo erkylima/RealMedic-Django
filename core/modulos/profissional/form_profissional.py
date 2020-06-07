@@ -41,7 +41,13 @@ class ProfissionalForm(forms.ModelForm):
             "core:modulo:tipo_profissional:getTipoProfissionalPorIdDepartamento",
             kwargs={'idDepartamento': '00'}).__str__() + f'","id_departamento","id_tipo_profissional","{select_master_departamento}")'
 
-        # Se o campo empresa possui algum dado atualizar o queryset
+        # Request Requisição Ajax Tipo Profissional
+        self.fields['tipo_profissional'].widget.attrs[
+            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
+            "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
+            kwargs={
+                'idTipoProfissional': '00'}).__str__() + f'","id_tipo_profissional","id_tiposAtendimentos","{select_master_departamento}")'        # Se o campo empresa possui algum dado atualizar o queryset
+        self.fields['perfil'].initial = 3 # Profissional id 3
         if select_master_empresa in self.data:
             try:
                 empresa_id = int(self.data.get('empresa'))

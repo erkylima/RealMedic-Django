@@ -35,6 +35,8 @@ class ClienteForm(forms.ModelForm):
             kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master_empresa}")'
 
         self.fields['departamento'].queryset = Departamento.objects.none()
+        self.fields['perfil'].initial = 4 # Cliente id 3
+
         # Se o campo empresa possui algum dado atualizar o queryset
         if select_master_empresa in self.data:
             try:

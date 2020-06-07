@@ -4,23 +4,33 @@
 {% block corpo_formulario %}
 
     <div class="row">
-        <div class="col-md-12 form-group ">
+        <div class="col-md-6 form-group ">
             {{ form.descricao.label_tag }}
             {{ form.descricao }}
             {{ form.descricao.errors }}
         </div>
+        <div class="col-md-6 form-group ">
+            {{ form.valor_padrao.label_tag }}
+            {{ form.valor_padrao }}
+            {{ form.valor_padrao.errors }}
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-12 form-group ">
+        <div class="col-md-6 form-group ">
             {{ form.areaAtendimento.label_tag }}
             {{ form.areaAtendimento }}
             {{ form.areaAtendimento.errors }}
+        </div>
+        <div class="col-md-6 form-group ">
+            {{ form.tipo_profissional.label_tag }}
+            {{ form.tipo_profissional }}
+            {{ form.tipo_profissional.errors }}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 form-group">
             {{ form.tempo_padrao.label_tag }}
-{#            {{ form.tempo_padrao }}#}
+            {#            {{ form.tempo_padrao }}#}
             <div class="form-control selectgroup w-100 pt-3" id="id_tempo_padrao">
                 <label class="selectgroup-item">
                     <input type="radio" name="tempo_padrao" required value="00:30:00" class="form-control selectgroup-input" {% if form.tempo_padrao.value|stringformat:"s" == "00:30:00" %} checked="" {% endif %}>
@@ -42,13 +52,7 @@
             {{ form.tempo_padrao.errors }}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 form-group ">
-            {{ form.valor_padrao.label_tag }}
-            {{ form.valor_padrao }}
-            {{ form.valor_padrao.errors }}
-        </div>
-    </div>
+
 
 {% endblock %}
 

@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
@@ -71,3 +73,12 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+@login_required()
+def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional):
+    subs = {}
+    departamentos = TipoAtendimento.objects.filter(tipo_profissional_id=idTipoProfissional)
+
+    for dep in departamentos:
+        subs[dep.id] = dep.descricao
+    return JsonResponse(subs)

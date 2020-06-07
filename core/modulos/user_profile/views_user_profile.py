@@ -63,8 +63,8 @@ class UserProfileCreateView(MyCreateViewUserProfile):
             username=userProfile.usuario,
             password='admin123admin',
         )
-        # user.groups.add(userProfile.group)
-        # user.save()
+        user.groups.add(userProfile.perfil_id)
+        user.save()
         userProfile.user = user
         userProfile.save()
         self.request.session['save_model'] = 'true'
