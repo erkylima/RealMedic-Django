@@ -1,0 +1,153 @@
+{% extends 'core/base/layout_base_cliente.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-inner">
+            <div class="row align-items-center">
+                {% for profissional in departamentoprofissional_list %}
+                    <div class="col-md-4">
+                        <div class="card card-profile">
+                            <div class="card-header" style="background-image: url({% static 'core/base/assets/img/blogpost.jpg'%})">
+                                <div class="profile-picture">
+                                    <div class="avatar avatar-xl">
+                                        <img src="{% static 'core/base/assets/img/profile2.jpg'%}" alt="..." class="avatar-img rounded-circle">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="user-profile text-center">
+                                    <div class="name">DR. {{ profissional.profissional.nome }}</div>
+                                    <div class="job">{{ profissional.tipo_profissional}}</div>
+                                    <div class="desc">
+                                        {% for atends in profissional.profissional.tiposAtendimentos.values %}
+                                            {{ atends.descricao }} {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="social-media">
+                                        <a class="btn btn-info btn-twitter btn-sm btn-link" href="#">
+                                            <span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#">
+                                            <span class="btn-label just-icon"><i class="flaticon-google-plus"></i> </span>
+                                        </a>
+                                        <a class="btn btn-primary btn-sm btn-link" rel="publisher" href="#">
+                                            <span class="btn-label just-icon"><i class="flaticon-facebook"></i> </span>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#">
+                                            <span class="btn-label just-icon"><i class="flaticon-dribbble"></i> </span>
+                                        </a>
+                                    </div>
+                                    <div class="view-profile">
+                                        <a href="{% url 'core:modulo:atendimento:update_view' profissional.id %}" class="btn btn-secondary btn-block">Ver Escalas Disponíveis</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row user-stats text-center">
+                                    <div class="col">
+                                        {% for atendimento in atendimentos %}
+                                            {% for atend in atendimento %}
+                                                {% if atend.departamentoProfissional.pk == profissional.profissional.pk and forloop.last and atend.pk != 99999999 %}
+                                                    <div class="number">
+                                                        {{ forloop.counter }}
+                                                    </div>
+                                                    <div class="title">{% if forloop.counter > 1 %}Atendimentos {% else %} Atendimento {% endif %}</div>
+
+                                                {% elif atend.departamentoProfissional.pk == profissional.profissional.pk and atend.pk == 99999999 %}
+                                                    <div class="number">
+                                                        0
+                                                    </div>
+                                                    <div class="title">Atendimento</div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block tbody %}
+
+    <tbody>
+    {% for atendimento in atendimento_list %}
+        <tr>
+            {% for valor  in atendimento.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a type="button"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'core:modulo:atendimento:update_view' atendimento.id %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <input type="checkbox"
+                       checked
+                       data-toggle="toggle"
+                       data-onstyle="success"
+                       data-offstyle="danger"
+                       data-style="btn-round"
+                        {#                       data-on="&nbsp"#}
+                        {#                       data-on="Ativo"#}
+                       data-size="normal"
+                        {#                       data-off="&nbsp"#}
+                        {#                       data-off="Desativado"#}
+
+                >
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+{% endblock %}
+
+{% block campo_busca %}
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="card card-stats card-round">
+                <div class="card-body ">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input
+                                            type="text"
+                                            class="form-control text-uppercase"
+                                            id="input-placeholder"
+                                            placeholder="  {{ labels.CAMPO_BUSCA }}"
+                                            name="q"
+                                            value="{{ q }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block sombra"
+                                            type="submit">
+                                                <span class="btn-label">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        {{ labels.BUSCAR }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

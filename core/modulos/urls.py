@@ -16,6 +16,7 @@ urlpatterns = [
     path('escala/', include('core.modulos.escala.urls_escala')),
     path('atendimento/', include('core.modulos.atendimento.urls_atendimento')),
     path('logout/',views.logout_view, name="sair")
+
     # path('professionals/', include('core.modulos.professional.urls')),
     # path('health_tips/', include('core.modulos.health_tips.urls')),
     # path('daily_newsletter/', include('core.modulos.daily_newsletter.urls')),

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'core',
+    'cliente',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ TEMPLATES = [
 
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'core/modulos'),
+            os.path.join(BASE_DIR, 'cliente/modulos'),
 
         ],
         'APP_DIRS': True,

@@ -1,0 +1,474 @@
+{% extends 'core/base/create_update_view_base.html' %}
+{% load static %}
+
+{% block cabecalho %}
+    <div class="page-header">
+        <h4 class="page-title">
+            Calendário
+        </h4>
+    </div>
+{% endblock %}
+
+{% block header %}
+
+    {% if profissional %}
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner border-bottom pb-0 mb-3">
+                <div class="d-flex align-items-left flex-column">
+                    <h2 class="pb-2 fw-bold text-white">ATENDIMENTOS DE {{ profissional.nome }}</h2>
+                    <div class="nav-scroller d-flex">
+                        <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
+                            <a class="nav-link active" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block corpo_formulario %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function(){
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        mensagem_erro("{{ message }}");
+                    {% else %}
+                        mensagem_sucesso("{{ message }}");
+                    {% endif %}
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+
+    <div id="calendar"></div>
+
+{% endblock %}
+{% block botao_save %}
+{% endblock %}
+{% block botoes %}
+    <a class="btn btn-info" href="{% url 'core:modulo:profissional:list_view' %}">{{ labels.VOLTAR }}</a>
+{% endblock %}
+
+{% block modals %}
+
+    <!-- Modal - View event -->
+    <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" id="title-view">Marcar Atendimento</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="visualizar">
+                        <dl class="row">
+                            <dt class="col-sm-3"></dt>
+                            <dd class="col-sm-9" id="title"></dd>
+                            <dt class="col-sm-3">Inicio</dt>
+                            <dd class="col-sm-9"><span  id="start" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labelfim"></dt>
+                            <dd class="col-sm-9"><span  id="end" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labeldesc"></dt>
+                            <dd class="col-sm-9" id="desc"></dd>
+                        </dl>
+
+                        <form name="marcar_atendimento" method="post" action="{% url 'core:modulo:atendimento:add_atendimento' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="hidden" id="profissional" name="profissional" value="{{ profissional.id }}">
+                                <input type="hidden" id="id_escala_intervalo" name="id_escala_intervalo">
+                                <div class="form-group">
+                                    <label for="tipo_atendimento">Tipo de Atendimento</label>
+                                    <select class="form-control form-control select2" name="tipo_atendimento" id="tipo_atendimento">
+                                        <option value="">---------</option>
+                                        {% for tipo_atendimento in profissional.tiposAtendimentos.values %}
+                                            <option value="{{ tipo_atendimento.id }}-{{ tipo_atendimento.valor_padrao }}-{{ tipo_atendimento.tempo_padrao }}">{{ tipo_atendimento.descricao }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente">Cliente</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <a class="btn btn-primary stretched-link" href="{% url 'core:modulo:cliente:create_view' %}">Adicionar Cliente</a>
+                                        </div>
+                                        <select class="form-control select2" name="cliente" id="cliente">
+                                            <option value="">---------</option>
+                                            {% for cliente in clientes %}
+                                                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="valor">Valor</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">R$</span>
+                                                </div>
+                                                <input type="text" class="form-control" readonly aria-label="Quantia em Reais" name="valor" id="valor">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">,00</span>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" id="editar-valor">
+                                                        <span class="form-check-sign">Editar valor?</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+
+                                        <div class="form-group">
+                                            <label for="retorno">Retorno?</label>
+                                            <select class="form-control form-control" name="retorno" id="retorno">
+                                                <option value="1">Sim</option>
+                                                <option value="0" selected>Não</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-flat btn-primary ml-3" id="send_atendimento">Marcar Atendimento</button>
+                        </form>
+                        <hr>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- END Modal - View event -->
+
+    <!-- Modal - View Atendimento -->
+    <div class="modal modal-top fade" id="modal-view-atendimento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" style="text-align: center" id="title-view">Detalhes do Atendimento</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="atendimento">
+                        <dl class="row">
+                            <dt class="col-sm-3">Cliente</dt>
+                            <dd class="col-sm-9" id="cliente">Data Removida</dd>
+                            <dt class="col-sm-3">Inicio</dt>
+                            <dd class="col-sm-9"><span  id="start" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labelfim">Fim</dt>
+                            <dd class="col-sm-9"><span id="end" class="badge badge-info"></span></dd>
+                            <dt class="col-sm-3" id="labeldesc">Atendimento</dt>
+                            <dd class="col-sm-9" id="desc"></dd>
+                        </dl>
+
+                        <hr>
+                        <button type="button" onclick="desmarcarAtendimento()" class="btn btn-danger">Desmarcar Atendimento</button>
+                        <form id="desmarcaratendimento"
+                              autocomplete="off"
+                              method="post"
+                              action="{% url 'core:modulo:atendimento:desmarcar_atendimento' %}"
+                              novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="intervalolimpar" id="intervalolimpar">
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal - View Atendimento -->
+
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'core/base/assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/plugin/fullcalendar/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/locale-all.js' %}"></script>
+
+
+    <script>
+
+        function desmarcarAtendimento(){
+            swal({
+                title: 'Tem certeza que quer desmarcar esse atendimento?',
+                text: "Isso não pode ser revertido!",
+                type: 'warning',
+                buttons:{
+                    cancel: {
+                        visible: true,
+                        text : 'Não, cancelar!',
+                        className: 'btn btn-danger'
+                    },
+                    confirm: {
+                        text : 'Sim, desmarcar!',
+                        className : 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Esse atendimento foi desmarcado!", {
+                        icon: "success",
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                    $('#desmarcaratendimento').submit();
+                } else {
+                    swal("Esse atendimento não foi desmarcado!", {
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        $("#id_departamentoProfissional").change(function () {
+
+            var valor = $(this).val();  // get the selected country ID from the HTML input
+            $('#profissional').val(valor);
+
+        });
+
+        $(document).ready(function () {
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            var className = Array('fc-primary', 'fc-danger', 'fc-black', 'fc-success', 'fc-info', 'fc-warning', 'fc-danger-solid', 'fc-warning-solid', 'fc-success-solid', 'fc-black-solid', 'fc-success-solid', 'fc-primary-solid');
+
+            $calendar = $('#calendar');
+            $calendar.fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listWeek'
+                },
+                locale: 'pt-br', // Definir tradução do calendário
+                selectable : true, // Definir se datas são selecionáveis
+                selectHelper: true,
+                eventLimit: true,
+                views: {
+                    month: {
+                        eventLimit: 4
+                    }
+                },
+                viewRender: function(view, element) {
+                    $('.quick-sidebar-toggler').toggle();
+                    $('#calendar-title').text( view.title );
+                }, // Ao renderizar view
+                dayClick: function(date, jsEvent, view) {
+
+                }, // Ao clicar em um dia
+                eventClick: function(date, jsEvent, view) {
+                    switch (date.className.toLocaleString()) {
+                        case "fc-success": // Abrir janela para visualizar escala
+                            $('#visualizar').attr('style', 'display:block');
+                            $('#editform').attr('style', 'display:none');
+                            tipo_atendimento = $('#tipo_atendimento');
+                            editar_valor = $('#editar-valor');
+                            tipo_atendimento.val("");
+                            editar_valor.prop('checked', false);
+                            valor = $('#valor');
+                            valor.val(0);
+                            $('#cliente').val($('#cliente2').val());
+                            valor.attr("readonly", true);
+                            $('#id_escala_intervalo').val(date.id);
+                            $('#retorno').val(0);
+                            tipo_atendimento.on('change', function () {
+                                id_tipo_atendimento = $("#tipo_atendimento").val().split('-')[0];
+                                valor_tipo_atendimento = $('#tipo_atendimento').val().split('-')[1];
+                                $('#valor').val(valor_tipo_atendimento.split(',')[0]);
+                                var horapadrao = parseInt($('#tipo_atendimento').val().split('-')[2].split(':')[0]);
+                                var minutopadrao = parseInt($('#tipo_atendimento').val().split('-')[2].split(':')[1]);
+                                $('#modal-view-event #end').text(moment(date.start).add(horapadrao,'hours').add(minutopadrao,'minutes').format('DD/MM/YYYY [àss] H:mm')); // Preenche data end
+                            });
+
+                            editar_valor.on('click', function () {
+                                if (valor.attr('readonly')) {
+                                    valor.removeAttr("readonly");
+                                } else {
+                                    valor.attr("readonly", true);
+                                }
+                            });
+
+                            $('#title').attr('className', date.className);// Armazena informação da cor para recuperar na edição
+                            $('#modal-view-event #start').text(moment(date.start).format('DD/MM/YYYY [às] H:mm')); // Preenche data start
+                            if (date.end) { // Se tiver data final
+                                $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
+                                $('#modal-view-event #end').text(moment(date.end).format('DD/MM/YYYY [às] H:mm')); // Preenche data end
+                            } else {
+                                $('#labelfim').text(''); // Reseta labelfim
+                                $('#modal-view-event #end').text(''); // Reseta data end
+                            }
+                            /*if (date.description) { // Se tiver descrição
+                                #$('#labeldesc').text('Descrição'); // Escreve texto dentro do labeldesc
+                                #$('#modal-view-event #desc').text(date.description); // Preenche descrição
+                            } else {
+                                $('#labeldesc').text(''); // Reseta labeldesc
+                                $('#modal-view-event #desc').text(''); // Reseta descrição
+                            }*/
+
+                            $('#modal-view-event').modal('show'); // Mostra janela de visalização
+                            break;
+                        case "fc-danger": // Abrir janela para visualizar atendimento
+                            $('#intervalolimpar').val(date.id);
+                            $('#atendimento').attr('style', 'display:block');
+                            $('#modal-view-atendimento #cliente').text(date.cliente.toLocaleString()); // Preenche campo titulo
+                            $('#modal-view-atendimento #start').text(date.inicio); // Preenche campo inicio
+                            $('#modal-view-atendimento #end').text(date.fim); // Preenche campo inicio
+                            $('#modal-view-atendimento #desc').text(date.tipo_atendimento); // Preenche campo inicio
+                            $('#modal-view-atendimento').modal('show'); // Mostra janela de visalização
+                    }
+
+                }, // Ao clicar em um evento
+                events:
+                {{ intervalos|safe }}
+                , // Popular escalas existentes no calendário
+
+
+            });
+
+            $('#retorno').on("change", function () {
+                if($('#retorno').val() == 1){
+                    $('#editar-valor').attr('disabled', true);
+                    $('#valor').val("0");
+                } else {
+                    $("#editar-valor").removeAttr("disabled");
+                    $('#valor').val($('#tipo_atendimento').val().split('-')[1]);
+                }
+            });
+
+            /* handle change view
+                -----------------------------------------------------------------*/
+
+            $('[data-calendar-view]').on('click', function() {
+                var view = $(this).data('calendar-view');
+                calendar.fullCalendar('changeView', view);
+
+                makeViewActive($(this));
+            });
+
+            var makeViewActive = function(e) {
+                $(e).closest('.nav').find('.nav-link.active, .dropdown-item.active').removeClass('active');
+                $(e).addClass('active');
+                if ($(e).hasClass('dropdown-item')) {
+                    $(e).closest('.dropdown').children('.nav-link').addClass('active');
+                }
+            };
+
+
+            /* handle caledar actions
+            -----------------------------------------------------------------*/
+
+            $('[data-calendar]').on('click', function() {
+                var action = $(this).data('calendar');
+
+                switch (action) {
+                    case 'today':
+                        calendar.fullCalendar('today');
+                        break;
+
+                    case 'next':
+                        calendar.fullCalendar('next');
+                        break;
+
+                    case 'prev':
+                        calendar.fullCalendar('prev');
+                        break;
+                }
+            });
+
+        });
+
+        $('#send_atendimento').on('click', function () {
+            {#alert();#}
+            if($('#tipo_atendimento').val()){
+                {#mensagem_erro("Você precisa ")#}
+            }
+        });
+
+        $('#datastart').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horastart').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#dataend').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horaend').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#datastarte').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horastarte').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#dataende').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale:'pt-br'
+        });
+
+        $('#horaende').datetimepicker({
+            format: 'H:mm',
+            locale:'pt-br'
+        });
+
+        $('#modal-view-event').on('shown.bs.modal', function (e) {
+            // Do this before you initialize any of your modals
+            $('.select2').select2({
+                theme: "bootstrap", // Reestabelece o tema do select para ficar no tamanho correto
+                dropdownParent: $('#modal-view-event') // Permite editar o input de pesquisa dentro do select dentro do modal
+            });
+
+        });
+
+
+        function dataFimMaiorQueDataInicio(inicio,fim) {
+            return toTimestamp('1998-01-01T'+inicio) >= toTimestamp('1998-01-01T'+fim);
+        }
+        function toTimestamp(strDate){
+            var datum = Date.parse(strDate);
+            return datum/1000;
+        }
+
+    </script>
+
+{% endblock %}

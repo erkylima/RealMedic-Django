@@ -1,0 +1,340 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<!-- Mirrored from themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/forms/formwidget.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2020 16:24:26 GMT -->
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Real Consultas</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
+    <link rel="icon" href="{% static 'core/base/assets/img/icon.ico' %}" type="image/x-icon"/>
+
+    <!-- Fonts and icons -->
+    <script src="{% static 'core/base/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+        WebFont.load({
+            google: {"families": ["Lato:300,400,700,900"]},
+            custom: {
+                "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                urls: ["{% static 'core/base/assets/css/fonts.min.css'%}"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'core/base/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/base/assets/css/atlantis.css' %}">
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{% static 'core/base/assets/css/demo.css' %}">
+    <link rel="stylesheet" href="{% static 'core/commum/novo_estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'core/commum/pre_loader.css' %}">
+    {% block extra_css %}
+
+    {% endblock %}
+</head>
+<body>
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner-dots">
+        <span class="dot1"></span>
+        <span class="dot2"></span>
+        <span class="dot3"></span>
+    </div>
+</div>
+<div class="wrapper">
+    {% include 'core/base/complementos/topbar.html' %}
+    <!-- Sidebar -->
+    <div class="main-panel">
+        <div class="container">
+            {% block header %}
+            
+            {% endblock %}
+            <div class="page-inner">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+        {% include 'core/base/complementos/footer.html' %}
+
+    </div>
+    <!-- End Custom template -->
+
+    {% block modals %}
+
+    {% endblock %}
+</div>
+<!--   Core JS Files   -->
+<script src="{% static 'core/base/assets/js/core/jquery.3.2.1.min.js' %}"></script>
+<script src="{% static 'core/base/assets/js/core/popper.min.js' %}"></script>
+<script src="{% static 'core/base/assets/js/core/bootstrap.min.js' %}"></script>
+<!-- jQuery UI -->
+<script src="{% static 'core/base/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
+<script src="{% static 'core/base/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
+<!-- Moment JS -->
+<script src="{% static 'core/base/assets/js/plugin/moment/moment.min.js' %}"></script>
+
+<!-- Bootstrap Notify -->
+<script src="{% static 'core/base/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+<!-- Bootstrap Toggle -->
+<script src="{% static 'core/base/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
+<!-- jQuery Scrollbar -->
+<script src="{% static 'core/base/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+<!-- DateTimePicker -->
+<script src="{% static 'core/base/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'core/base/assets/js/plugin/select2/select2.full.min.js' %}"></script>
+<!-- Bootstrap Tagsinput -->
+{#<script src="{% static 'core/base/assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>#}
+<!-- Atlantis JS -->
+<script src="{% static 'core/base/assets/js/plugin/jquery.validate/jquery.validate.min.js' %}"></script>
+
+
+<script src="{% static 'core/base/assets/js/atlantis.min.js' %}"></script>
+<!-- Atlantis DEMO methods, don't include it in your project! -->
+<script src="{% static 'core/base/assets/js/setting-demo2.js' %}"></script>
+<script>
+
+    $('#datetime').datetimepicker({
+        format: 'DD/MM/YYYY H:mm',
+    });
+    $('#datepicker').datetimepicker({
+        format: 'DD/MM/YYYY',
+    });
+    $('#timepicker').datetimepicker({
+        format: 'h:mm',
+    });
+
+    $('.select2').select2({
+        theme: "bootstrap"
+    });
+
+    $('#multiple').select2({
+        theme: "bootstrap"
+    });
+
+    $('#multiple-states').select2({
+        theme: "bootstrap"
+    });
+
+    {#$('#tagsinput').tagsinput({#}
+    {#    tagClass: 'badge-info'#}
+    {# });#}
+
+    $("#exampleValidation").validate({
+        validClass: "success",
+        rules: {
+            gender: {required: true},
+            confirmpassword: {
+                equalTo: "#password"
+            },
+            birth: {
+                date: true
+            },
+            uploadImg: {
+                required: true,
+            },
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        success: function (element) {
+            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+        },
+    });
+
+    $(function () {
+        $("#slider").slider({
+            range: "min",
+            max: 100,
+            value: 40,
+        });
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: 500,
+            values: [75, 300]
+        });
+    });
+
+
+
+    {% if SAVE_MODEL is not None  %}
+        {% if SAVE_MODEL is True %}
+            var mensagem = "{{ labels.MSG_SALVO_SUCESSO }}"
+        {% else %}
+            var mensagem = "{{ labels.MSG_EDITADO_SUCESSO }}"
+        {% endif %}
+
+        $.notify({
+            // options
+            icon: 'flaticon-alarm-1',
+            title: '{{ NAME_MODEL }}',
+            message: mensagem,
+        }, {
+            // settings
+            element: 'body',
+            position: null,
+            type: "success",
+            placement: {
+                from: "top",
+                align: "right"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 3000,
+            url_target: '_blank',
+            mouse_over: null,
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
+
+    {% endif %}
+
+    function mensagem_erro(mensagem) {
+         $.notify({
+                        // options
+                        icon: 'flaticon-alarm-1',
+                        title: 'Opss...',
+                        message: mensagem,
+                    }, {
+                        // settings
+                        element: 'body',
+                        position: null,
+                        type: "danger",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 6000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                    });
+    }
+
+    function mensagem_sucesso(mensagem) {
+         $.notify({
+                        // options
+                        icon: 'flaticon-alarm-1',
+                        title: 'Sucesso',
+                        message: mensagem,
+                    }, {
+                        // settings
+                        element: 'body',
+                        position: null,
+                        type: "success",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 3000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                    });
+    }
+
+    {#PRE_LOADER#}
+    var readyStateCheckInterval = setInterval(function () {
+        console.log(document.readyState)
+        if (document.readyState === "complete") {
+            {#console.log(document.readyState)#}
+            clearInterval(readyStateCheckInterval);
+            var preloader = $('.preloader');
+            if (preloader.length) {
+                preloader.fadeOut(1000);
+            }
+        }
+    }, 100);
+
+    function retornarElementoId(url, id_item_selecionado, select_master) {
+        var id_item_selecionado = $('#' + id_item_selecionado);
+        var valor = id_item_selecionado.val();
+        if (valor == '') {
+            valor = 0
+        }
+        if (select_master == '') {
+            select_master = ''
+        }
+
+        var url = url
+        url = url.replace('00', valor);
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                select_master: valor       // add the select_master id to the GET parameters
+            },
+            success: function (data) {
+                alert(data);
+            }
+        })
+
+    }
+
+
+    function carregarElementoPorIdFK(url, id_item_selecionado, id_item_carregar, select_master) {
+        var id_item_selecionado = $('#' + id_item_selecionado);
+        var id_item_carregar = $('#' + id_item_carregar);
+        var valor = id_item_selecionado.val();
+        if (valor == '') {
+            valor = 0
+        }
+        if (select_master == '') {
+            select_master = ''
+        }
+
+        var url = url
+        url = url.replace('00', valor);
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                select_master: valor       // add the select_master id to the GET parameters
+            },
+            success: function (data) {
+                id_item_carregar.empty();
+                id_item_carregar.append('<option value >---------</option>');
+                $.each(data, function (key, value) {
+                    id_item_carregar.append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                {#id_sub_setor.selectpicker('refresh')#}
+                {#seelct_setor.selectpicker('refresh')#}
+            }
+        })
+
+    }
+
+
+</script>
+
+{% block extra_scripts %}
+
+{% endblock %}
+</body>
+
+<!-- Mirrored from themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/forms/formwidget.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2020 16:26:26 GMT -->
+</html>
