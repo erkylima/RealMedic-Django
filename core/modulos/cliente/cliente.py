@@ -18,7 +18,7 @@ class Cliente(Timestampable):
     senha = UpperCaseCharField('Senha', max_length=255)
     perfil = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name='Perfil', related_name='clientes')
     ativo = models.BooleanField(default=True)
-    departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT,default=1)
+    cliente_app = models.CharField('Cliente App', max_length=255, default='', blank=True)
     # hasSuperAdministrador = models.BooleanField('Super', default=False)
 
     def __str__(self):

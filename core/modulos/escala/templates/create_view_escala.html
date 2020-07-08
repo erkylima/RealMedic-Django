@@ -7,6 +7,20 @@
             Calendário
         </h4>
     </div>
+    {% if messages %}
+        {% for message in messages %}
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function(){
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        mensagem_erro("{{ message }}");
+                    {% else %}
+                        mensagem_sucesso("{{ message }}");
+                    {% endif %}
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block header %}
@@ -219,7 +233,7 @@
                 range: true,
                 min: 0,
                 max: 1411,
-                step: 30,
+                step: 10,
                 values: [600, 720],
                 slide: function (e, ui) {
                     console.log(ui.values[0]);

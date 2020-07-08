@@ -10,6 +10,7 @@ urlpatterns = [
     path('departamento/', include('core.modulos.departamento.urls_departamento')),
     path('atendente/', include('core.modulos.atendente.urls_atendente')),
     path('cliente/', include('core.modulos.cliente.urls_cliente')),
+    path('paciente/', include('core.modulos.paciente.urls_paciente')),
     path('profissional/', include('core.modulos.profissional.urls_profissional')),
     path('tipo_profissional/', include('core.modulos.tipo_profissional.urls_tipo_profissional')),
     path('tipo_atendimento/', include('core.modulos.tipo_atendimento.urls_tipo_atendimento')),

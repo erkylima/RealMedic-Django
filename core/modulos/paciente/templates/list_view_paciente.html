@@ -1,0 +1,42 @@
+{% extends 'core/base/list_view_base.html' %}
+{% load static %}
+
+{% block bt_nova %}
+    {{ labels.NOVO }}
+{% endblock %}
+
+
+{% block tbody %}
+    <tbody>
+    {% for paciente in paciente_list %}
+        <tr>
+            {% for valor  in paciente.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a type="button"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'core:modulo:paciente:update_view' paciente.id %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <input type="checkbox"
+                       checked
+                       data-toggle="toggle"
+                       data-onstyle="success"
+                       data-offstyle="danger"
+                       data-style="btn-round"
+                        {#                       data-on="&nbsp"#}
+                        {#                       data-on="Ativo"#}
+                       data-size="normal"
+                        {#                       data-off="&nbsp"#}
+                        {#                       data-off="Desativado"#}
+
+                >
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+{% endblock %}
+

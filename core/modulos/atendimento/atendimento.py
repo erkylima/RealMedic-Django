@@ -1,15 +1,11 @@
-from datetime import datetime
-
-from django.contrib.auth.models import User, Group
 from django.db import models
 from django.utils import timezone
 
-from core.models import Departamento
 from core.models.base.time_stampable import Timestampable
-from core.modulos.cliente.cliente import Cliente
+from core.modulos.paciente.paciente import Paciente
+
 from core.modulos.profissional.profissional import DepartamentoProfissional
 from core.modulos.tipo_atendimento.tipo_atendimento import TipoAtendimento
-from core.util.util_manager import UpperCaseCharField
 
 
 class Atendimento(Timestampable):
@@ -17,7 +13,7 @@ class Atendimento(Timestampable):
         verbose_name = 'ATENDIMENTO'
         verbose_name_plural = 'ATENDIMENTOS'
 
-    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, default=1)
     tipoAtendimento = models.ForeignKey(TipoAtendimento, on_delete=models.PROTECT)
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
     retorno = models.BooleanField(default=False)
@@ -27,6 +23,24 @@ class Atendimento(Timestampable):
     fim_atendimento = models.TimeField(null=True, blank=True) # Horario de finalização do atendimento
 
     def __str__(self):
-        return self.cliente.nome
+        return self.paciente.nome
 
+    @property
+    def getNamePerfil(self):
+        return self.paciente.nome
+
+    @property
+    def getDataAtendimento(self):
+        return self.escalaintervalo_set.first().escala.dia.strftime('%d/%m/%Y às ') + self.escalaintervalo_set.first().inicio.strftime("%H:%M até ") + \
+               self.escalaintervalo_set.first().fim.strftime("%H:%M")
+
+
+    @property
+    def getListAtributes(self):
+        atributos = ['getNamePerfil', 'tipoAtendimento', 'valor','getDataAtendimento']
+        inter_lista = []
+        for row in atributos:
+            field_value = getattr(self, row, None)
+            inter_lista.append(field_value)
+        return inter_lista
 

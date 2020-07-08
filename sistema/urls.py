@@ -28,5 +28,6 @@ urlpatterns = [
                   path('', include('core.urls'), name='core_index'),
                   path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
                   path('cliente/', include('cliente.urls')),
+                  path('profissional/', include('profissional.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + staticfiles_urlpatterns()

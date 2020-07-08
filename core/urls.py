@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views_core.index),
     path('login/', views_core.LoginView.as_view(), name='login'),
     path('core/', include('core.modulos.urls')),
-    path('cliente', include('cliente.modulos.urls'))
+    path('cliente', include('cliente.modulos.urls')),
+    path('profissional', include('profissional.modulos.urls'))
 ]

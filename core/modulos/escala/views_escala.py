@@ -134,24 +134,27 @@ def addEditEscala(request):
         if start.timestamp() < end.timestamp():
             escala = Escala.objects.get_or_create(dia=start.date(),departamentoProfissional_id=profissional)
             escala[0].save()
-            intervalostart = start.hour*2
-            intervalostart = intervalostart+(start.minute/30)
-            intervaloend = end.hour * 2
-            intervaloend = intervaloend + (end.minute / 30)
-            diferenca_intervalo = int(intervaloend) - int(intervalostart)
-            if(diferenca_intervalo > 1):
-                messages.success(request, "Escalas adicionadas com sucesso")
-            elif(diferenca_intervalo == 1):
-                messages.success(request, "Escala adicionada com sucesso")
-            else:
-                messages.error(request, "O intervalo da escala precisa ter no mínimo 30 minutos")
-
-
+            intervalostart = start.hour*6 # Quantidade de intervalos inicialmente
+            intervalostart = intervalostart+(start.minute/10)
+            intervaloend = end.hour * 6
+            intervaloend = intervaloend + (end.minute / 10) # Quantidade de intervalos finalmente
+            diferenca_intervalo = int(intervaloend) - int(intervalostart) # Diferença entre quantidade de intervalos iniciais e finais
+            exists = False
             for i in range(int(diferenca_intervalo)):
-                inicio = (start + timedelta(minutes=(i * 30)))
-                fim = (start + timedelta(minutes=(i * 30)+30))
+                inicio = (start + timedelta(minutes=(i * 10)))
+                fim = (start + timedelta(minutes=(i * 10)+10))
+                exists = EscalaIntervalo.objects.filter(inicio=inicio.strftime('%H:%M'), escala=escala[0]).exists() # Verifica se já existe esse intervalo
+                if exists:
+                    messages.error(request, "Não foi possível concluir essa operação, pois essa escala já existe no horário " + inicio.strftime('%H:%M'))
+                    break
                 EscalaIntervalo(inicio=inicio.strftime('%H:%M'),fim=fim.strftime('%H:%M'),escala_id=escala[0].pk,descricao=descricao,cor=cor).save()
-
+            if not exists:
+                if (diferenca_intervalo > 1):
+                    messages.success(request, "Escalas adicionadas com sucesso")
+                elif (diferenca_intervalo == 1):
+                    messages.success(request, "Escala adicionada com sucesso")
+                else:
+                    messages.error(request, "O intervalo da escala precisa ter no mínimo 10 minutos")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required()

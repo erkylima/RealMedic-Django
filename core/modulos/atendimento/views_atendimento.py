@@ -11,7 +11,7 @@ from django.views.generic import ListView, CreateView, UpdateView, View
 from django.views.generic.base import View
 from django.forms.models import model_to_dict
 import json
-from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Cliente, EscalaIntervalo
+from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -60,7 +60,7 @@ class AtendimentoListView(MyListViewAtendimento):
             else:
                 atend = Atendimento()
                 atend.pk = 99999999
-                atend.cliente_id = 1
+                atend.paciente_id = 1
                 profissional = prof.pk
                 atend.departamentoProfissional_id = profissional
                 atend.tipoAtendimento_id = 0
@@ -101,7 +101,7 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
         profissional = Profissional.objects.get(pk=self.object.pk)
         context['profissional'] = profissional
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
-        clientes = Cliente.objects.all()
+        pacientes = Paciente.objects.all()
         intervalos = []
 
         for escala in escalas:
@@ -110,12 +110,12 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
             for inter in intervalo:
                 if inter.atendimento_id != None:
                     b = {'id': inter.pk,
-                         'title': inter.atendimento.cliente.nome.split(" ")[0],
+                         'title': inter.atendimento.paciente.nome.split(" ")[0],
                          'start': str(escala.dia) + "T" + str(inter.inicio),
                          'end': str(escala.dia) + "T" + inter.atendimento.fim_atendimento.strftime("%H:%M"),
                          'description': inter.descricao,
                          'className': "fc-danger",
-                         'cliente': inter.atendimento.cliente.nome.split(" ")[0],
+                         'cliente': inter.atendimento.paciente.nome.split(" ")[0],
                          'inicio': inter.atendimento.inicio_atendimento.strftime("%Hh%M"),
                          'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
                          'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")
@@ -134,7 +134,7 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
                          }
                 intervalos.append(b)
 
-        context['clientes'] = clientes
+        context['clientes'] = pacientes
         context['intervalos'] = intervalos
         return context
 
@@ -152,10 +152,10 @@ def addAtendimento(request):
     if request.POST['tipo_atendimento'] == '':
         messages.error(request, "Selecione o tipo de atendimento")
     elif request.POST['cliente'] == '':
-        messages.error(request, "Selecione um cliente")
+        messages.error(request, "Selecione um paciente")
     else:
         atendimento = Atendimento()
-        atendimento.cliente_id = str(request.POST['cliente'])
+        atendimento.paciente = str(request.POST['cliente'])
         profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST['profissional'])
         atendimento.departamentoProfissional = profissional
         atendimento.tipoAtendimento_id = request.POST['tipo_atendimento'].split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
@@ -173,21 +173,25 @@ def addAtendimento(request):
                                    '%Y-%m-%d %H:%M:%S') # Datetime do início do primeiro intervalo
         horas = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0]) # Quantidade de horas do tipo de atendimento
         minutos = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) # Quantidade de minutos do tipo de atendimento
-        fim = inicio + timedelta(minutes=(horas * 60 + minutos) - 30) # inicio do ultimo intervalo
+        fim = inicio + timedelta(minutes=(horas * 60 + minutos)-10) # inicio do ultimo intervalo
 
         atendimento.inicio_atendimento = inicio # Início do primeiro intervalo
-        atendimento.fim_atendimento = fim + timedelta(minutes=30) # fim do ultimo intervalo
+        atendimento.fim_atendimento = fim + timedelta(minutes=10) # fim do ultimo intervalo
         atendimento.save()
 
         # Calcula quantidade de intervalos disponíveis necessários para completar a operação
-        quantidade_intervalos_necessarios = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])*2
-        if int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) == 30:
-            quantidade_intervalos_necessarios += 1
+        quantidade_intervalos_necessarios = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])*6
+        # if int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) == 30:
+        #     quantidade_intervalos_necessarios += 1
+        quantidade_intervalos_necessarios += (int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]))/10
         # Fim do calculo de quantidade de intervalos
+        print(inicio.strftime("%H:%M") + ' inicio')
+        print(fim.strftime("%H:%M") + ' fim')
 
         escalas_todos_intervalos = EscalaIntervalo.objects.filter(escala_id=escala_intervalo_inicial.escala_id,
                                                                   inicio__range=[inicio, fim],atendimento_id=None).order_by(
                                                                   "inicio")  # Filtrar os intervalos de tempo de acordo com o atendimento
+
 
         if escalas_todos_intervalos.count() >= quantidade_intervalos_necessarios:
             for intervalo in escalas_todos_intervalos:
@@ -197,6 +201,7 @@ def addAtendimento(request):
 
         else:
             atendimento.delete()
+            print(str(escalas_todos_intervalos.count()) + " CONT + QNT: "+ str(quantidade_intervalos_necessarios))
             messages.error(request, "Para marcar este tipo de consulta você precisa de " +
                            request.POST['tipo_atendimento'].split('-')[2] + " disponíveis")
         # dict_obj = model_to_dict(atendimento)

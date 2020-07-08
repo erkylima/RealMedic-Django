@@ -11,3 +11,4 @@ from core.modulos.profissional.profissional import DepartamentoProfissional
 from core.modulos.escala.escala import Escala
 from core.modulos.escala.escala import EscalaIntervalo
 from core.modulos.atendimento.atendimento import Atendimento
+from core.modulos.paciente.paciente import Paciente
