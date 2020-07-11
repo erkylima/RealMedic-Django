@@ -25,74 +25,6 @@ class MyGenericView(object):
     NAME_MODEL_PLURAL = Escala._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:escala:create_view')
 
-
-class MyListViewEscala(MyGenericView, LoginRequiredMixin, MyListViewSearcheGeneric, MyLabls, ListView):
-    allow_empty = True
-
-
-class MyCreateViewEscala(MyGenericView, LoginRequiredMixin, MyLabls, CreateView):
-    pass
-
-
-class MyUpdateViewEscala(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
-    # permission_required = 'global_permissions.controla_licitacao'
-    # permission_denied_message = 'Permission Denied'
-    pass
-
-
-class EscalaCreateView(MyCreateViewEscala):
-    template_name = 'escala/templates/create_view_escala.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['intervalos'] = []
-        return context
-
-    def form_invalid(self, form):
-        print(form.errors, len(form.errors))
-        print(form.data)
-        return super(EscalaCreateView, self).form_invalid(form)
-
-    def form_valid(self, form):
-        self.request.session['save_model'] = 'true'
-        return super().form_valid(form)
-
-
-class EscalaUpdateView(MyUpdateViewEscala):
-    template_name = 'escala/templates/create_view_escala.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # print(self.object.departamentoProfissional_id)
-        profissional = Profissional.objects.get(pk=self.object.departamentoProfissional_id)
-        context['idProfissional'] = profissional.pk
-        escalas = Escala.objects.filter(departamentoProfissional_id=profissional.pk)
-        intervalos = []
-        for escala in escalas:
-            intervalo = escala.escalaintervalo_set.get(escala_id=escala.pk)
-
-            b = {'id': escala.pk,
-                'title': "Disponível",
-                 'start':str(escala.dia) + "T" + str(intervalo.inicio),
-                 'end': str(escala.dia) + "T" + str(intervalo.fim),
-                 'description': intervalo.descricao,
-                 'className': "fc-"+intervalo.cor
-                 }
-            intervalos.append(b)
-        # print(intervalos)
-        context['intervalos'] = intervalos
-        return context
-
-    def form_invalid(self, form):
-        print(form.errors, len(form.errors))
-        return super(EscalaUpdateView, self).form_invalid(form)
-
-    def form_valid(self, form):
-        self.request.session['update_model'] = 'true'
-        print(self.request.POST)
-        return super().form_valid(form)
-
-
 @login_required
 def addEditEscala(request):
     subs = {}
@@ -158,7 +90,7 @@ def addEditEscala(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required()
-def limparIntervaloDia(request):
+def limparIntervalo(request):
     intervalo = request.POST['intervalolimpar']
 
     intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
@@ -170,5 +102,21 @@ def limparIntervaloDia(request):
         atendimento.delete()
     else:
         intervalo_obj.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required()
+def limparIntervaloDia(request):
+    # intervalo = request.POST['intervalolimpar']
+    #
+    # intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
+    # if(intervalo_obj.atendimento != None):
+    #     atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento_id)
+    #     intervalos_obj = EscalaIntervalo.objects.filter(atendimento_id=intervalo_obj.atendimento)
+    #     for inter in intervalos_obj:
+    #         inter.delete()
+    #     atendimento.delete()
+    # else:
+    #     intervalo_obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

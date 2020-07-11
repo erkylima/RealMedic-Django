@@ -20,6 +20,7 @@ class TipoAtendimento(Timestampable):
                                         on_delete=models.PROTECT, verbose_name='Area de Atendimento')
     tempo_padrao = models.TimeField(verbose_name='Tempo Padrão',default=timezone.now)
     valor_padrao = models.DecimalField(verbose_name='Preço Padrão',decimal_places=2,max_digits=5, default=0)
+    publico = models.BooleanField(default=False)
 
     def __str__(self):
         return self.descricao

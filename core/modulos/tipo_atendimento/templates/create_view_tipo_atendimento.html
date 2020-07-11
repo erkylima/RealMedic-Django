@@ -9,7 +9,12 @@
             {{ form.descricao }}
             {{ form.descricao.errors }}
         </div>
-        <div class="col-md-6 form-group ">
+        <div class="col-md-1 form-group ">
+            {{ form.publico.label_tag }}
+            {{ form.publico }}
+            {{ form.publico.errors }}
+        </div>
+        <div class="col-md-5 form-group ">
             {{ form.valor_padrao.label_tag }}
             {{ form.valor_padrao }}
             {{ form.valor_padrao.errors }}

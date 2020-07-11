@@ -1,0 +1,187 @@
+{% extends 'core/base/datalhe_view_base.html' %}
+{% load static %}
+
+
+{% block header %}
+
+    {% if pacientedepartamentoprofissional %}
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner border-bottom pb-0 mb-3">
+                <div class="d-flex align-items-left flex-column">
+                    <h2 class="pb-2 fw-bold text-white text-uppercase">DETALHES DE{{ pacientedepartamentoprofissional.paciente.nome }}</h2>
+                    <div class="nav-scroller d-flex">
+                        <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
+                            <a class="nav-link active" href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' pacientedepartamentoprofissional.paciente.pk %}">Informações Gerais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% if messages %}
+    {% for message in messages %}
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    mensagem_erro("{{ message }}");
+                {% else %}
+                    mensagem_sucesso("{{ message }}");
+                {% endif %}
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+
+{% block li-tab1 %}<li class="nav-item submenu"> <a class="nav-link active show" id="pills-perfil-tab-nobd" data-toggle="pill" href="#pills-perfil-nobd" role="tab" aria-controls="pills-perfil-nobd" aria-selected="true">Perfil</a> </li> {% endblock %}
+{% block li-tab2 %}<li class="nav-item submenu"> <a class="nav-link" id="pills-protuario-tab-nobd" data-toggle="pill" href="#pills-protuario-nobd" role="tab" aria-controls="pills-protuario-nobd" aria-selected="false">Protuários</a> </li>{% endblock %}
+{% block tab1 %}
+    <div class="tab-pane fade active show" id="pills-perfil-nobd" role="tabpanel" aria-labelledby="pills-perfil-tab-nobd">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="form-group form-group-default">
+                    <label>Nome</label>
+                    <input type="text" readonly class="form-control" name="name" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.nome}}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-default">
+                    <label>Email</label>
+                    <input type="email" readonly class="form-control" name="email" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.email}}">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="form-group form-group-default">
+                    <label>idade</label>
+                    <input type="text" readonly class="form-control" value="{{ pacientedepartamentoprofissional.paciente.idade}}" placeholder="Idade">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group form-group-default">
+                    <label>Genero</label>
+                    <select readonly class="form-control" id="genero">
+                        {% if pacientedepartamentoprofissional.paciente.genero == 1 %}<option value="1">Masculino</option>{% endif %}
+                        {% if pacientedepartamentoprofissional.paciente.genero == 0 %}<option value="0">Feminino</option> {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group form-group-default">
+                    <label>Telefone</label>
+                    <input type="text" class="form-control" readonly value="+55 {{ pacientedepartamentoprofissional.paciente.telefone }}" name="phone" placeholder="Telefone">
+                </div>
+            </div>
+        </div>
+        {% if pacientedepartamentoprofissional.paciente.endereco %}
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="form-group form-group-default">
+                        <label>Endereco</label>
+                        <input type="text" readonly class="form-control" value="{{ pacientedepartamentoprofissional.paciente.endereco }}" name="address" placeholder="Endereço">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row mt-3 mb-1">
+            <div class="col-md-12">
+                <div class="form-group form-group-default">
+                    <label>Sobre</label>
+                    <textarea class="form-control" readonly name="about" placeholder="Insira informação sobre o paciente" rows="3">{{ pacientedepartamentoprofissional.paciente.sobre }}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="text-right mt-3 mb-3">
+            <a href="{% url 'profissional:modulo:meus_pacientes:list_view' %}"><button class="btn btn-success">Voltar</button></a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tab2 %}
+    <div class="tab-pane fade" id="pills-protuario-nobd" role="tabpanel" aria-labelledby="pills-protuario-tab-nobd">
+        <div class="card-header">
+            <div class="card-title">Feed Activity</div>
+        </div>
+        <div class="card-body">
+            <ol class="activity-feed">
+                <li class="feed-item feed-item-secondary">
+                    <time class="date" datetime="9-25">Sep 25</time>
+                    <span class="text">Responded to need <a href="#">"Volunteer opportunity"</a></span>
+                </li>
+                <li class="feed-item feed-item-success">
+                    <time class="date" datetime="9-24">Sep 24</time>
+                    <span class="text">Added an interest <a href="#">"Volunteer Activities"</a></span>
+                </li>
+                <li class="feed-item feed-item-info">
+                    <time class="date" datetime="9-23">Sep 23</time>
+                    <span class="text">Joined the group <a href="single-group.php">"Boardsmanship Forum"</a></span>
+                </li>
+                <li class="feed-item feed-item-warning">
+                    <time class="date" datetime="9-21">Sep 21</time>
+                    <span class="text">Responded to need <a href="#">"In-Kind Opportunity"</a></span>
+                </li>
+                <li class="feed-item feed-item-danger">
+                    <time class="date" datetime="9-18">Sep 18</time>
+                    <span class="text">Created need <a href="#">"Volunteer Opportunity"</a></span>
+                </li>
+                <li class="feed-item">
+                    <time class="date" datetime="9-17">Sep 17</time>
+                    <span class="text">Attending the event <a href="single-event.php">"Some New Event"</a></span>
+                </li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content-lateral %}
+    <div class="card card-profile">
+        <div class="card-header" style="background-image: url('{% static 'core/base/assets/img/blogpost.jpg' %}')">
+            <div class="profile-picture">
+                <div class="avatar avatar-xl">
+                    <img src="{% static 'core/base/assets/img/generic-user.png' %}" alt="..." class="avatar-img rounded-circle">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="user-profile text-center">
+                <div class="name">{{ pacientedepartamentoprofissional.paciente.nome }}{% if pacientedepartamentoprofissional.paciente.idade %}, {% endif %} {{ pacientedepartamentoprofissional.paciente.idade }}</div>
+                <div class="desc">{{ pacientedepartamentoprofissional.paciente.sobre }}</div>
+                <div class="social-media">
+                    {% if not pacientedepartamentoprofissional.paciente.twitter %}
+                        <a class="btn btn-info btn-twitter btn-sm btn-link" href="#">
+                            <span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
+                        </a>
+                    {% endif %}
+                    {% if not pacientedepartamentoprofissional.paciente.instagram %}
+                        <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#">
+                            <span class="btn-label just-icon"><i class="flaticon-instagram"></i> </span>
+                        </a>
+                    {% endif %}
+                    {% if not pacientedepartamentoprofissional.paciente.facebook %}
+                        <a class="btn btn-primary btn-sm btn-link" rel="publisher" href="#">
+                            <span class="btn-label just-icon"><i class="flaticon-facebook"></i> </span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row user-stats text-center">
+                <div class="col">
+                    <div class="number">125</div>
+                    <div class="title">Atendimentos Realizados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'core/base/assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/plugin/fullcalendar/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'core/base/assets/js/locale-all.js' %}"></script>
+
+{% endblock %}

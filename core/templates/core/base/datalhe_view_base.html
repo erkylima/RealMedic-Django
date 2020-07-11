@@ -1,0 +1,38 @@
+{% extends 'core/base/layout_base.html' %}
+{% load static %}
+
+{% block content %}
+    {% block cabecalho %}{% endblock %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card card-with-nav">
+                <div class="card-header">
+                    <div class="row row-nav-line">
+                        <ul class="nav nav-tabs nav-line nav-color-secondary w-100 pl-3" role="tablist">
+                            {% block li-tab1 %}{% endblock %}
+                            {% block li-tab2 %}{% endblock %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                        {% block tab1 %}
+
+                        {% endblock %}
+                        {% block tab2 %}
+
+                        {% endblock %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            {% block content-lateral %}
+                <!-- Sidebar dos detalhes -->
+            {% endblock %}
+        </div>
+
+    </div>
+{% endblock %}

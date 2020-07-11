@@ -21,10 +21,15 @@
 
     </div>
     <div class="row">
-        <div class="col-md-6 form-group">
+        <div class="col-md-5 form-group">
             {{ form.nome.label_tag }}
             {{ form.nome }}
             {{ form.nome.errors }}
+        </div>
+        <div class="col-md-1 form-group">
+            {{ form.idade.label_tag }}
+            {{ form.idade }}
+            {{ form.idade.errors }}
         </div>
         <div class="col-md-4 form-group">
             {{ form.email.label_tag }}

@@ -1,0 +1,35 @@
+    {% extends 'core/base/list_view_base.html' %}
+    {% load static %}
+
+    {% block bt_nova %}
+        {{ labels.NOVO }}
+    {% endblock %}
+
+
+    {% block tbody %}
+        <tbody>
+        {% for paciente in pacientedepartamentoprofissional_list %}
+            <tr>
+                {% for valor  in paciente.getListAtributes %}
+                    <td>{{ valor }}</td>
+                {% endfor %}
+                <td>
+                    <a type="button"
+                       class="btn btn-rounded btn-primary"
+                       href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' paciente.paciente_id %}">
+                        <i class="fa fa-info"></i>
+                    </a>
+                    <a type="button"
+                       class="btn btn-rounded btn-primary"
+                       href="">
+                        <i class="fa fa-list"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+
+
+    {% endblock %}

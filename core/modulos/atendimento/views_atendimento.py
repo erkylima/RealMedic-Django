@@ -13,6 +13,7 @@ from django.forms.models import model_to_dict
 import json
 from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
+from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
 
@@ -155,7 +156,7 @@ def addAtendimento(request):
         messages.error(request, "Selecione um paciente")
     else:
         atendimento = Atendimento()
-        atendimento.paciente = str(request.POST['cliente'])
+        atendimento.paciente_id = int(request.POST['cliente'])
         profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST['profissional'])
         atendimento.departamentoProfissional = profissional
         atendimento.tipoAtendimento_id = request.POST['tipo_atendimento'].split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
@@ -196,6 +197,7 @@ def addAtendimento(request):
         if escalas_todos_intervalos.count() >= quantidade_intervalos_necessarios:
             for intervalo in escalas_todos_intervalos:
                 intervalo.atendimento_id = atendimento.pk
+                pacienteDoMedico = PacienteDepartamentoProfissional.objects.get_or_create(paciente=atendimento.paciente,departamentoProfissional_id=atendimento.departamentoProfissional.pk)
                 intervalo.save()
             messages.success(request, 'Atendimento marcado com sucesso')
 

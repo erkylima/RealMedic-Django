@@ -122,8 +122,8 @@
                 {% endif %}
 
                 {% if request.user.userProfissional %}
-                    <li class="nav-item {% if "/atendimento/" in request.path %} active {% endif %}">
-                        <a href="{% url 'core:modulo:atendimento:list_view' %}">
+                    <li class="nav-item {% if "/minha_escala/" in request.path %} active {% endif %}">
+                        <a href="{% url 'profissional:modulo:minha_escala:update_view' %}">
                             <i class="fa fa-clock"></i>
                             <p>{{ labels.MINHA_ESCALA }}</p>
                         </a>
@@ -136,8 +136,8 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {% if "/minhas_escalas/" in request.path %} active {% endif %}">
-                        <a href="{% url 'core:modulo:atendimento:list_view' %}">
+                    <li class="nav-item {% if "/meus_pacientes/" in request.path %} active {% endif %}">
+                        <a href="{% url 'profissional:modulo:meus_pacientes:list_view' %}">
                             <i class="fas fa-users"></i>
                             <p>{{ labels.MEUS_PACIENTES }}</p>
                         </a>

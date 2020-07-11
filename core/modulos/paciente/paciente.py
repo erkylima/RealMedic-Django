@@ -13,6 +13,11 @@ class Paciente(Timestampable):
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT)
     nome = models.CharField('Nome', max_length=255)
     email = models.CharField('Email', max_length=255)
+    idade = models.IntegerField('Idade',default=10)
+    telefone = models.CharField('Telefone', max_length=40, default='(87) 912345678')
+    genero = models.IntegerField('Genero', default=1)
+    endereco = models.CharField('Endereço', max_length=255,blank=True, null=True)
+    sobre = models.CharField('Sobre', max_length=255,blank=True,default='')
     cliente_app = models.CharField('Cliente App', max_length=255, default=None, blank=True)
 
     def __str__(self):
@@ -31,3 +36,20 @@ class Paciente(Timestampable):
 class PacienteDepartamentoProfissional(Timestampable):
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
+
+    @property
+    def getNome(self):
+        return self.paciente.nome
+
+    @property
+    def getEmail(self):
+        return self.paciente.email
+
+    @property
+    def getListAtributes(self):
+        atributos = ['getNome','getEmail']
+        inter_lista = []
+        for row in atributos:
+            field_value = getattr(self, row, None)
+            inter_lista.append(field_value)
+        return inter_lista

@@ -40,11 +40,14 @@ class MyUpdateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, U
 
 class MeusAtendimentosListView(MyListViewMeusAtendimentos):
     template_name = 'meus_atendimentos/templates/list_view_meus_atendimentos.html'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
+    def get_queryset(self):
+        queryset = Atendimento.objects.filter(departamentoProfissional_id=self.request.user.userProfissional.pk).order_by('departamentoProfissional__escala__dia','-inicio_atendimento')
+        return queryset
 
 class MeusAtendimentosUpdateView(MyUpdateViewMeusAtendimentos):
     template_name = 'meus_atendimentos/templates/create_view_meus_atendimentos.html'

@@ -33,7 +33,13 @@ def adiciona_form_control(self):
             # field.widget.attrs['data-size '] = '10'
         elif field and isinstance(field, forms.ChoiceField):
             field.widget.attrs['class'] = 'form-control selectgroup w-100'
-
+        elif field and isinstance(field, forms.BooleanField):
+            field.widget.attrs['class'] = 'form-control selectgroup w-100 mr-2'
+            field.widget.attrs['data-on'] = 'Sim'
+            field.widget.attrs['data-off'] = 'Não'
+            field.widget.attrs['data-toggle'] = 'toggle'
+            field.widget.attrs['data-onstyle'] = 'success'
+            field.widget.attrs['data-offstyle'] = 'danger'
         elif field and isinstance(field, forms.ModelMultipleChoiceField):
             pass
             # field.widget.attrs['class'] = 'selectpicker form-control'

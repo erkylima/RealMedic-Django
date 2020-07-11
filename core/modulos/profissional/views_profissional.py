@@ -116,12 +116,12 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
             for inter in intervalo:
                 if inter.atendimento_id != None:
                     b = {'id': inter.pk,
-                         'title': inter.atendimento.cliente.nome.split(" ")[0],
+                         'title': inter.atendimento.paciente.nome.split(" ")[0],
                          'start': str(escala.dia) + "T" + str(inter.inicio),
                          'end': str(escala.dia) + "T" + inter.atendimento.fim_atendimento.strftime("%H:%M"),
                          'description': inter.descricao,
                          'className': "fc-danger",
-                         'cliente': inter.atendimento.cliente.nome.split(" ")[0],
+                         'cliente': inter.atendimento.paciente.nome.split(" ")[0],
                          'inicio': inter.atendimento.inicio_atendimento.strftime("%Hh%M"),
                          'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
                          'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")

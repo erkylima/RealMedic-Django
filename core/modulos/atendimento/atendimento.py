@@ -15,6 +15,7 @@ class Atendimento(Timestampable):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, default=1)
     tipoAtendimento = models.ForeignKey(TipoAtendimento, on_delete=models.PROTECT)
+    
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
     retorno = models.BooleanField(default=False)
     valor = models.DecimalField(verbose_name='Preço',decimal_places=2,max_digits=5, default=0)
@@ -31,8 +32,8 @@ class Atendimento(Timestampable):
 
     @property
     def getDataAtendimento(self):
-        return self.escalaintervalo_set.first().escala.dia.strftime('%d/%m/%Y às ') + self.escalaintervalo_set.first().inicio.strftime("%H:%M até ") + \
-               self.escalaintervalo_set.first().fim.strftime("%H:%M")
+        return self.escalaintervalo_set.first().escala.dia.strftime('%d/%m/%Y às ') + self.inicio_atendimento.strftime("%H:%M até ") + \
+               self.fim_atendimento.strftime("%H:%M")
 
 
     @property

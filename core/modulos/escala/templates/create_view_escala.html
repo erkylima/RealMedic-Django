@@ -68,6 +68,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Criar Nova Escala</h5>
+
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -81,6 +82,16 @@
                           novalidate>
                         {% csrf_token %}
                         {% include 'escala/templates/form_add_escala.html' %}
+                    </form>
+
+                    <form id="limparintervalodia"
+                          autocomplete="off"
+                          method="post"
+                          action="{% url 'core:modulo:escala:limpar_intervalo_dia' %}"
+                          novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="intervalolimpardia" id="intervalolimpardia">
+
                     </form>
                 </div>
             </div>
@@ -113,7 +124,7 @@
                         </dl>
                         <hr>
                         <button class="btn btn-flat btn-primary ml-3" id="open-modal-edit">Editar</button>
-                        <button type="button" onclick="apagarinvervalo()" class="btn btn-danger">Apagar</button>
+                        <button type="button" onclick="apagarinvervalo()" id="botao-apagar" class="btn btn-danger">Apagar</button>
                         <form id="limparintervalo"
                               autocomplete="off"
                               method="post"
@@ -152,6 +163,44 @@
 
 
     <script>
+        function apagarinvervalodia(){
+            swal({
+                title: 'Tem certeza que quer apagar as escalas desse dia?',
+                text: "Isso não pode ser revertido!",
+                type: 'warning',
+                buttons:{
+                    cancel: {
+                        visible: true,
+                        text : 'Não, cancelar!',
+                        className: 'btn btn-danger'
+                    },
+                    confirm: {
+                        text : 'Sim, apague isso!',
+                        className : 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Essa escala foi apagada!", {
+                        icon: "success",
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                    {#$('#limparintervalodia').submit();#}
+                } else {
+                    swal("Essa escala não foi apagada!", {
+                        buttons : {
+                            confirm : {
+                                className: 'btn btn-success'
+                            }
+                        }
+                    });
+                }
+            });
+        }
         function apagarinvervalo(){
             swal({
                 title: 'Tem certeza que quer apagar essa escala?',
@@ -194,9 +243,9 @@
         $( function() {
             $("#slider-range-edit").slider({
                 range: false,
-                min: 0,
-                max: 1411,
-                step: 30,
+                min: 300,
+                max: 1260,
+                step: 10,
                 values: [600],
                 slide: function (e, ui) {
                     var hours1 = Math.floor(ui.values[0] / 60);
@@ -205,7 +254,7 @@
 
 
                     var hours2 = Math.floor(ui.values[1] / 60);
-                    var minutes2 = minutes1 + 30;
+                    var minutes2 = minutes1 + 10    ;
 
                     if(hours1.length < 10) hours1= '0' + hours;
                     if(minutes1.length < 10) minutes1 = '0' + minutes;
@@ -217,8 +266,8 @@
                     } else {
                         hours2 = hours1 + 1;
                         minutes2 = '00';
-                        console.log('Hora 1: ' +  hours1+":" +minutes1);
-                        console.log('Hora 2: ' +  hours2+":" +minutes2);
+                        {#console.log('Hora 1: ' +  hours1+":" +minutes1);#}
+                        {#console.log('Hora 2: ' +  hours2+":" +minutes2);#}
                     }
 
 
@@ -231,12 +280,12 @@
             });
             $("#slider-range").slider({
                 range: true,
-                min: 0,
-                max: 1411,
+                min: 300,
+                max: 1260,
                 step: 10,
                 values: [600, 720],
                 slide: function (e, ui) {
-                    console.log(ui.values[0]);
+                    {#console.log(ui.values[0]);#}
                     var hours1 = Math.floor(ui.values[0] / 60);
                     var minutes1 = ui.values[0] - (hours1 * 60);
 
@@ -285,7 +334,7 @@
                     right: 'month,agendaWeek,agendaDay,listWeek'
                 },
                 locale: 'pt-br', // Definir tradução do calendário
-                selectable : true, // Definir se datas são selecionáveis
+                selectable : false, // Definir se datas são selecionáveis
                 selectHelper: true,
                 eventLimit: true,
                 views: {
@@ -298,18 +347,23 @@
                     $('#calendar-title').text( view.title );
                 }, // Ao renderizar view
                 dayClick: function(date, jsEvent, view) {
-                    // Abrir janela para adicionar nova escala
-                    $( "#slider-range" ).slider('values',0,480);
-                    $( "#slider-range" ).slider('values',1,720);
-                    $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                    $('#horastart').val($('.slider-time').val()); // Preenche horastart
-                    var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
+                    if(moment(date.format()).format('DD/MM/YYYY') === moment(Date.now()).format('DD/MM/YYYY')){
+                        mensagem_erro("Não é possível definir sua escala hoje.");
+                    }else if(Date.now() > date){
+                        mensagem_erro("Impossível alterar escalas antigas");
+                    }else {
+                        // Abrir janela para adicionar nova escala
+                        $("#slider-range").slider('values', 0, 480);
+                        $("#slider-range").slider('values', 1, 720);
+                        $('#datastart').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                        $('#horastart').val($('.slider-time').val()); // Preenche horastart
+                        var datatimestamp = new Date(moment(date.start).format('MM-DD-YYYYTH:mm'));
 
-                    $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
-                    $('#horaend').val($('.slider-time2').val()); // Preenche horastart
+                        $('#dataend').val(moment(date.format()).format('DD/MM/YYYY')); // Preenche datastart
+                        $('#horaend').val($('.slider-time2').val()); // Preenche horastart
 
-                    $('#modal-add-event').modal('show'); // Mostra janela de criação
-
+                        $('#modal-add-event').modal('show'); // Mostra janela de criação
+                    }
                 }, // Ao clicar em um dia
                 eventClick: function(date, jsEvent, view) {
                     // Abrir janela para visualizar escala
@@ -318,14 +372,23 @@
                     $('#modal-view-event #title').text(date.title); // Preenche campo titulo
                     $('#idbd').val(date.id);
                     $('#title').attr('className',date.className);// Armazena informação da cor para recuperar na edição
-                    $('#modal-view-event #start').text(date.inicio); // Preenche data start
+                    if(date.inicio) {
+                        $('#botao-apagar').attr('style','display:none');
+                        $('#modal-view-event #start').text(date.inicio); // Preenche data start
+                    }else{
+                        $('#botao-apagar').attr('style','display:inline-block');
+                        $('#modal-view-event #start').text(moment(date.start).format('H:mm')); // Preenche data start
+                    }
                     var horareversa = Math.floor(moment(date.start).format('H') * 60);
                     var minutesreverso = Math.floor(moment(date.start).format('m')) + (horareversa);
                     $( "#slider-range-edit" ).slider('values',0,minutesreverso);
                     $('#intervalolimpar').val(date.id);
                     if(date.end) { // Se tiver data final
                         $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
-                        $('#modal-view-event #end').text(date.fim); // Preenche data end
+                        $('#modal-view-event #end').text(moment(date.end).format('H:mm')); // Preenche data end
+                    }else if(date.fim) {
+                        $('#labelfim').text('Fim'); // Escreve texto dentro do labelfim
+                        $('#modal-view-event #end').text(moment(date.fim).format('H:mm')); // Preenche data fim
                     }else{
                         $('#labelfim').text(''); // Reseta labelfim
                         $('#modal-view-event #end').text(''); // Reseta data end
