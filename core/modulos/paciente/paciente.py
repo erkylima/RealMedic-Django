@@ -37,6 +37,9 @@ class PacienteDepartamentoProfissional(Timestampable):
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return self.paciente.nome + ' paciente de ' + self.departamentoProfissional.profissional.nome
+
     @property
     def getNome(self):
         return self.paciente.nome

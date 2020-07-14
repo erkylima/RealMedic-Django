@@ -15,14 +15,10 @@
                 {% endfor %}
                 <td>
                     <a type="button"
+                       data-toggle="tooltip" data-placement="top" title="Informações do Paciente"
                        class="btn btn-rounded btn-primary"
                        href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' paciente.paciente_id %}">
                         <i class="fa fa-info"></i>
-                    </a>
-                    <a type="button"
-                       class="btn btn-rounded btn-primary"
-                       href="">
-                        <i class="fa fa-list"></i>
                     </a>
                 </td>
             </tr>

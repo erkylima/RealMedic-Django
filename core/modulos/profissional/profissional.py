@@ -48,5 +48,3 @@ class DepartamentoProfissional(models.Model):
 
     def __str__(self):
         return self.profissional.nome
-    #todo
-    # escala

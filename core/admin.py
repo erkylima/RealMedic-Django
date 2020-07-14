@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from core.models import Empresa, UserProfile
+from core.models import Empresa, UserProfile, Prontuario,Paciente,PacienteDepartamentoProfissional
 from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.lat_lng import LatLng
 from core.modulos.atendente.atendente import Atendente
@@ -22,10 +22,13 @@ admin.site.register(Profissional)
 admin.site.register(Departamento)
 admin.site.register(Atendente)
 admin.site.register(Cliente)
+admin.site.register(Paciente)
+admin.site.register(PacienteDepartamentoProfissional)
 admin.site.register(TipoAtendimento)
 admin.site.register(TipoProfissional)
 admin.site.register(DepartamentoProfissional)
 admin.site.register(Escala)
 admin.site.register(EscalaIntervalo)
 admin.site.register(Atendimento)
+admin.site.register(Prontuario)
 

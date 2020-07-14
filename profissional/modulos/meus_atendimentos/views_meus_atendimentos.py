@@ -46,7 +46,7 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
     def get_queryset(self):
-        queryset = Atendimento.objects.filter(departamentoProfissional_id=self.request.user.userProfissional.pk).order_by('departamentoProfissional__escala__dia','-inicio_atendimento')
+        queryset = Atendimento.objects.filter(departamentoProfissional_id=self.request.user.userProfissional.pk).order_by('escalaintervalo__escala__dia','-inicio_atendimento')
         return queryset
 
 class MeusAtendimentosUpdateView(MyUpdateViewMeusAtendimentos):

@@ -1,12 +1,11 @@
-from datetime import datetime, timedelta
-from decimal import Decimal
+
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
-from django.views.generic.base import View
+from django.views.generic import ListView, UpdateView, DetailView
 
-from core.models import Paciente
+from core.models import Paciente, Prontuario
+
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -54,6 +53,11 @@ class MeusPacientesDetalheView(MyDetalheViewMeusPacientes):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        prontuarios = Prontuario.objects.filter(departamento_profissional_paciente__paciente=self.object.pk)
+
+        for pro in prontuarios:
+            print(pro.getListAtributes)
+        context['prontuarios'] = prontuarios
         return context
 
 class MeusPacientesUpdateView(MyUpdateViewMeusPacientes):
@@ -61,6 +65,7 @@ class MeusPacientesUpdateView(MyUpdateViewMeusPacientes):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # prontuario = Prontuario.objects.filter(departamento_profissional_paciente=self.object.pk)
 
         return context
 
