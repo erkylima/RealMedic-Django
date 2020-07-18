@@ -79,7 +79,7 @@
                             <dd class="col-sm-9" id="desc"></dd>
                         </dl>
 
-                        <form name="marcar_atendimento" method="post" action="{% url 'core:modulo:atendimento:add_atendimento' %}">
+                        <form name="marcar_atendimento" id="marcar_atendimento" method="post" action="{% url 'core:modulo:atendimento:add_atendimento' %}">
                             {% csrf_token %}
                             <div class="form-group">
                                 <input type="hidden" id="profissional" name="profissional" value="{{ profissional.id }}">
@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-flat btn-primary ml-3" id="send_atendimento">Marcar Atendimento</button>
+                            <button class="btn btn-flat btn-primary ml-3" id="send_atendimento" type="button">Marcar Atendimento</button>
                         </form>
                         <hr>
 
@@ -405,9 +405,17 @@
         });
 
         $('#send_atendimento').on('click', function () {
-            {#alert();#}
-            if($('#tipo_atendimento').val()){
-                {#mensagem_erro("Você precisa ")#}
+            if(!$('#tipo_atendimento').val()){
+                mensagem_erro("Você precisa definir o tipo de atendimento")
+            }else if(!$('#cliente').val()){
+                mensagem_erro("Você precisa definir o cliente")
+            }else{
+                swal(
+                    'Salvando Atendimento!',
+                    'Aguarde a confirmação!',
+                    'info'
+                );
+                $('#marcar_atendimento').submit();
             }
         });
 

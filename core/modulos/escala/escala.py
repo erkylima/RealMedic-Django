@@ -1,11 +1,8 @@
-from django.contrib.auth.models import User, Group
 from django.db import models
 
 from core.models import DepartamentoProfissional
-from core.modulos.atendimento.atendimento import Atendimento
-
 from core.models.base.time_stampable import Timestampable
-from core.util.util_manager import UpperCaseCharField
+from core.modulos.atendimento.atendimento import Atendimento
 
 
 class Escala(Timestampable):

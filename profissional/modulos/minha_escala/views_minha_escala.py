@@ -2,11 +2,12 @@ import calendar
 from datetime import datetime, timedelta
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
 from core.models import Escala, EscalaIntervalo, Profissional, Atendimento
@@ -72,3 +73,7 @@ class MinhaEscalaUpdateView(MyUpdateViewMinhaEscala):
 
         context['intervalos'] = intervalos
         return context
+
+    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(MinhaEscalaUpdateView, self).dispatch(*args, **kwargs)

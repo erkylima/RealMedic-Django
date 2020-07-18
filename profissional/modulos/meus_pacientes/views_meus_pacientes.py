@@ -1,7 +1,8 @@
-
-
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, DetailView
 
 from core.models import Paciente, Prontuario
@@ -16,7 +17,7 @@ class MyGenericView(object):
     model = PacienteDepartamentoProfissional
     form_class = MeusPacientesForm
     success_url = reverse_lazy('profissional:modulo:meus_pacientes:list_view')
-    search_fields = ['nome','email']
+    search_fields = ['paciente__nome', 'tipoAtendimento__descricao']
     COLUMNS = [LabesProperty.NOME, LabesProperty.EMAIL]
     NAME_MODEL = Paciente._meta.verbose_name
     NAME_MODEL_PLURAL = Paciente._meta.verbose_name_plural
@@ -45,8 +46,19 @@ class MeusPacientesListView(MyListViewMeusPacientes):
 
         return context
     def get_queryset(self):
-        queryset = PacienteDepartamentoProfissional.objects.filter(departamentoProfissional_id=self.request.user.userProfissional.pk)
+        if (self.request.GET.get('q')):
+            queryset = PacienteDepartamentoProfissional.objects.filter(
+                (Q(paciente__nome__icontains=self.request.GET.get('q')) | Q(
+                    paciente__email__icontains=self.request.GET.get('q'))) & Q(
+                    departamentoProfissional_id=self.request.user.userProfissional.pk))
+        else:
+            queryset = PacienteDepartamentoProfissional.objects.filter(
+                departamentoProfissional_id=self.request.user.userProfissional.pk)
         return queryset
+
+    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(MeusPacientesListView, self).dispatch(*args, **kwargs)
 
 class MeusPacientesDetalheView(MyDetalheViewMeusPacientes):
     template_name = 'meus_pacientes/templates/detalhe_view_meus_pacientes.html'
@@ -55,17 +67,18 @@ class MeusPacientesDetalheView(MyDetalheViewMeusPacientes):
         context = super().get_context_data(**kwargs)
         prontuarios = Prontuario.objects.filter(departamento_profissional_paciente__paciente=self.object.pk)
 
-        for pro in prontuarios:
-            print(pro.getListAtributes)
         context['prontuarios'] = prontuarios
         return context
+
+    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(MeusPacientesDetalheView, self).dispatch(*args, **kwargs)
 
 class MeusPacientesUpdateView(MyUpdateViewMeusPacientes):
     template_name = 'meus_pacientes/templates/detalhe_view_meus_pacientes.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # prontuario = Prontuario.objects.filter(departamento_profissional_paciente=self.object.pk)
 
         return context
 

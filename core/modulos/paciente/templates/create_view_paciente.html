@@ -31,10 +31,22 @@
             {{ form.idade }}
             {{ form.idade.errors }}
         </div>
-        <div class="col-md-4 form-group">
+        <div class="col-md-6 form-group">
             {{ form.email.label_tag }}
             {{ form.email }}
             {{ form.email.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            {{ form.genero.label_tag }}
+            {{ form.genero }}
+            {{ form.genero.errors }}
+        </div>
+        <div class="col-md-4 form-group">
+            {{ form.telefone.label_tag }}
+            {{ form.telefone }}
+            {{ form.telefone.errors }}
         </div>
         <div class="col-md-2 form-group">
             {{ form.cliente_app.label_tag }}

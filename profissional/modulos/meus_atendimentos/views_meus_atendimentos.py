@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
-from decimal import Decimal
-
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
 
@@ -16,7 +16,8 @@ class MyGenericView(object):
     model = Atendimento
     form_class = MeusAtendimentosForm
     success_url = reverse_lazy('profissional:modulo:meus_atendimentos:list_view')
-    search_fields = ['cliente__nome','tipoAtendimento__descricao','valor']
+    search_fields = ['paciente__nome', 'tipoAtendimento__descricao','departamentoProfissional__pk']
+
     COLUMNS = [LabesProperty.NOME, LabesProperty.ATENDIMENTO, LabesProperty.VALOR, LabesProperty.DATA]
     NAME_MODEL = Atendimento._meta.verbose_name
     NAME_MODEL_PLURAL = Atendimento._meta.verbose_name_plural
@@ -29,6 +30,7 @@ class MyListViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyListViewSe
 class MyDetailViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, View):
     pass
 
+
 class MyCreateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, CreateView):
     pass
 
@@ -38,6 +40,7 @@ class MyUpdateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, U
     # permission_denied_message = 'Permission Denied'
     pass
 
+
 class MeusAtendimentosListView(MyListViewMeusAtendimentos):
     template_name = 'meus_atendimentos/templates/list_view_meus_atendimentos.html'
     paginate_by = 10
@@ -45,9 +48,21 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
+
     def get_queryset(self):
-        queryset = Atendimento.objects.filter(departamentoProfissional_id=self.request.user.userProfissional.pk).order_by('escalaintervalo__escala__dia','-inicio_atendimento')
+        if(self.request.GET.get('q')):
+            queryset = Atendimento.objects.filter((Q(paciente__nome__icontains=self.request.GET.get('q')) |
+                                                   Q(tipoAtendimento__descricao__icontains=self.request.GET.get('q').upper()) |
+                                                   Q(valor__contains=self.request.GET.get('q'))) &
+                                                  Q(departamentoProfissional_id=self.request.user.userProfissional.pk))
+        else:
+            queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=self.request.user.userProfissional.pk))
         return queryset
+
+    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(MeusAtendimentosListView, self).dispatch(*args, **kwargs)
+
 
 class MeusAtendimentosUpdateView(MyUpdateViewMeusAtendimentos):
     template_name = 'meus_atendimentos/templates/create_view_meus_atendimentos.html'
@@ -65,3 +80,6 @@ class MeusAtendimentosUpdateView(MyUpdateViewMeusAtendimentos):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(MeusAtendimentosUpdateView, self).dispatch(*args, **kwargs)

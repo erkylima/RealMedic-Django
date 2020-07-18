@@ -15,13 +15,14 @@ class Atendimento(Timestampable):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, default=1)
     tipoAtendimento = models.ForeignKey(TipoAtendimento, on_delete=models.PROTECT)
-    
+    intervalo = models.IntegerField(null=True,blank=True)
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
     retorno = models.BooleanField(default=False)
     valor = models.DecimalField(verbose_name='Preço',decimal_places=2,max_digits=5, default=0)
     tempo = models.TimeField(default=timezone.now)
     inicio_atendimento = models.TimeField(null=True, blank=True) # Horario de inicialização do atendimento
     fim_atendimento = models.TimeField(null=True, blank=True) # Horario de finalização do atendimento
+    pago = models.BooleanField(default=False)
 
     def __str__(self):
         return self.paciente.nome

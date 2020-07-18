@@ -189,7 +189,7 @@
                             }
                         }
                     });
-                    {#$('#limparintervalodia').submit();#}
+                    $('#limparintervalodia').submit();
                 } else {
                     swal("Essa escala não foi apagada!", {
                         buttons : {
@@ -363,6 +363,7 @@
                         $('#horaend').val($('.slider-time2').val()); // Preenche horastart
 
                         $('#modal-add-event').modal('show'); // Mostra janela de criação
+                        $('#intervalolimpardia').val(date.format());
                     }
                 }, // Ao clicar em um dia
                 eventClick: function(date, jsEvent, view) {

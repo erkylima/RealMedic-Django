@@ -92,13 +92,6 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
-                        <a href="{% url 'core:modulo:paciente:list_view' %}">
-                            <i class="fas fa-user-circle"></i>
-                            <p>{{ labels.PACIENTE }}</p>
-                        </a>
-                    </li>
-
                     <li class="nav-item {% if "/tipo_atendimento/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:tipo_atendimento:list_view' %}">
                             <i class="fas fa-first-aid"></i>
@@ -112,6 +105,15 @@
                             <p>{{ labels.PROFISSIONAIS }}</p>
                         </a>
                     </li>
+                {% endif %}
+
+                {% if request.user.is_staff %}
+                    <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:paciente:list_view' %}">
+                            <i class="fas fa-user-circle"></i>
+                            <p>{{ labels.PACIENTES }}</p>
+                        </a>
+                    </li>
 
                     <li class="nav-item {% if "/atendimento/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:atendimento:list_view' %}">
@@ -119,8 +121,23 @@
                             <p>{{ labels.ATENDIMENTOS }}</p>
                         </a>
                     </li>
-                {% endif %}
 
+                {% elif request.user.userAtendente %}
+                    <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:paciente:list_view' %}">
+                            <i class="fas fa-user-circle"></i>
+                            <p>{{ labels.PACIENTES }}</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item {% if "/atendimento/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:atendimento:list_view' %}">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>{{ labels.ATENDIMENTOS }}</p>
+                        </a>
+                    </li>
+
+                {% endif %}
                 {% if request.user.userProfissional %}
                     <li class="nav-item {% if "/minha_escala/" in request.path %} active {% endif %}">
                         <a href="{% url 'profissional:modulo:minha_escala:update_view' %}">
@@ -128,7 +145,6 @@
                             <p>{{ labels.MINHA_ESCALA }}</p>
                         </a>
                     </li>
-
                     <li class="nav-item {% if "/meus_atendimentos/" in request.path %} active {% endif %}">
                         <a href="{% url 'profissional:modulo:meus_atendimentos:list_view' %}">
                             <i class="fas fa-calendar-check"></i>

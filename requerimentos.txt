@@ -1,5 +1,5 @@
-asgiref==3.2.7
-Django==3.0.5
+asgiref==3.2.10
+Django==3.0.8
 django-extra-views==0.13.0
 django-global-permissions==0.2.4
 djangorestframework==3.11.0

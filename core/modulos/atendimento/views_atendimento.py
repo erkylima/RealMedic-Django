@@ -22,7 +22,7 @@ class MyGenericView(object):
     model = DepartamentoProfissional
     form_class = AtendimentoForm
     success_url = reverse_lazy('core:modulo:atendimento:list_view')
-    search_fields = ['nome_razao_social', 'documento']
+    search_fields = ['profissional__nome', 'tipo_profissional__descricao']
     COLUMNS = [LabesProperty.NOME, LabesProperty.DOCUMENTO]
     NAME_MODEL = Atendimento._meta.verbose_name
     NAME_MODEL_PLURAL = Atendimento._meta.verbose_name_plural
@@ -150,41 +150,42 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
 
 @login_required
 def addAtendimento(request):
-    if request.POST['tipo_atendimento'] == '':
+    if not request.POST.get('tipo_atendimento'):
         messages.error(request, "Selecione o tipo de atendimento")
-    elif request.POST['cliente'] == '':
+    elif not request.POST.get('cliente'):
         messages.error(request, "Selecione um paciente")
     else:
         atendimento = Atendimento()
-        atendimento.paciente_id = int(request.POST['cliente'])
-        profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST['profissional'])
+        atendimento.paciente_id = int(request.POST.get('cliente'))
+        profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST.get('profissional'))
         atendimento.departamentoProfissional = profissional
-        atendimento.tipoAtendimento_id = request.POST['tipo_atendimento'].split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
-        if request.POST['retorno'] == 1:
+        atendimento.tipoAtendimento_id = request.POST.get('tipo_atendimento').split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
+        if request.POST.get('retorno') == 1:
             atendimento.retorno = True
         else:
             atendimento.retorno = False
-        atendimento.valor = Decimal(str(request.POST['valor']).replace(",", "."))
-        atendimento.tempo = request.POST['tipo_atendimento'].split('-')[2]
+        atendimento.valor = Decimal(str(request.POST.get('valor')).replace(",", "."))
+        atendimento.tempo = request.POST.get('tipo_atendimento').split('-')[2]
         atendimento.save()
-        escala_intervalo_inicial = EscalaIntervalo.objects.get(pk=request.POST['id_escala_intervalo'])
+        escala_intervalo_inicial = EscalaIntervalo.objects.get(pk=request.POST.get('id_escala_intervalo'))
         escalas_intervalo = None
 
         inicio = datetime.strptime(escala_intervalo_inicial.escala.dia.strftime("%Y-%m-%d") + " " + escala_intervalo_inicial.inicio.strftime("%H:%M:%S"),
                                    '%Y-%m-%d %H:%M:%S') # Datetime do início do primeiro intervalo
-        horas = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0]) # Quantidade de horas do tipo de atendimento
-        minutos = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) # Quantidade de minutos do tipo de atendimento
+        horas = int(request.POST.get('tipo_atendimento').split('-')[2].split(':')[0]) # Quantidade de horas do tipo de atendimento
+        minutos = int(request.POST.get('tipo_atendimento').split('-')[2].split(':')[1]) # Quantidade de minutos do tipo de atendimento
         fim = inicio + timedelta(minutes=(horas * 60 + minutos)-10) # inicio do ultimo intervalo
 
         atendimento.inicio_atendimento = inicio # Início do primeiro intervalo
         atendimento.fim_atendimento = fim + timedelta(minutes=10) # fim do ultimo intervalo
+        atendimento.intervalo = request.POST.get('id_escala_intervalo')
         atendimento.save()
 
         # Calcula quantidade de intervalos disponíveis necessários para completar a operação
-        quantidade_intervalos_necessarios = int(request.POST['tipo_atendimento'].split('-')[2].split(':')[0])*6
+        quantidade_intervalos_necessarios = int(request.POST.get('tipo_atendimento').split('-')[2].split(':')[0])*6
         # if int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]) == 30:
         #     quantidade_intervalos_necessarios += 1
-        quantidade_intervalos_necessarios += (int(request.POST['tipo_atendimento'].split('-')[2].split(':')[1]))/10
+        quantidade_intervalos_necessarios += (int(request.POST.get('tipo_atendimento').split('-')[2].split(':')[1]))/10
         # Fim do calculo de quantidade de intervalos
         print(inicio.strftime("%H:%M") + ' inicio')
         print(fim.strftime("%H:%M") + ' fim')
@@ -215,10 +216,10 @@ def addAtendimento(request):
 
 @login_required()
 def desmarcarAtendimento(request):
-    intervalo = request.POST['intervalolimpar']
+    intervalo = request.POST.get('intervalolimpar')
 
     intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
-    if (intervalo_obj.atendimento != None):
+    if (intervalo_obj.atendimento_id != None and intervalo_obj.atendimento.pago == False):
         atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento_id)
         intervalos_obj = EscalaIntervalo.objects.filter(atendimento_id=intervalo_obj.atendimento)
         for inter in intervalos_obj:
