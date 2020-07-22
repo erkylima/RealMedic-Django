@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
+from core.modulos.escala.views_escala import mobile
 from core.modulos.profissional.form_profissional import ProfissionalForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
@@ -143,6 +144,11 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
                 intervalos.append(b)
 
         context['intervalos'] = intervalos
+        if mobile(self.request):
+            is_mobile = True
+        else:
+            is_mobile = False
+        print(is_mobile)
         return context
 
     def form_invalid(self, form):

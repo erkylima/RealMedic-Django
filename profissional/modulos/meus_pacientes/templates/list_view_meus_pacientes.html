@@ -1,31 +1,39 @@
-    {% extends 'core/base/list_view_base.html' %}
-    {% load static %}
+{% extends 'core/base/list_view_base.html' %}
+{% load static %}
 
-    {% block bt_nova %}
-        {{ labels.NOVO }}
-    {% endblock %}
-
-
-    {% block tbody %}
-        <tbody>
-        {% for paciente in pacientedepartamentoprofissional_list %}
-            <tr>
-                {% for valor  in paciente.getListAtributes %}
-                    <td>{{ valor }}</td>
-                {% endfor %}
-                <td>
-                    <a type="button"
-                       data-toggle="tooltip" data-placement="top" title="Informações do Paciente"
-                       class="btn btn-rounded btn-primary"
-                       href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' paciente.paciente_id %}">
-                        <i class="fa fa-info"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
+{% block bt_nova %}
+    {{ labels.NOVO }}
+{% endblock %}
 
 
-        </tbody>
+{% block tbody %}
+    <tbody>
+    {% for paciente in pacientedepartamentoprofissional_list %}
+        <tr>
+            {% for valor  in paciente.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a type="button"
+                   data-toggle="tooltip" data-placement="top" title="Informações do Paciente"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' paciente.paciente_id %}">
+                    <i class="fa fa-info"></i>
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td>Nenhum paciente cadastrado</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endfor %}
 
 
-    {% endblock %}
+    </tbody>
+
+
+{% endblock %}

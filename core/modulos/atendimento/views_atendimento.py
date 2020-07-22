@@ -3,14 +3,12 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import Permission, User
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, View
+from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
-from django.forms.models import model_to_dict
-import json
+
 from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
