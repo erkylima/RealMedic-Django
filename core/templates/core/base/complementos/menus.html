@@ -76,15 +76,22 @@
                     </li>
                 {% endif %}
 
-                {% url 'core:modulo:dashboard' as index %}
-                <li class="nav-item {% if request.path == index %} active {% endif %}">
-                    <a href="{% url 'core:modulo:dashboard' %}">
-                        <i class="fas fa-desktop"></i>
-                        <p>{{ labels.PAINEL }}</p>
-                    </a>
-                </li>
-
                 {% if request.user.userProfile %}
+                    {% url 'core:modulo:dashboard' as index %}
+                    <li class="nav-item {% if request.path == index %} active {% endif %}">
+                        <a href="{% url 'core:modulo:dashboard' %}">
+                            <i class="fas fa-desktop"></i>
+                            <p>{{ labels.PAINEL }}</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:paciente:list_view' %}">
+                            <i class="fas fa-user-circle"></i>
+                            <p>{{ labels.PACIENTES }}</p>
+                        </a>
+                    </li>
+
                     <li class="nav-item {% if "/atendente/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:atendente:list_view' %}">
                             <i class="fas fa-user-tie"></i>
@@ -139,6 +146,14 @@
 
                 {% endif %}
                 {% if request.user.userProfissional %}
+                    {% url 'profissional:modulo:relatorio:ver' as relatorio %}
+                    <li class="nav-item {% if request.path == relatorio %} active {% endif %}">
+                        <a href="{% url 'profissional:modulo:relatorio:ver' %}">
+                            <i class="fas fa-desktop"></i>
+                            <p>{{ labels.RELATORIO }}</p>
+                        </a>
+                    </li>
+
                     <li class="nav-item {% if "/minha_escala/" in request.path %} active {% endif %}">
                         <a href="{% url 'profissional:modulo:minha_escala:update_view' %}">
                             <i class="fa fa-clock"></i>

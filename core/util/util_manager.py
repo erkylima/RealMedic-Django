@@ -83,6 +83,7 @@ class MyListViewSearcheGeneric(SearchableListMixin):
         return context
 
 
+
 class MyLabls(object):
     NAME_MODEL = None
     NAME_MODEL_PLURAL = None

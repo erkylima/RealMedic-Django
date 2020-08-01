@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
+from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.escala.views_escala import mobile
 from core.modulos.profissional.form_profissional import ProfissionalForm
 from core.util.labels_property import LabesProperty
@@ -115,23 +116,23 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
             atendimento_anterior = None
             for inter in intervalo:
-                if inter.atendimento_id != None:
-                    b = {'id': inter.pk,
-                         'title': inter.atendimento.paciente.nome.split(" ")[0],
+                if inter.atendimento != None:
+                    atendimento = Atendimento.objects.get(pk=inter.atendimento)
+                    b = {'id': atendimento.pk,
+                         'title': atendimento.paciente.nome.split(" ")[0],
                          'start': str(escala.dia) + "T" + str(inter.inicio),
-                         'end': str(escala.dia) + "T" + inter.atendimento.fim_atendimento.strftime("%H:%M"),
-                         'description': inter.descricao,
+                         'end': str(escala.dia) + "T" + atendimento.fim_atendimento.strftime("%H:%M"),
                          'className': "fc-danger",
-                         'cliente': inter.atendimento.paciente.nome.split(" ")[0],
-                         'inicio': inter.atendimento.inicio_atendimento.strftime("%Hh%M"),
-                         'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
-                         'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")
+                         'cliente': atendimento.paciente.nome.split(" ")[0],
+                         'inicio': atendimento.inicio_atendimento.strftime("%Hh%M"),
+                         'tipo_atendimento': atendimento.tipoAtendimento.descricao,
+                         'fim': atendimento.fim_atendimento.strftime("%Hh%M")
                          }
                     if (
-                            inter.atendimento_id == atendimento_anterior):  # Verifica se é um atendimento em sequência de intervalos
+                            inter.atendimento == atendimento_anterior):  # Verifica se é um atendimento em sequência de intervalos
                         continue
 
-                    atendimento_anterior = inter.atendimento_id  # Armazena o primeiro e id de um atendimento em sequencia de intervalos
+                    atendimento_anterior = inter.atendimento  # Armazena o primeiro e id de um atendimento em sequencia de intervalos
                 else:
                     b = {'id': inter.pk,
                          'title': "Disponível",

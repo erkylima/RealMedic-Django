@@ -2,7 +2,6 @@ from django.db import models
 
 from core.models import DepartamentoProfissional
 from core.models.base.time_stampable import Timestampable
-from core.modulos.atendimento.atendimento import Atendimento
 
 
 class Escala(Timestampable):
@@ -32,7 +31,7 @@ class EscalaIntervalo(models.Model):
     fim = models.TimeField()
     descricao = models.CharField(max_length=255)
     cor = models.CharField(max_length=20)
-    atendimento = models.ForeignKey(Atendimento, on_delete=models.PROTECT, null=True, blank=True)
+    atendimento = models.IntegerField(null=True, blank=True)
 
     @property
     def getListAtributes(self):

@@ -5,18 +5,29 @@
     {{ labels.NOVO }}
 {% endblock %}
 {% block corpo_formulario %}
-    <div class="row">
-        <div class="col-md-6 form-group">
-            {{ form.empresa.label_tag }}
-            {{ form.empresa }}
-            {{ form.empresa.errors }}
+    {% if request.user.is_staff %}
+        <div class="row">
+            <div class="col-md-6 form-group">
+                {{ form.empresa.label_tag }}
+                {{ form.empresa }}
+                {{ form.empresa.errors }}
+            </div>
+            <div class="col-md-6 form-group">
+                {{ form.departamento.label_tag }}
+                {{ form.departamento }}
+                {{ form.departamento.errors }}
+            </div>
         </div>
-        <div class="col-md-6 form-group">
-            {{ form.departamento.label_tag }}
-            {{ form.departamento }}
-            {{ form.departamento.errors }}
+    {% elif request.user.userProfile %}
+        <div class="row">
+            <div class="col-md-12 form-group">
+                {{ form.departamento.label_tag }}
+                {{ form.departamento }}
+                {{ form.departamento.errors }}
+            </div>
         </div>
-    </div>
+    {% endif %}
+
     <div class="row">
 
     </div>

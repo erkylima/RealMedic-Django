@@ -107,22 +107,23 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)
             atendimento_anterior = None
             for inter in intervalo:
-                if inter.atendimento_id != None:
+                if inter.atendimento != None:
+                    atendimento = Atendimento.objects.get(pk=inter.atendimento)
                     b = {'id': inter.pk,
-                         'title': inter.atendimento.paciente.nome.split(" ")[0],
+                         'title': atendimento.paciente.nome.split(" ")[0],
                          'start': str(escala.dia) + "T" + str(inter.inicio),
-                         'end': str(escala.dia) + "T" + inter.atendimento.fim_atendimento.strftime("%H:%M"),
-                         'description': inter.descricao,
+                         'end': str(escala.dia) + "T" + atendimento.fim_atendimento.strftime("%H:%M"),
                          'className': "fc-danger",
-                         'cliente': inter.atendimento.paciente.nome.split(" ")[0],
-                         'inicio': inter.atendimento.inicio_atendimento.strftime("%Hh%M"),
-                         'tipo_atendimento': inter.atendimento.tipoAtendimento.descricao,
-                         'fim': inter.atendimento.fim_atendimento.strftime("%Hh%M")
+                         'cliente': atendimento.paciente.nome.split(" ")[0],
+                         'inicio': atendimento.inicio_atendimento.strftime("%Hh%M"),
+                         'tipo_atendimento': atendimento.tipoAtendimento.descricao,
+                         'fim': atendimento.fim_atendimento.strftime("%Hh%M")
                          }
-                    if(inter.atendimento_id == atendimento_anterior):# Verifica se é um atendimento em sequência de intervalos
+                    if (
+                            inter.atendimento == atendimento_anterior):  # Verifica se é um atendimento em sequência de intervalos
                         continue
 
-                    atendimento_anterior = inter.atendimento_id #Armazena o primeiro e id de um atendimento em sequencia de intervalos
+                    atendimento_anterior = inter.atendimento #Armazena o primeiro e id de um atendimento em sequencia de intervalos
                 else:
                     b = {'id': inter.pk,
                          'title': "Disponível",
@@ -176,7 +177,8 @@ def addAtendimento(request):
 
         atendimento.inicio_atendimento = inicio # Início do primeiro intervalo
         atendimento.fim_atendimento = fim + timedelta(minutes=10) # fim do ultimo intervalo
-        atendimento.intervalo = request.POST.get('id_escala_intervalo')
+        atendimento.intervalo_id = request.POST.get('id_escala_intervalo')
+        atendimento.pago = True
         atendimento.save()
 
         # Calcula quantidade de intervalos disponíveis necessários para completar a operação
@@ -189,13 +191,13 @@ def addAtendimento(request):
         print(fim.strftime("%H:%M") + ' fim')
 
         escalas_todos_intervalos = EscalaIntervalo.objects.filter(escala_id=escala_intervalo_inicial.escala_id,
-                                                                  inicio__range=[inicio, fim],atendimento_id=None).order_by(
+                                                                  inicio__range=[inicio, fim],atendimento=None).order_by(
                                                                   "inicio")  # Filtrar os intervalos de tempo de acordo com o atendimento
 
 
         if escalas_todos_intervalos.count() >= quantidade_intervalos_necessarios:
             for intervalo in escalas_todos_intervalos:
-                intervalo.atendimento_id = atendimento.pk
+                intervalo.atendimento = atendimento.pk
                 pacienteDoMedico = PacienteDepartamentoProfissional.objects.get_or_create(paciente=atendimento.paciente,departamentoProfissional_id=atendimento.departamentoProfissional.pk)
                 intervalo.save()
             messages.success(request, 'Atendimento marcado com sucesso')
@@ -217,12 +219,13 @@ def desmarcarAtendimento(request):
     intervalo = request.POST.get('intervalolimpar')
 
     intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
-    if (intervalo_obj.atendimento_id != None and intervalo_obj.atendimento.pago == False):
-        atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento_id)
-        intervalos_obj = EscalaIntervalo.objects.filter(atendimento_id=intervalo_obj.atendimento)
-        for inter in intervalos_obj:
-            inter.atendimento_id = None
-            inter.save()
-        atendimento.delete()
+    if intervalo_obj.atendimento is not None:
+        atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento)
+        intervalos_obj = EscalaIntervalo.objects.filter(atendimento=intervalo_obj.atendimento)
+        if atendimento.pago is not False:
+            for inter in intervalos_obj:
+                inter.atendimento = None
+                inter.save()
+            atendimento.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

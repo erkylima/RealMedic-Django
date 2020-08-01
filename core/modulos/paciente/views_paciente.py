@@ -48,16 +48,27 @@ class PacienteListView(MyListViewPaciente):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
 
-
 class PacienteCreateView(MyCreateViewPaciente):
     template_name = 'paciente/templates/create_view_paciente.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
+
         return super(PacienteCreateView, self).form_invalid(form)
 
     def form_valid(self, form):
         self.request.session['save_model'] = 'true'
+        paciente = form.save(commit=False)
+
+        if self.request.user.userAtendente:
+            paciente.departamento_id = self.request.user.userAtendente.departamento_id
+        elif self.request.user.userProfile.departamento_id:
+            paciente.departamento_id = self.request.user.userProfile.departamento_id
         form.save(commit=False)
         return super().form_valid(form)
 
@@ -65,10 +76,21 @@ class PacienteCreateView(MyCreateViewPaciente):
 class PacienteUpdateView(MyUpdateViewPaciente):
     template_name = 'paciente/templates/create_view_paciente.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
         return super(PacienteUpdateView, self).form_invalid(form)
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
+        paciente = form.save(commit=False)
+        if self.request.user.userAtendente:
+            paciente.departamento_id = self.request.user.userAtendente.departamento_id
+        elif self.request.user.userProfile.departamento_id:
+            paciente.departamento_id = self.request.user.userProfile.departamento_id
         return super().form_valid(form)
+

@@ -9,7 +9,7 @@ from core.util.util_manager import adiciona_form_control
 
 
 class PacienteForm(forms.ModelForm):
-    empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
+    empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select(), required=False)
 
     class Meta:
         model = Paciente
@@ -17,12 +17,14 @@ class PacienteForm(forms.ModelForm):
         exclude = ('senha', 'user')
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
         super(PacienteForm, self).__init__(*args, **kwargs)
 
         empresas = Empresa.objects.all()
         self.fields['empresa'].queryset = empresas
-        print(dir(self.fields['departamento']))
         self.fields['departamento'].empty_label = '---------'
+        self.fields['departamento'].required = False
+
         # Select masters são as strings de retorno do ajax
         select_master_empresa = 'empresa'
 
@@ -34,6 +36,9 @@ class PacienteForm(forms.ModelForm):
             kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master_empresa}")'
 
         self.fields['departamento'].queryset = Departamento.objects.none()
+
+        if self.user.userProfile: #verificar se é gerente
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=self.user.userProfile.empresa_id)
 
         # Se o campo empresa possui algum dado atualizar o queryset
         if select_master_empresa in self.data:
