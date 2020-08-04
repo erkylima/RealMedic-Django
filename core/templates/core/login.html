@@ -4,7 +4,7 @@
 <!-- Mirrored from themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2020 16:26:43 GMT -->
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Login</title>
+    <title>Acessar Sistema</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
     <link rel="icon" href="{% static 'core/base/assets/img/icon.ico' %}" type="image/x-icon"/>
 
@@ -30,16 +30,16 @@
 <body class="login">
 <div class="wrapper wrapper-login">
     <div class="container container-login animated fadeIn">
-        <h3 class="text-center">Sign In To Admin</h3>
+        <h3 class="text-center">Acessar sua Conta</h3>
         <form class="login-form" method="post">
             {% csrf_token %}
             <div class="form-group form-floating-label">
                 <input id="username" name="username" type="text" class="form-control input-border-bottom" required>
-                <label for="username" class="placeholder">Username</label>
+                <label for="username" class="placeholder">Usuário</label>
             </div>
             <div class="form-group form-floating-label">
                 <input id="password" name="password" type="password" class="form-control input-border-bottom" required>
-                <label for="password" class="placeholder">Password</label>
+                <label for="password" class="placeholder">Senha</label>
                 <div class="show-password">
                     <i class="icon-eye"></i>
                 </div>
@@ -47,13 +47,13 @@
             <div class="row form-sub m-0">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="rememberme">
-                    <label class="custom-control-label" for="rememberme">Remember Me</label>
+                    <label class="custom-control-label" for="rememberme">Lembrar acesso?</label>
                 </div>
 
-                <a href="#" class="link float-right">Forget Password ?</a>
+                <a href="#" class="link float-right">Esqueceu a senha?</a>
             </div>
             <div class="form-action mb-3">
-                <button type="submit" class="btn btn-primary btn-rounded btn-login">Sign In</button>
+                <button type="submit" class="btn btn-primary btn-rounded btn-login">Entrar</button>
             </div>
         </form>
     </div>

@@ -8,8 +8,8 @@ from core.modulos.tipo_atendimento.tipo_atendimento import TipoAtendimento
 from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 from core.modulos.profissional.profissional import Profissional
 from core.modulos.profissional.profissional import DepartamentoProfissional
+from core.modulos.prontuario.prontuario import Prontuario
 from core.modulos.escala.escala import Escala
 from core.modulos.escala.escala import EscalaIntervalo
 from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.paciente.paciente import Paciente,PacienteDepartamentoProfissional
-from core.modulos.prontuario.prontuario import Prontuario
