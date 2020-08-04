@@ -37,9 +37,11 @@ class PacienteForm(forms.ModelForm):
 
         self.fields['departamento'].queryset = Departamento.objects.none()
 
-        if self.user.userProfile: #verificar se é gerente
-            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=self.user.userProfile.empresa_id)
-
+        try:
+            if self.user.userProfile: #verificar se é gerente
+                self.fields['departamento'].queryset = Departamento.objects.filter(empresa=self.user.userProfile.empresa_id)
+        except:
+            pass
         # Se o campo empresa possui algum dado atualizar o queryset
         if select_master_empresa in self.data:
             try:

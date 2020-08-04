@@ -18,62 +18,66 @@
 {% endblock %}
 
 {% block content %}
+    {% if request.user.userProfile %}
+        <div class="row mt--5">
+            <div class="col-md-6">
+                <div class="card full-height">
+                    <div class="card-body">
+                        <div class="card-title">Estatísticas Gerais</div>
+                        <div class="card-category">Diariamente informações estatísticas do sistema</div>
+                        <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                            <div class="px-2 pb-2 pb-md-0 text-center">
+                                <h6 class="fw-bold mt-3 mb-2">Meta de Clientes: <span class="badge badge-info">10</span></h6>
+                                <div id="novos-clientes"></div>
+                                <h6 class="fw-bold mt-3 mb-0">Novos Clientes</h6>
+                            </div>
+                            <div class="px-2 pb-2 pb-md-0 text-center">
+                                <h6 class="fw-bold mt-3 mb-2">Meta de Atendimentos: <span class="badge badge-info">500</span></h6>
+                                <div id="atendimentos"></div>
+                                <h6 class="fw-bold mt-3 mb-0">Atendimentos</h6>
+                            </div>
+                            <div class="px-2 pb-2 pb-md-0 text-center">
+                                <h6 class="fw-bold mt-3 mb-2">Quantidade de Inscrições</h6>
+                                <div id="inscritos"></div>
+                                <h6 class="fw-bold mt-3 mb-0">Total de Clientes</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card full-height">
+                    <div class="card-body">
+                        <div class="card-title">Total Bruto &amp; Gasto em Estatistica</div>
+                        <div class="row py-3">
+                            <div class="col-md-3 d-flex flex-column justify-content-around">
+                                <div>
+                                    <h6 class="fw-bold text-uppercase text-success op-8">Total Bruto Anual</h6>
+                                    <h3 class="fw-bold">R${{ total.sum }}</h3>
+                                </div>
+                                <!--<div>
+                                    <h6 class="fw-bold text-uppercase text-danger op-8">Total Gasto</h6>
+                                    <h3 class="fw-bold">$1,248</h3>
+                                </div>-->
+                            </div>
+                            <div class="col-md-9">
+                                <div id="chart-container"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                    <canvas id="totalIncomeChart" width="307" height="150" class="chartjs-render-monitor" style="display: block; width: 307px; height: 150px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="row mt--5">
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Estatísticas Gerais</div>
-                    <div class="card-category">Diariamente informações estatísticas do sistema</div>
-                    <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <h6 class="fw-bold mt-3 mb-2">Meta de Clientes: <span class="badge badge-info">10</span></h6>
-                            <div id="novos-clientes"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Novos Clientes</h6>
-                        </div>
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <h6 class="fw-bold mt-3 mb-2">Meta de Atendimentos: <span class="badge badge-info">500</span></h6>
-                            <div id="atendimentos"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Atendimentos</h6>
-                        </div>
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <h6 class="fw-bold mt-3 mb-2">Quantidade de Inscrições</h6>
-                            <div id="inscritos"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Total de Clientes</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Total Bruto &amp; Gasto em Estatistica</div>
-                    <div class="row py-3">
-                        <div class="col-md-3 d-flex flex-column justify-content-around">
-                            <div>
-                                <h6 class="fw-bold text-uppercase text-success op-8">Total Bruto Anual</h6>
-                                <h3 class="fw-bold">R${{ total.sum }}</h3>
-                            </div>
-                            <!--<div>
-                                <h6 class="fw-bold text-uppercase text-danger op-8">Total Gasto</h6>
-                                <h3 class="fw-bold">$1,248</h3>
-                            </div>-->
-                        </div>
-                        <div class="col-md-9">
-                            <div id="chart-container"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                <canvas id="totalIncomeChart" width="307" height="150" class="chartjs-render-monitor" style="display: block; width: 307px; height: 150px;"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Relatório por Idade</div>
+                    <div class="card-title">Relatório de Pacientes por Idade</div>
                 </div>
                 <div class="card-body">
                     <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
@@ -96,78 +100,22 @@
                             </div>
                         </div>
                         <div class="list">
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/jm_denis.jpg" %}" alt="..." class="avatar-img rounded-circle">
+                            {% for clinico in corpo_clinico %}
+                                <div class="item-list">
+                                    <div class="avatar">
+                                        <img src="{% static "core/base/assets/img/generic-user.png" %}" alt="..." class="avatar-img rounded-circle">
+                                    </div>
+                                    <div class="info-user ml-3">
+                                        <div class="username">DR. {{ clinico.profissional.nome }}</div>
+                                        <div class="status">{{ clinico.tipo_profissional.descricao}}</div>
+                                    </div>
+                                    <a href="{% url 'core:modulo:atendimento:update_view' clinico.profissional.id %}">
+                                        <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Marcar Atendimento">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </a>
                                 </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr .Denis Almeida</div>
-                                    <div class="status">Cirurgião Plástico</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/chadengle.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                                </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr. Laécio Carvalho</div>
-                                    <div class="status">Pediátra</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                                </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr. José Ramalho</div>
-                                    <div class="status">Oftamologista</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/mlane.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                                </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr. Thalles</div>
-                                    <div class="status">Dentista</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                                </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr. Joelson Alemão</div>
-                                    <div class="status">Cardiologista</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="item-list">
-                                <div class="avatar">
-                                    <img src="{% static "core/base/assets/img/talha.jpg" %}" alt="..." class="avatar-img rounded-circle">
-                                </div>
-                                <div class="info-user ml-3">
-                                    <div class="username">Dr. Pedro Lins</div>
-                                    <div class="status">Cardiologista</div>
-                                </div>
-                                <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Adicionar Escala">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -242,12 +190,29 @@
         var myBarChart = new Chart(barChart, {
             type: 'bar',
             data: {
-                labels: ["Não informado", "0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "80+"],
+                labels: [
+                    "0-10",
+                    "11-20",
+                    "21-30",
+                    "31-40",
+                    "41-50",
+                    "51-60",
+                    "61-70",
+                    "80+"],
                 datasets : [{
                     label: "Pacientes por Idade",
                     backgroundColor: 'rgb(23, 125, 255)',
                     borderColor: 'rgb(23, 125, 255)',
-                    data: [350, 452, 509, 305, 124, 216, 431, 126, 127],
+                    data: [
+                        {% if pacientes_10 %}{{ pacientes_10 }}{% endif %},
+                        {% if pacientes_20 %}{{ pacientes_20 }}{% endif %},
+                        {% if pacientes_30 %}{{ pacientes_30 }}{% endif %},
+                        {% if pacientes_40 %}{{ pacientes_40 }}{% endif %},
+                        {% if pacientes_50 %}{{ pacientes_50 }}{% endif %},
+                        {% if pacientes_60 %}{{ pacientes_60 }}{% endif %},
+                        {% if pacientes_70 %}{{ pacientes_70 }}{% endif %},
+                        {% if pacientes_80 %}{{ pacientes_80 }}{% endif %},
+                    ],
                 }],
             },
             options: {

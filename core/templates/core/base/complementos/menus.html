@@ -6,7 +6,7 @@
             <div class="user">
                 <div class="avatar-sm float-left mr-2">
                     <img src="
-{% static 'core/base/assets/img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle">
+{% static 'core/base/assets/img/generic-user.png' %}" alt="..." class="avatar-img rounded-circle">
                 </div>
                 <div class="info">
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -130,6 +130,14 @@
                     </li>
 
                 {% elif request.user.userAtendente %}
+                    {% url 'core:modulo:dashboard' as index %}
+                    <li class="nav-item {% if request.path == index %} active {% endif %}">
+                        <a href="{% url 'core:modulo:dashboard' %}">
+                            <i class="fas fa-desktop"></i>
+                            <p>{{ labels.PAINEL }}</p>
+                        </a>
+                    </li>
+
                     <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:paciente:list_view' %}">
                             <i class="fas fa-user-circle"></i>

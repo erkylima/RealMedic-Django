@@ -8,7 +8,7 @@
         <div class="panel-header bg-primary-gradient">
             <div class="page-inner border-bottom pb-0 mb-3">
                 <div class="d-flex align-items-left flex-column">
-                    <h2 class="pb-2 fw-bold text-white text-uppercase">DETALHES DE{{ pacientedepartamentoprofissional.paciente.nome }}</h2>
+                    <h2 class="pb-2 fw-bold text-white text-uppercase">DETALHES DE {{ pacientedepartamentoprofissional.paciente.nome }}</h2>
                     <div class="nav-scroller d-flex">
                         <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
                             <a class="nav-link active" href="{% url 'profissional:modulo:meus_pacientes:detalhe_view' pacientedepartamentoprofissional.paciente.pk %}">Informações Gerais</a>
@@ -107,6 +107,7 @@
                 <th>#</th>
                 <th>PACIENTE</th>
                 <th>OBSERVACAO</th>
+                <th>AÇÃO</th>
             </tr>
 
             </thead>
@@ -117,6 +118,14 @@
                     {% for valor  in prontuario.getListAtributes %}
                         <td>{{ valor }}</td>
                     {% endfor %}
+                    <td>
+                        <a type="button"
+                           data-toggle="tooltip" data-placement="top" title="Editar Prontuário"
+                           class="btn btn-rounded btn-primary"
+                           href="{% url 'profissional:modulo:prontuario:update_view' prontuario.pk %}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
 
