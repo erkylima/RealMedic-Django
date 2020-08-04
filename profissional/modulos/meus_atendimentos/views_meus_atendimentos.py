@@ -59,7 +59,7 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
             queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=self.request.user.userProfissional.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
         return queryset
 
-    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    @method_decorator(permission_required(['global_permissions.ver_meus_atendimentos'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
         return super(MeusAtendimentosListView, self).dispatch(*args, **kwargs)
 

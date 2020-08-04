@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
 
@@ -79,7 +80,9 @@ class AtendimentoListView(MyListViewAtendimento):
         # # print(context)
         return context
 
-
+    @method_decorator(permission_required(['global_permissions.ver_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoListView, self).dispatch(*args, **kwargs)
 
 class AtendimentoCreateView(MyCreateViewAtendimento):
     template_name = 'atendimento/templates/create_view_atendimento.html'

@@ -59,6 +59,6 @@ class RelatorioView(MyViewRelatorio):
         context['total'] = total
         return context
 
-    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    @method_decorator(permission_required(['global_permissions.ver_painel_profissional'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
         return super(RelatorioView, self).dispatch(*args, **kwargs)

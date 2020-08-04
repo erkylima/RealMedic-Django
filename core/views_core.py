@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login as django_login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 
@@ -13,7 +13,6 @@ def index(request):
 
 class LoginView(TemplateView):
     template_name = 'core/login.html'
-
     def get(self, request, *args, **kwargs):
         print('GET')
         return super().get(request, *args, **kwargs)
@@ -37,6 +36,14 @@ class LoginView(TemplateView):
         if user.is_superuser:
             return redirect('/admin/')
         else:
-            return redirect('/core/')
+            try:
+                if user.userProfile:
+                    return redirect('/core/')
+            except:
+                try:
+                    if user.userAtendente:
+                        return redirect('/core/')
+                except:
+                    return redirect('/profissional/app/relatorio/relatorio/')
         # message = 'Usuário sem permissão!!'
         # return self.render_to_response({'message': message})

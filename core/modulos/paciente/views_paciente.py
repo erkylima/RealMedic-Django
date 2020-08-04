@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Paciente
 from core.modulos.paciente.form_paciente import PacienteForm
@@ -47,6 +49,10 @@ class PacienteListView(MyListViewPaciente):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
+
+    @method_decorator(permission_required(['global_permissions.ver_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(PacienteListView, self).dispatch(*args, **kwargs)
 
 class PacienteCreateView(MyCreateViewPaciente):
     template_name = 'paciente/templates/create_view_paciente.html'
