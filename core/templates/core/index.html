@@ -27,19 +27,12 @@
                         <div class="card-category">Diariamente informações estatísticas do sistema</div>
                         <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
                             <div class="px-2 pb-2 pb-md-0 text-center">
-                                <h6 class="fw-bold mt-3 mb-2">Meta de Clientes: <span class="badge badge-info">10</span></h6>
                                 <div id="novos-clientes"></div>
-                                <h6 class="fw-bold mt-3 mb-0">Novos Clientes</h6>
+                                <h6 class="fw-bold mt-3 mb-0">Novos Pacientes</h6>
                             </div>
                             <div class="px-2 pb-2 pb-md-0 text-center">
-                                <h6 class="fw-bold mt-3 mb-2">Meta de Atendimentos: <span class="badge badge-info">500</span></h6>
                                 <div id="atendimentos"></div>
                                 <h6 class="fw-bold mt-3 mb-0">Atendimentos</h6>
-                            </div>
-                            <div class="px-2 pb-2 pb-md-0 text-center">
-                                <h6 class="fw-bold mt-3 mb-2">Quantidade de Inscrições</h6>
-                                <div id="inscritos"></div>
-                                <h6 class="fw-bold mt-3 mb-0">Total de Clientes</h6>
                             </div>
                         </div>
 
@@ -141,8 +134,8 @@
         Circles.create({
             id:           'novos-clientes',
             radius:       45,
-            value:        {{ clientes.count }},
-            maxValue:     20,
+            value:        {{ pacientes.count }},
+            maxValue:     {{ pacientes.count }},
             width:        7,
             text:         function(value){return value + '';},
             colors:       ['#eee', '#ffa13c'],
@@ -157,25 +150,10 @@
             id:           'atendimentos',
             radius:       45,
             value:        {{ atendimentos.count }},
-            maxValue:     500,
+            maxValue:     {{ atendimentos.count }},
             width:        7,
             text:         function(value){return value + '';},
             colors:       ['#eee', '#ff6662'],
-            duration:     400,
-            wrpClass:     'circles-wrp',
-            textClass:    'circles-text',
-            styleWrapper: true,
-            styleText:    true
-        });
-
-        Circles.create({
-            id:           'inscritos',
-            radius:       45,
-            value:        {{ tclientes.count }},
-            maxValue:     {{ tclientes.count }},
-            width:        7,
-            text:         function(value){return value + '';},
-            colors:       ['#eee', '#5eaeff'],
             duration:     400,
             wrpClass:     'circles-wrp',
             textClass:    'circles-text',

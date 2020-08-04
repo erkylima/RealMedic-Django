@@ -25,8 +25,6 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         dados = {}
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-        clientes = Cliente.objects.filter(data_cadastro__gt=yesterday)
-        tclientes = Cliente.objects.all()
 
         try:
             pacientes_10 = Paciente.objects.filter(
@@ -47,6 +45,8 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
                 Q(departamento__empresa_id=self.request.user.userAtendente.departamento.empresa_id, idade__range=[80, 100])).count()
 
             corpo_clinico = DepartamentoProfissional.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
+            pacientes = Paciente.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
+
         except:
             try:
                 print(self.request.user.userProfile)
@@ -76,6 +76,8 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
                       idade__range=[80, 100])).count()
                 corpo_clinico = DepartamentoProfissional.objects.filter(
                     departamento__empresa_id=self.request.user.userProfile.empresa_id)
+                pacientes = Paciente.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+
             except:
                 dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.request.user.userProfissional.pk)
                 pacientes_10 = Paciente.objects.filter(
@@ -104,6 +106,9 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
                       idade__range=[80, 100])).count()
                 corpo_clinico = DepartamentoProfissional.objects.filter(
                     departamento_id=dep_prof.departamento_id)
+                pacientes = Paciente.objects.filter(departamento_id=dep_prof.departamento_id)
+
+
         context['pacientes_10'] = pacientes_10
         context['pacientes_20'] = pacientes_20
         context['pacientes_30'] = pacientes_30
@@ -116,8 +121,7 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
 
 
 
-        context['clientes'] = clientes
-        context['tclientes'] = tclientes
+        context['pacientes'] = pacientes
         context['total'] = atendimentos.aggregate(sum= Sum('valor'))
         # print(atendimentos.aggregate(sum= Sum('valor')))
         context['atendimentos'] = atendimentos
