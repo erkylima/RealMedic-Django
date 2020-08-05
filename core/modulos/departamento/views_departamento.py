@@ -58,6 +58,9 @@ class DepartamentoCreateView(MyCreateViewDepartamento):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_departamentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DepartamentoCreateView, self).dispatch(*args, **kwargs)
 
 class DepartamentoUpdateView(MyUpdateViewDepartamento):
     template_name = 'departamento/templates/create_view_departamento.html'
@@ -70,6 +73,9 @@ class DepartamentoUpdateView(MyUpdateViewDepartamento):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_departamentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DepartamentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getDepartamentosPorIdEmpresa(request, idEmpresa):

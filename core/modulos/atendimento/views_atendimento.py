@@ -94,6 +94,9 @@ class AtendimentoCreateView(MyCreateViewAtendimento):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoCreateView, self).dispatch(*args, **kwargs)
 
 class AtendimentoUpdateView(MyUpdateViewAtendimento):
     template_name = 'atendimento/templates/create_view_atendimento.html'
@@ -149,6 +152,9 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required
 def addAtendimento(request):

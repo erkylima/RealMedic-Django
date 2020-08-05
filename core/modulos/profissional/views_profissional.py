@@ -83,6 +83,9 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalCreateView, self).dispatch(*args, **kwargs)
 
 class ProfissionalUpdateView(MyUpdateViewProfissional):
     template_name = 'profissional/templates/create_view_profissional.html'
@@ -106,6 +109,10 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
         departamento_profissional.save()
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalUpdateView, self).dispatch(*args, **kwargs)
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
     template_name = 'escala/templates/create_view_escala.html'
@@ -164,6 +171,10 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         self.request.session['update_model'] = 'true'
         print(self.request.POST)
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.ver_escalas_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalEscalaUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getDepartamentosPorIdEmpresa(request, idEmpresa):

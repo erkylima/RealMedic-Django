@@ -66,6 +66,9 @@ class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
 
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_tipos_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoAtendimentoCreateView, self).dispatch(*args, **kwargs)
 
 class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
@@ -77,6 +80,10 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_tipos_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoAtendimentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional):

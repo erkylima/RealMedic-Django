@@ -78,6 +78,9 @@ class PacienteCreateView(MyCreateViewPaciente):
         form.save(commit=False)
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(PacienteCreateView, self).dispatch(*args, **kwargs)
 
 class PacienteUpdateView(MyUpdateViewPaciente):
     template_name = 'paciente/templates/create_view_paciente.html'
@@ -100,3 +103,6 @@ class PacienteUpdateView(MyUpdateViewPaciente):
             paciente.departamento_id = self.request.user.userProfile.departamento_id
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_pacientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(PacienteUpdateView, self).dispatch(*args, **kwargs)

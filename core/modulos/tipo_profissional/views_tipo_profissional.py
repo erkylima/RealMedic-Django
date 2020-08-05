@@ -62,6 +62,9 @@ class TipoProfissionalCreateView(MyCreateViewTipoProfissional):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_tipos_profissional'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoProfissionalCreateView , self).dispatch(*args, **kwargs)
 
 class TipoProfissionalUpdateView(MyUpdateViewTipoProfissional):
     template_name = 'tipo_profissional/templates/create_view_tipo_profissional.html'
@@ -74,6 +77,9 @@ class TipoProfissionalUpdateView(MyUpdateViewTipoProfissional):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_tipos_profissional'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoProfissionalUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getTipoProfissionalPorIdDepartamento(request, idDepartamento):

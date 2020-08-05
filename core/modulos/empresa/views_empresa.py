@@ -61,6 +61,9 @@ class EmpresaCreateView(MyCreateViewEmpresa):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_empresas'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(EmpresaCreateView, self).dispatch(*args, **kwargs)
 
 class EmpresaUpdateView(MyUpdateViewEmpresa):
     template_name = 'empresa/templates/create_view_empresa.html'
@@ -72,3 +75,7 @@ class EmpresaUpdateView(MyUpdateViewEmpresa):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_empresas'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(EmpresaUpdateView, self).dispatch(*args, **kwargs)

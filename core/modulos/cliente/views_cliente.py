@@ -76,6 +76,9 @@ class ClienteCreateView(MyCreateViewCliente):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_clientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ClienteCreateView, self).dispatch(*args, **kwargs)
 
 class ClienteUpdateView(MyUpdateViewCliente):
     template_name = 'cliente/templates/create_view_cliente.html'
@@ -87,3 +90,7 @@ class ClienteUpdateView(MyUpdateViewCliente):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_clientes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ClienteUpdateView, self).dispatch(*args, **kwargs)

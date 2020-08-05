@@ -130,12 +130,21 @@
         var myBarChart = new Chart(barChart, {
             type: 'bar',
             data: {
-                labels: ["Não informado", "0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "80+"],
+                labels: ["0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "80+"],
                 datasets : [{
                     label: "Pacientes por Idade",
                     backgroundColor: 'rgb(23, 125, 255)',
                     borderColor: 'rgb(23, 125, 255)',
-                    data: [350, 452, 509, 305, 124, 216, 431, 126, 127],
+                    data: [
+                        {% if pacientes_10 %}{{ pacientes_10 }}{% endif %},
+                        {% if pacientes_20 %}{{ pacientes_20 }}{% endif %},
+                        {% if pacientes_30 %}{{ pacientes_30 }}{% endif %},
+                        {% if pacientes_40 %}{{ pacientes_40 }}{% endif %},
+                        {% if pacientes_50 %}{{ pacientes_50 }}{% endif %},
+                        {% if pacientes_60 %}{{ pacientes_60 }}{% endif %},
+                        {% if pacientes_70 %}{{ pacientes_70 }}{% endif %},
+                        {% if pacientes_80 %}{{ pacientes_80 }}{% endif %},
+                    ],
                 }],
             },
             options: {
