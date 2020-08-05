@@ -1,10 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import TipoAtendimento
 from core.modulos.tipo_atendimento.form_tipo_atendimento import TipoAtendimentoForm
@@ -47,6 +48,9 @@ class TipoAtendimentoListView(MyListViewTipoAtendimento):
     def get_queryset(self):
         return super().get_queryset()
 
+    @method_decorator(permission_required(['global_permissions.ver_tipos_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoAtendimentoListView, self).dispatch(*args, **kwargs)
 
 class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
@@ -62,6 +66,9 @@ class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
 
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_tipos_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoAtendimentoCreateView, self).dispatch(*args, **kwargs)
 
 class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
@@ -73,6 +80,10 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_tipos_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(TipoAtendimentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional):

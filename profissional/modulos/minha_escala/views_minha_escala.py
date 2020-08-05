@@ -75,6 +75,6 @@ class MinhaEscalaUpdateView(MyUpdateViewMinhaEscala):
         context['intervalos'] = intervalos
         return context
 
-    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
+    @method_decorator(permission_required(['global_permissions.ver_minha_escala'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
         return super(MinhaEscalaUpdateView, self).dispatch(*args, **kwargs)

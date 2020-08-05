@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Atendente
 from core.modulos.atendente.form_atendente import AtendenteForm
@@ -48,6 +50,9 @@ class AtendenteListView(MyListViewAtendente):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
 
+    @method_decorator(permission_required(['global_permissions.ver_atendentes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendenteListView, self).dispatch(*args, **kwargs)
 
 class AtendenteCreateView(MyCreateViewAtendente):
     template_name = 'atendente/templates/create_view_atendente.html'
@@ -71,6 +76,9 @@ class AtendenteCreateView(MyCreateViewAtendente):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_atendentes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendenteCreateView, self).dispatch(*args, **kwargs)
 
 class AtendenteUpdateView(MyUpdateViewAtendente):
     template_name = 'atendente/templates/create_view_atendente.html'
@@ -82,3 +90,7 @@ class AtendenteUpdateView(MyUpdateViewAtendente):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_atendentes'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendenteUpdateView, self).dispatch(*args, **kwargs)

@@ -1,7 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Empresa
 from core.modulos.empresa.form_empresa import EmpresaForm
@@ -44,6 +46,9 @@ class EmpresaListView(MyListViewEmpresa):
     def get_queryset(self):
         return super().get_queryset()
 
+    @method_decorator(permission_required(['global_permissions.ver_empresas'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(EmpresaListView, self).dispatch(*args, **kwargs)
 
 class EmpresaCreateView(MyCreateViewEmpresa):
     template_name = 'empresa/templates/create_view_empresa.html'
@@ -56,6 +61,9 @@ class EmpresaCreateView(MyCreateViewEmpresa):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_empresas'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(EmpresaCreateView, self).dispatch(*args, **kwargs)
 
 class EmpresaUpdateView(MyUpdateViewEmpresa):
     template_name = 'empresa/templates/create_view_empresa.html'
@@ -67,3 +75,7 @@ class EmpresaUpdateView(MyUpdateViewEmpresa):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_empresas'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(EmpresaUpdateView, self).dispatch(*args, **kwargs)

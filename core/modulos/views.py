@@ -2,11 +2,12 @@ import datetime
 
 from django.contrib import auth
 from django.contrib.auth import user_logged_out
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum, Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.core import serializers
 
@@ -15,10 +16,8 @@ from core.modulos.paciente.paciente import Paciente
 from core.modulos.profissional.profissional import Profissional, DepartamentoProfissional
 from core.util.util_manager import MyLabls
 
-
 class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
     template_name = 'core/index.html'
-
     def get_context_data(self, **kwargs):
         print('get_context_data')
         context = super().get_context_data(**kwargs)
@@ -26,8 +25,6 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         dados = {}
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-        clientes = Cliente.objects.filter(data_cadastro__gt=yesterday)
-        tclientes = Cliente.objects.all()
 
         try:
             pacientes_10 = Paciente.objects.filter(
@@ -48,34 +45,70 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
                 Q(departamento__empresa_id=self.request.user.userAtendente.departamento.empresa_id, idade__range=[80, 100])).count()
 
             corpo_clinico = DepartamentoProfissional.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
-        except:
-            pacientes_10 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[0, 10])).count()
-            pacientes_20 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[11, 20])).count()
-            pacientes_30 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[21, 30])).count()
-            pacientes_40 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[31, 40])).count()
-            pacientes_50 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[41, 50])).count()
-            pacientes_60 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[51, 60])).count()
-            pacientes_70 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[61, 79])).count()
-            pacientes_80 = Paciente.objects.filter(
-                Q(departamento__empresa_id=self.request.user.userProfile.departamento.empresa_id,
-                  idade__range=[80, 100])).count()
+            pacientes = Paciente.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
 
-            corpo_clinico = DepartamentoProfissional.objects.filter(
-                departamento_id=self.request.user.userProfile.departamento_id)
+        except:
+            try:
+                print(self.request.user.userProfile)
+                pacientes_10 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[0, 10])).count()
+                pacientes_20 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[11, 20])).count()
+                pacientes_30 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[21, 30])).count()
+                pacientes_40 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[31, 40])).count()
+                pacientes_50 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[41, 50])).count()
+                pacientes_60 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[51, 60])).count()
+                pacientes_70 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[61, 79])).count()
+                pacientes_80 = Paciente.objects.filter(
+                    Q(departamento__empresa_id=self.request.user.userProfile.empresa_id,
+                      idade__range=[80, 100])).count()
+                corpo_clinico = DepartamentoProfissional.objects.filter(
+                    departamento__empresa_id=self.request.user.userProfile.empresa_id)
+                pacientes = Paciente.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+
+            except:
+                dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.request.user.userProfissional.pk)
+                pacientes_10 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[0, 10])).count()
+                pacientes_20 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[11, 20])).count()
+                pacientes_30 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[21, 30])).count()
+                pacientes_40 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[31, 40])).count()
+                pacientes_50 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[41, 50])).count()
+                pacientes_60 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[51, 60])).count()
+                pacientes_70 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[61, 79])).count()
+                pacientes_80 = Paciente.objects.filter(
+                    Q(departamento_id=dep_prof.departamento_id,
+                      idade__range=[80, 100])).count()
+                corpo_clinico = DepartamentoProfissional.objects.filter(
+                    departamento_id=dep_prof.departamento_id)
+                pacientes = Paciente.objects.filter(departamento_id=dep_prof.departamento_id)
+
+
         context['pacientes_10'] = pacientes_10
         context['pacientes_20'] = pacientes_20
         context['pacientes_30'] = pacientes_30
@@ -88,8 +121,7 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
 
 
 
-        context['clientes'] = clientes
-        context['tclientes'] = tclientes
+        context['pacientes'] = pacientes
         context['total'] = atendimentos.aggregate(sum= Sum('valor'))
         # print(atendimentos.aggregate(sum= Sum('valor')))
         context['atendimentos'] = atendimentos
@@ -99,6 +131,10 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         context.update(dados)
 
         return context
+
+    @method_decorator(permission_required(['global_permissions.ver_painel_geral'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DashBoard, self).dispatch(*args, **kwargs)
 
 @login_required
 def logout_view(request):

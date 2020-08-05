@@ -1,10 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Departamento
 from core.modulos.departamento.form_departamento import DepartamentoForm
@@ -42,6 +43,9 @@ class DepartamentoListView(MyListViewDepartamento):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
 
+    @method_decorator(permission_required(['global_permissions.ver_departamentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DepartamentoListView, self).dispatch(*args, **kwargs)
 
 class DepartamentoCreateView(MyCreateViewDepartamento):
     template_name = 'departamento/templates/create_view_departamento.html'
@@ -54,6 +58,9 @@ class DepartamentoCreateView(MyCreateViewDepartamento):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_departamentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DepartamentoCreateView, self).dispatch(*args, **kwargs)
 
 class DepartamentoUpdateView(MyUpdateViewDepartamento):
     template_name = 'departamento/templates/create_view_departamento.html'
@@ -66,6 +73,9 @@ class DepartamentoUpdateView(MyUpdateViewDepartamento):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_departamentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(DepartamentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getDepartamentosPorIdEmpresa(request, idEmpresa):

@@ -1,12 +1,13 @@
 import datetime
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from core.modulos.atendimento.atendimento import Atendimento
-from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
+from core.modulos.paciente.paciente import PacienteDepartamentoProfissional, Paciente
+from core.modulos.profissional.profissional import DepartamentoProfissional
 from core.util.util_manager import MyLabls
 
 
@@ -57,8 +58,45 @@ class RelatorioView(MyViewRelatorio):
         context['qnt_clientes_profissional_mes'] = qnt_clientes_profissional_mes
         total = valor_atendimentos_profissional_julho + valor_atendimentos_profissional_agosto
         context['total'] = total
+
+        dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.request.user.userProfissional.pk)
+        pacientes_10 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[0, 10])).count()
+        pacientes_20 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[11, 20])).count()
+        pacientes_30 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[21, 30])).count()
+        pacientes_40 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[31, 40])).count()
+        pacientes_50 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[41, 50])).count()
+        pacientes_60 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[51, 60])).count()
+        pacientes_70 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[61, 79])).count()
+        pacientes_80 = PacienteDepartamentoProfissional.objects.filter(
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+              paciente__idade__range=[80, 100])).count()
+
+
+        context['pacientes_10'] = pacientes_10
+        context['pacientes_20'] = pacientes_20
+        context['pacientes_30'] = pacientes_30
+        context['pacientes_40'] = pacientes_40
+        context['pacientes_50'] = pacientes_50
+        context['pacientes_60'] = pacientes_60
+        context['pacientes_70'] = pacientes_70
+        context['pacientes_80'] = pacientes_80
+
         return context
 
-    @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))
-    def dispatch(self, *args, **kwargs):
-        return super(RelatorioView, self).dispatch(*args, **kwargs)
+@method_decorator(permission_required(['global_permissions.ver_painel_profissional'], raise_exception=True))
+def dispatch(self, *args, **kwargs):
+    return super(RelatorioView, self).dispatch(*args, **kwargs)

@@ -1,6 +1,11 @@
 {% extends 'core/base/list_view_base.html' %}
 {% load static %}
 
+{% block card_header %}
+    <div class="row">
+        <div class="col-md-10"><h2 class="left"> {{ NAME_MODEL_PLURAL }}</h2></div>
+    </div>
+{% endblock %}
 {% block card_body %}
     <div class="container">
         <div class="page-inner">
@@ -11,7 +16,7 @@
                             <div class="card-header" style="background-image: url({% static 'core/base/assets/img/blogpost.jpg'%})">
                                 <div class="profile-picture">
                                     <div class="avatar avatar-xl">
-                                        <img src="{% static 'core/base/assets/img/profile2.jpg'%}" alt="..." class="avatar-img rounded-circle">
+                                        <img src="{% static 'core/base/assets/img/generic-user.png'%}" alt="..." class="avatar-img rounded-circle">
                                     </div>
                                 </div>
                             </div>

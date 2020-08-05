@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import UserProfile
 from core.modulos.user_profile.form_user_profile import UserProfileForm
@@ -48,6 +50,10 @@ class UserProfileListView(MyListViewUserProfile):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
 
+    @method_decorator(permission_required(['global_permissions.ver_gerente'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(UserProfileListView, self).dispatch(*args, **kwargs)
+
 
 class UserProfileCreateView(MyCreateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
@@ -70,6 +76,9 @@ class UserProfileCreateView(MyCreateViewUserProfile):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_gerente'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(UserProfileCreateView, self).dispatch(*args, **kwargs)
 
 class UserProfileUpdateView(MyUpdateViewUserProfile):
     template_name = 'user_profile/templates/create_view_user_profile.html'
@@ -81,3 +90,7 @@ class UserProfileUpdateView(MyUpdateViewUserProfile):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_gerente'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(UserProfileUpdateView, self).dispatch(*args, **kwargs)

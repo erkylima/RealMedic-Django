@@ -115,12 +115,7 @@
                 {% endif %}
 
                 {% if request.user.is_staff %}
-                    <li class="nav-item {% if "/paciente/" in request.path %} active {% endif %}">
-                        <a href="{% url 'core:modulo:paciente:list_view' %}">
-                            <i class="fas fa-user-circle"></i>
-                            <p>{{ labels.PACIENTES }}</p>
-                        </a>
-                    </li>
+
 
                     <li class="nav-item {% if "/atendimento/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:atendimento:list_view' %}">

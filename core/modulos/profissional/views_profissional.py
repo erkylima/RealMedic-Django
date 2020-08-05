@@ -1,9 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User, Group
 from django.http import JsonResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
 from core.modulos.atendimento.atendimento import Atendimento
@@ -47,6 +48,9 @@ class ProfissionalListView(MyListViewProfissional):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
 
+    @method_decorator(permission_required(['global_permissions.ver_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalListView, self).dispatch(*args, **kwargs)
 
 class ProfissionalCreateView(MyCreateViewProfissional):
     template_name = 'profissional/templates/create_view_profissional.html'
@@ -79,6 +83,9 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalCreateView, self).dispatch(*args, **kwargs)
 
 class ProfissionalUpdateView(MyUpdateViewProfissional):
     template_name = 'profissional/templates/create_view_profissional.html'
@@ -102,6 +109,10 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
         departamento_profissional.save()
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.editar_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalUpdateView, self).dispatch(*args, **kwargs)
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
     template_name = 'escala/templates/create_view_escala.html'
@@ -160,6 +171,10 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         self.request.session['update_model'] = 'true'
         print(self.request.POST)
         return super().form_valid(form)
+
+    @method_decorator(permission_required(['global_permissions.ver_escalas_profissionais'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfissionalEscalaUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required()
 def getDepartamentosPorIdEmpresa(request, idEmpresa):

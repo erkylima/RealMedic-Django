@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
 
@@ -79,7 +80,9 @@ class AtendimentoListView(MyListViewAtendimento):
         # # print(context)
         return context
 
-
+    @method_decorator(permission_required(['global_permissions.ver_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoListView, self).dispatch(*args, **kwargs)
 
 class AtendimentoCreateView(MyCreateViewAtendimento):
     template_name = 'atendimento/templates/create_view_atendimento.html'
@@ -91,6 +94,9 @@ class AtendimentoCreateView(MyCreateViewAtendimento):
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.criar_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoCreateView, self).dispatch(*args, **kwargs)
 
 class AtendimentoUpdateView(MyUpdateViewAtendimento):
     template_name = 'atendimento/templates/create_view_atendimento.html'
@@ -146,6 +152,9 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
         self.request.session['update_model'] = 'true'
         return super().form_valid(form)
 
+    @method_decorator(permission_required(['global_permissions.editar_atendimentos'], raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(AtendimentoUpdateView, self).dispatch(*args, **kwargs)
 
 @login_required
 def addAtendimento(request):
