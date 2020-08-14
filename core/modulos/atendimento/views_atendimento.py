@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
@@ -12,9 +13,10 @@ from django.views.generic.base import View
 
 from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
+from core.modulos.departamento.departamento import Departamento
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -38,7 +40,7 @@ class MyCreateViewAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, Create
     pass
 
 
-class MyUpdateViewAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewAtendimento(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -52,6 +54,14 @@ class AtendimentoListView(MyListViewAtendimento):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
+        try:
+            context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
+        except:
+            try:
+                context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+            except:
+                redirect('/core/atendimento/list')
+            
         atendimentos = []
         for prof in context['departamentoprofissional_list']:
             atendimento = Atendimento.objects.filter(departamentoProfissional_id=prof.pk)
@@ -100,13 +110,13 @@ class AtendimentoCreateView(MyCreateViewAtendimento):
 
 class AtendimentoUpdateView(MyUpdateViewAtendimento):
     template_name = 'atendimento/templates/create_view_atendimento.html'
-
+    permission_required('se', raise_exception=True)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profissional = Profissional.objects.get(pk=self.object.pk)
         context['profissional'] = profissional
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
-        pacientes = Paciente.objects.all()
+        pacientes = Paciente.objects.filter(departamento_id=self.object.departamento_id)
         intervalos = []
 
         for escala in escalas:

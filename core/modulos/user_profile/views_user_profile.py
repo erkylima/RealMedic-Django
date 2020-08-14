@@ -7,7 +7,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from core.models import UserProfile
 from core.modulos.user_profile.form_user_profile import UserProfileForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -37,7 +37,7 @@ class MyCreateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, CreateV
     pass
 
 
-class MyUpdateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewUserProfile(MyGenericView,LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

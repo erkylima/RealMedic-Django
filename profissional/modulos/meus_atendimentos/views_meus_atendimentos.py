@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from core.models import Atendimento
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 from profissional.modulos.meus_atendimentos.form_meus_atendimentos import MeusAtendimentosForm
 
 
@@ -35,7 +35,7 @@ class MyCreateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, C
     pass
 
 
-class MyUpdateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewMeusAtendimentos(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

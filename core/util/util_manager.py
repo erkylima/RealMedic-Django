@@ -14,9 +14,38 @@ from django import forms
 #     directory = 'blog_post/' + str(instance.id)
 #     full_path = str(directory) + "/%s" % (filename)
 #     return full_path
+
+from django.shortcuts import redirect
 from extra_views import SearchableListMixin
 
+
 from core.util.labels_property import LabesProperty
+
+class ValidarEmpresa:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('core:login')
+        try:
+            if request.user.userAtendente.departamento.empresa ==  self.get_object().departamento.empresa:                
+                return super().dispatch(request, *args, **kwargs) 
+            else:
+                return redirect('core:modulo:dashboard')
+        except:
+            try:
+                if request.user.userProfile.empresa ==  self.get_object().departamento.empresa:
+                    return super().dispatch(request, *args, **kwargs)
+                else:
+                    return redirect('core:modulo:dashboard')
+            except:
+                # departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=request.user.userProfissional.pk)
+                print(request.user.userProfissional.pk)
+                print(self.get_object().departamentoProfissional.pk)
+                # departamento_profissional_do_objeto = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
+                
+                # if departamento_profissional.de*partamento.empresa == departamento_profissional_do_objeto.departamento.empresa:
+                return super().dispatch(request, *args, **kwargs)
+                # else:
+                #     return redirect('profissional:modulo:relatorio:ver')
 
 
 def adiciona_form_control(self):
@@ -62,6 +91,7 @@ def adiciona_form_control(self):
         elif field and isinstance(field, forms.CharField):
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['style'] = 'text-transform:uppercase'
+            field.widget.attrs['onkeyup'] = 'this.value = this.value.toUpperCase()'
             # field.widget.attrs['data-show-meridian'] = 'false'
         # elif field and isinstance(field, forms.BooleanField):
         #     field.widget.attrs['class'] = 'custom-control-input'

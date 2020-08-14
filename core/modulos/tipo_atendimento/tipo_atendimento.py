@@ -1,21 +1,20 @@
 from django.db import models
-from datetime import datetime
-
+from django.forms import CharField
 from django.utils import timezone
 
 from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.time_stampable import Timestampable
+from core.modulos.departamento.departamento import Departamento
 from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
-from core.util.util_manager import UpperCaseCharField
 
 
 class TipoAtendimento(Timestampable):
     class Meta:
         verbose_name = 'TIPO DE ATENDIMENTO'
         verbose_name_plural = 'TIPOS DE ATENDIMENTOS'
-
+    departamento  = models.ForeignKey(Departamento, on_delete=models.PROTECT, default=1)
     tipo_profissional = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, default=1)
-    descricao = UpperCaseCharField('Descrição', max_length=255)
+    descricao = models.CharField('Descricao', max_length=255)
     areaAtendimento = models.ForeignKey(AreaAtendimento,
                                         on_delete=models.PROTECT, verbose_name='Area de Atendimento')
     tempo_padrao = models.TimeField(verbose_name='Tempo Padrão',default=timezone.now)
@@ -26,12 +25,14 @@ class TipoAtendimento(Timestampable):
         return self.descricao
 
     @property
+    def getDepartamento(self):
+        return self.departamento
+
+    @property
     def getListAtributes(self):
-        atributos = ['descricao']
+        atributos = ['descricao', 'getDepartamento']
         inter_lista = []
         for row in atributos:
-            field_name = row
-            field_object = TipoAtendimento._meta.get_field(field_name)
-            field_value = getattr(self, field_object.attname)
+            field_value = getattr(self, row, None)
             inter_lista.append(field_value)
         return inter_lista

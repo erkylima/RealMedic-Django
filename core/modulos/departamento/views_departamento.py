@@ -18,7 +18,7 @@ class MyGenericView(object):
     form_class = DepartamentoForm
     success_url = reverse_lazy('core:modulo:departamento:list_view')
     search_fields = ['nome', 'descricao']
-    COLUMNS = [LabesProperty.NOME, LabesProperty.DESCRICAO]
+    COLUMNS = [LabesProperty.NOME, LabesProperty.EMPRESA, LabesProperty.DESCRICAO]
     NAME_MODEL = Departamento._meta.verbose_name
     NAME_MODEL_PLURAL = Departamento._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:departamento:create_view')

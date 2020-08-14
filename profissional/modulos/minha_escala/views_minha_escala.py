@@ -12,7 +12,7 @@ from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
 from core.models import Escala, EscalaIntervalo, Profissional, Atendimento
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -22,7 +22,7 @@ class MyGenericView(object):
     NAME_MODEL = Escala._meta.verbose_name
     NAME_MODEL_PLURAL = Escala._meta.verbose_name_plural
 
-class MyUpdateViewMinhaEscala(MyGenericView, LoginRequiredMixin, MyLabls, TemplateView):
+class MyUpdateViewMinhaEscala(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, TemplateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

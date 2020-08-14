@@ -27,12 +27,12 @@ class Atendente(Timestampable):
         return self.nome.upper()
 
     @property
-    def getNamePerfil(self):
-        return self.perfil.name
+    def getDepartamento(self):
+        return self.departamento
 
     @property
     def getListAtributes(self):
-        atributos = ['nome', 'usuario', 'getNamePerfil']
+        atributos = ['nome', 'usuario', 'getDepartamento']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

@@ -47,7 +47,7 @@
                             <div class="col-md-3 d-flex flex-column justify-content-around">
                                 <div>
                                     <h6 class="fw-bold text-uppercase text-success op-8">Total Bruto Anual</h6>
-                                    <h3 class="fw-bold">R${{ total.sum }}</h3>
+                                    <h3 class="fw-bold">R${% if total.sum %}{{ total.sum }}{% else %}0{% endif %}</h3>
                                 </div>
                                 <!--<div>
                                     <h6 class="fw-bold text-uppercase text-danger op-8">Total Gasto</h6>

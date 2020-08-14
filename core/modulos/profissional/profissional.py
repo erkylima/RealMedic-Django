@@ -11,7 +11,7 @@ class Profissional(Timestampable):
         verbose_name_plural = 'PROFISSIONAIS'
 
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userProfissional')
-    nome = UpperCaseCharField('Nome', max_length=255)
+    nome = models.CharField('Nome', max_length=255)
     codigo = UpperCaseCharField('Código', max_length=10,default="")
     usuario = UpperCaseCharField('Usuario', max_length=255, unique=True)
     email = models.EmailField('Email', max_length=255, unique=True)
@@ -25,12 +25,16 @@ class Profissional(Timestampable):
         return self.nome.upper()
 
     @property
-    def getNamePerfil(self):
-        return self.perfil.name
+    def getDepartamento(self):
+        departamento = DepartamentoProfissional.objects.filter(profissional_id=self.pk)
+        texto = departamento.first().departamento.empresa.nome_razao_social + " - "
+        for dep in departamento:
+            texto = texto + dep.departamento.nome + " "
+        return texto
 
     @property
     def getListAtributes(self):
-        atributos = ['nome', 'usuario', 'getNamePerfil']
+        atributos = ['nome', 'usuario', 'getDepartamento']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

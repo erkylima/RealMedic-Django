@@ -3,6 +3,7 @@ from django.db import models
 
 from core.models import Empresa
 from core.models.base.time_stampable import Timestampable
+from core.modulos.departamento.departamento import Departamento
 from core.util.util_manager import UpperCaseCharField
 
 

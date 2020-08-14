@@ -5,7 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Prontuario
 from profissional.modulos.prontuario.form_prontuario import ProntuarioForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -24,7 +24,7 @@ class MyCreateViewProntuario(MyGenericView, LoginRequiredMixin, MyLabls, CreateV
     pass
 
 
-class MyUpdateViewProntuario(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewProntuario(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     permission_required = 'global_permissions.ver_prontuario'
     # permission_denied_message = 'Permission Denied'
     pass

@@ -2,15 +2,17 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import TipoAtendimento
+from core.modulos.departamento.departamento import Departamento
 from core.modulos.tipo_atendimento.form_tipo_atendimento import TipoAtendimentoForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -18,7 +20,7 @@ class MyGenericView(object):
     form_class = TipoAtendimentoForm
     success_url = reverse_lazy('core:modulo:tipo_atendimento:list_view')
     search_fields = ['descricao']
-    COLUMNS = [LabesProperty.DESCRICAO]
+    COLUMNS = [LabesProperty.DESCRICAO, LabesProperty.DEPARTAMENTO]
     NAME_MODEL = TipoAtendimento._meta.verbose_name
     NAME_MODEL_PLURAL = TipoAtendimento._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:tipo_atendimento:create_view')
@@ -32,7 +34,7 @@ class MyCreateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, Cr
     pass
 
 
-class MyUpdateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -46,7 +48,11 @@ class TipoAtendimentoListView(MyListViewTipoAtendimento):
         return context
 
     def get_queryset(self):
-        return super().get_queryset()
+        if (self.request.GET.get('q')):
+            queryset = TipoAtendimento.objects.filter(Q(descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+        else:
+            queryset = TipoAtendimento.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+        return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_tipos_atendimentos'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
@@ -55,6 +61,10 @@ class TipoAtendimentoListView(MyListViewTipoAtendimento):
 class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
@@ -73,6 +83,11 @@ class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
 class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/create_view_tipo_atendimento.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
         return super(TipoAtendimentoUpdateView, self).form_invalid(form)
@@ -87,9 +102,10 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
 
 @login_required()
 def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional):
+    print(idTipoProfissional)
     subs = {}
-    departamentos = TipoAtendimento.objects.filter(tipo_profissional_id=idTipoProfissional)
-
+    departamentos = TipoAtendimento.objects.filter(departamento_id=idTipoProfissional)
+    print(departamentos)
     for dep in departamentos:
         subs[dep.id] = dep.descricao
     return JsonResponse(subs)

@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Atendente
 from core.modulos.atendente.form_atendente import AtendenteForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -15,7 +16,7 @@ class MyGenericView(object):
     form_class = AtendenteForm
     success_url = reverse_lazy('core:modulo:atendente:list_view')
     search_fields = ['nome', 'usuario']
-    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.PERFIL]
+    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.DEPARTAMENTO]
     NAME_MODEL = Atendente._meta.verbose_name
     NAME_MODEL_PLURAL = Atendente._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:atendente:create_view')
@@ -37,7 +38,7 @@ class MyCreateViewAtendente(MyGenericView, LoginRequiredMixin, MyLabls, CreateVi
     pass
 
 
-class MyUpdateViewAtendente(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewAtendente(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -45,6 +46,13 @@ class MyUpdateViewAtendente(MyGenericView, LoginRequiredMixin, MyLabls, UpdateVi
 
 class AtendenteListView(MyListViewAtendente):
     template_name = 'atendente/templates/list_view_atendente.html'
+
+    def get_queryset(self):
+        if (self.request.GET.get('q')):
+            queryset = Atendente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+        else:
+            queryset = Atendente.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+        return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -56,6 +64,11 @@ class AtendenteListView(MyListViewAtendente):
 
 class AtendenteCreateView(MyCreateViewAtendente):
     template_name = 'atendente/templates/create_view_atendente.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
@@ -82,6 +95,11 @@ class AtendenteCreateView(MyCreateViewAtendente):
 
 class AtendenteUpdateView(MyUpdateViewAtendente):
     template_name = 'atendente/templates/create_view_atendente.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))

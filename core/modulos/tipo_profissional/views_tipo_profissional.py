@@ -7,9 +7,10 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import TipoProfissional
+from core.modulos.tipo_atendimento.tipo_atendimento import TipoAtendimento
 from core.modulos.tipo_profissional.form_tipo_profissional import TipoProfissionalForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -84,7 +85,11 @@ class TipoProfissionalUpdateView(MyUpdateViewTipoProfissional):
 @login_required()
 def getTipoProfissionalPorIdDepartamento(request, idDepartamento):
     subs = {}
-    tipoprofissional = TipoProfissional.objects.filter(departamento_id=idDepartamento)
+    subs2 = {}
+    tipoprofissional = TipoProfissional.objects.all()
+    # tipoatendimentos = TipoAtendimento.objects.filter(departamento_id=idDepartamento)
     for dep in tipoprofissional:
         subs[dep.id] = dep.descricao
+    # for atd in tipoatendimentos:
+    #     subs2[atd.id] = atd.descricao
     return JsonResponse(subs)

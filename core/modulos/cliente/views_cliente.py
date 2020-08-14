@@ -7,7 +7,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Cliente
 from core.modulos.cliente.form_cliente import ClienteForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -37,7 +37,7 @@ class MyCreateViewCliente(MyGenericView, LoginRequiredMixin, MyLabls, CreateView
     pass
 
 
-class MyUpdateViewCliente(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewCliente(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

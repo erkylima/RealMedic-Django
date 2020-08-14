@@ -9,7 +9,7 @@ from core.models import Paciente, Prontuario
 
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 from profissional.modulos.meus_pacientes.form_meus_pacientes import MeusPacientesForm
 
 

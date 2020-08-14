@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Permission, User, Group
+from django.db.models import Q
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
@@ -11,7 +13,7 @@ from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.escala.views_escala import mobile
 from core.modulos.profissional.form_profissional import ProfissionalForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
 
 class MyGenericView(object):
@@ -19,7 +21,7 @@ class MyGenericView(object):
     form_class = ProfissionalForm
     success_url = reverse_lazy('core:modulo:profissional:list_view')
     search_fields = ['nome', 'usuario']
-    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.PERFIL]
+    COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.DEPARTAMENTO]
     NAME_MODEL = Profissional._meta.verbose_name
     NAME_MODEL_PLURAL = Profissional._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:profissional:create_view')
@@ -44,6 +46,13 @@ class MyUpdateViewProfissional(MyGenericView, LoginRequiredMixin, MyLabls, Updat
 class ProfissionalListView(MyListViewProfissional):
     template_name = 'profissional/templates/list_view_profissional.html'
 
+    def get_queryset(self):
+        if (self.request.GET.get('q')):
+            queryset = Profissional.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamentoprofissional__departamento__empresa_id=self.request.user.userProfile.empresa_id))
+        else:
+            queryset = Profissional.objects.filter(departamentoprofissional__departamento__empresa_id=self.request.user.userProfile.empresa_id)
+        return queryset
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
@@ -54,6 +63,11 @@ class ProfissionalListView(MyListViewProfissional):
 
 class ProfissionalCreateView(MyCreateViewProfissional):
     template_name = 'profissional/templates/create_view_profissional.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
@@ -90,6 +104,11 @@ class ProfissionalCreateView(MyCreateViewProfissional):
 class ProfissionalUpdateView(MyUpdateViewProfissional):
     template_name = 'profissional/templates/create_view_profissional.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
         return super(ProfissionalUpdateView, self).form_invalid(form)
@@ -112,10 +131,25 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
 
     @method_decorator(permission_required(['global_permissions.editar_profissionais'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
-        return super(ProfissionalUpdateView, self).dispatch(*args, **kwargs)
+        dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
+        try:
+            if self.request.user.userAtendente.departamento.empresa == dep_prof.departamento.empresa:
+                return super().dispatch(self.request, *args, **kwargs)
+            else:
+                return redirect('core:modulo:dashboard')
+        except:
+            if self.request.user.userProfile.empresa ==  dep_prof.departamento.empresa:
+                return super().dispatch(self.request, *args, **kwargs)
+            else:
+                return redirect('core:modulo:dashboard')
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
     template_name = 'escala/templates/create_view_escala.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -24,8 +24,12 @@ class Paciente(Timestampable):
         return self.nome
 
     @property
+    def getDepartamento(self):
+        return self.departamento
+
+    @property
     def getListAtributes(self):
-        atributos = ['nome']
+        atributos = ['nome', 'getDepartamento']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

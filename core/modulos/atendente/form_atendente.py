@@ -10,42 +10,22 @@ from core.util.util_manager import adiciona_form_control
 
 
 class AtendenteForm(forms.ModelForm):
-    empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
-
     class Meta:
         model = Atendente
         fields = '__all__'
         exclude = ('senha', 'user')
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
         super(AtendenteForm, self).__init__(*args, **kwargs)
         instancia = self.instance
 
-        select_master = 'empresa'
-
-        self.fields['empresa'].queryset = Empresa.objects.all()
-        if instancia.pk :
-            self.fields['empresa'].initial = instancia.departamento.empresa
-
-        self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
-        self.fields['empresa'].widget.attrs[
-            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy("core:modulo:departamento:getDepartamentosPorIdEmpresa",
-                                                                     kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master}")'
-
-        self.fields['departamento'].queryset = Departamento.objects.none()
+        self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=self.user.userProfile.empresa_id)
         self.fields['perfil'].initial = 2 # Atendente id 2
-
-        if select_master in self.data:
-            try:
-                empresa_id = int(self.data.get('empresa'))
-                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=empresa_id).order_by(
-                    'nome')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
+        if self.instance.pk:
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
 
-        self.fields['departamento'].required = True
+        self.fields['departamento'].required = False
 
         adiciona_form_control(self)
 
