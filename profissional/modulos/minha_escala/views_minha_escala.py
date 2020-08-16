@@ -22,7 +22,7 @@ class MyGenericView(object):
     NAME_MODEL = Escala._meta.verbose_name
     NAME_MODEL_PLURAL = Escala._meta.verbose_name_plural
 
-class MyUpdateViewMinhaEscala(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, TemplateView):
+class MyUpdateViewMinhaEscala(MyGenericView, LoginRequiredMixin, MyLabls, TemplateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
