@@ -8,35 +8,62 @@
     {% if user.userProfile %}
 
         <div class="row">
-            <div class="col-md-5 form-group">
-                {{ form.departamento.label_tag }}
-                {{ form.departamento }}
-                {{ form.departamento.errors }}
-            </div>
-            <div class="col-md-6 form-group">
-                {{ form.nome.label_tag }}
-                {{ form.nome }}
-                {{ form.nome.errors }}
-            </div>
-            <div class="col-md-1 form-group">
-                {{ form.idade.label_tag }}
-                {{ form.idade }}
-                {{ form.idade.errors }}
-            </div>
+            {% if paciente.pk == '' %}
+                <div class="col-md-3 form-group">
+                    {{ form.departamento.label_tag }}
+                    {{ form.departamento }}
+                    {{ form.departamento.errors }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form.nome.label_tag }}
+                    {{ form.nome }}
+                    {{ form.nome.errors }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form.mae.label_tag }}
+                    {{ form.mae }}
+                    {{ form.mae.errors }}
+                </div>
+                <div class="col-md-1 form-group">
+                    {{ form.idade.label_tag }}
+                    {{ form.idade }}
+                    {{ form.idade.errors }}
+                </div>
+            {% else %}
+                <input type="hidden" name="departamento" id="id_departamento" value="{{ paciente.departamento_id }}">
 
+                <div class="col-md-6 form-group">
+                    {{ form.nome.label_tag }}
+                    {{ form.nome }}
+                    {{ form.nome.errors }}
+                </div>
+                <div class="col-md-5 form-group">
+                    {{ form.mae.label_tag }}
+                    {{ form.mae }}
+                    {{ form.mae.errors }}
+                </div>
+                <div class="col-md-1 form-group">
+                    {{ form.idade.label_tag }}
+                    {{ form.idade }}
+                    {{ form.idade.errors }}
+                </div>
+            {% endif %}
         </div>
         <div class="row">
-            <div class="col-md-5 form-group">
+            <div class="col-md-4 form-group">
                 {{ form.email.label_tag }}
                 {{ form.email }}
                 {{ form.email.errors }}
             </div>
-            <div class="col-md-1 form-group">
+            <div class="col-md-2 form-group mr-2">
                 {{ form.genero.label_tag }}
-                {{ form.genero }}
+                <select class="form-control form-control" id="id_genero" name="genero">
+                    <option {% if paciente.genero == 0 %} selected {% endif %} value="0">Masculino</option>
+                    <option {% if paciente.genero == 1 %} selected {% endif %} value="1">Feminino</option>
+                </select>
                 {{ form.genero.errors }}
             </div>
-            <div class="col-md-4 form-group">
+            <div class="col-md-3 form-group">
                 {{ form.telefone.label_tag }}
                 {{ form.telefone }}
                 {{ form.telefone.errors }}
@@ -66,29 +93,18 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 form-group">
+            <div class="col-md-2 form-group mr-2">
                 {{ form.genero.label_tag }}
-
-                {#            {{ form.tempo_padrao }}#}
-                <div class="form-control selectgroup w-100 pt-3" id="id_genero">
-                    <label class="selectgroup-item">
-
-                        <input type="radio" name="genero" required value="0" class="form-control selectgroup-input" {% if form.genero.value == 0 %} checked="" {% endif %}>
-                        <span class="selectgroup-button">Masculino</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="genero" required value="1" class="form-control selectgroup-input" {% if form.genero.value == 1 %} checked="" {% endif %}>
-                        <span class="selectgroup-button">Feminino</span>
-                    </label>
-                </div>
-
+                <select class="form-control form-control" id="id_genero" name="genero">
+                    <option {% if paciente.genero == 0 %} checked {% endif %} value="0">Masculino</option>
+                    <option {% if paciente.genero == 1 %} checked {% endif %} value="1">Feminino</option>
+                </select>
                 {{ form.genero.errors }}
-            </div>
-            <div class="col-md-4 form-group">
-                {{ form.telefone.label_tag }}
-                {{ form.telefone }}
-                {{ form.telefone.errors }}
-            </div>
+            </div>            <div class="col-md-4 form-group">
+            {{ form.telefone.label_tag }}
+            {{ form.telefone }}
+            {{ form.telefone.errors }}
+        </div>
             <div class="col-md-2 form-group">
                 {{ form.cliente_app.label_tag }}
                 {{ form.cliente_app }}

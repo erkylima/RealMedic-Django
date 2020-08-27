@@ -114,6 +114,7 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profissional = Profissional.objects.get(pk=self.object.pk)
+        print(dir(profissional.tiposAtendimentos.first()))
         context['profissional'] = profissional
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
         pacientes = Paciente.objects.filter(departamento_id=self.object.departamento_id)
@@ -132,7 +133,7 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
                          'className': "fc-danger",
                          'cliente': atendimento.paciente.nome.split(" ")[0],
                          'inicio': atendimento.inicio_atendimento.strftime("%Hh%M"),
-                         'tipo_atendimento': atendimento.tipoAtendimento.descricao,
+                         'tipo_atendimento': atendimento.tipoAtendimento.tipo_atendimento.descricao,
                          'fim': atendimento.fim_atendimento.strftime("%Hh%M")
                          }
                     if (

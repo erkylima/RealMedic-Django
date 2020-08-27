@@ -91,7 +91,8 @@ def adiciona_form_control(self):
         elif field and isinstance(field, forms.CharField):
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['style'] = 'text-transform:uppercase'
-            field.widget.attrs['onkeyup'] = 'this.value = this.value.toUpperCase()'
+            if field_name is not 'usuario':
+                field.widget.attrs['onkeyup'] = 'this.value = this.value.toUpperCase()'
             # field.widget.attrs['data-show-meridian'] = 'false'
         # elif field and isinstance(field, forms.BooleanField):
         #     field.widget.attrs['class'] = 'custom-control-input'

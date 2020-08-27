@@ -16,17 +16,6 @@ class TipoAtendimentoForm(forms.ModelForm):
         self.user = kwargs.pop('user')
         super(TipoAtendimentoForm, self).__init__(*args, **kwargs)
 
-        try:
-            if self.user.userProfile:
-                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=self.user.userProfile.empresa_id)
-        except:
-            pass
-        CHOICES = ([('00:30:00', '00h'), ('01:00:00', '01h'),
-                   ('01:30:00', '01h'), ('02:00:00', '02h'),])
-        self.fields['tempo_padrao'] = forms.ChoiceField(choices=CHOICES,label='Tempo Padrão', widget=forms.RadioSelect)
-        if self.instance.pk:
-            print(self.instance.tempo_padrao.strftime('%H:%M'))
-            self.fields['tempo_padrao'].default = self.instance.tempo_padrao
         adiciona_form_control(self)
     #
     # def clean(self):

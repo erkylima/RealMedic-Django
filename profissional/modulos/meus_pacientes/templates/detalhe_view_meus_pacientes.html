@@ -35,22 +35,43 @@
 {% endif %}
 
 {% block li-tab1 %}<li class="nav-item submenu"> <a class="nav-link active show" id="pills-perfil-tab-nobd" data-toggle="pill" href="#pills-perfil-nobd" role="tab" aria-controls="pills-perfil-nobd" aria-selected="true">Perfil</a> </li> {% endblock %}
-{% block li-tab2 %}<li class="nav-item submenu"> <a class="nav-link" id="pills-protuario-tab-nobd" data-toggle="pill" href="#pills-protuario-nobd" role="tab" aria-controls="pills-protuario-nobd" aria-selected="false">Protuários</a> </li>{% endblock %}
+{% block li-tab2 %}<li class="nav-item submenu"> <a class="nav-link" id="pills-protuario-tab-nobd" data-toggle="pill" href="#pills-protuario-nobd" role="tab" aria-controls="pills-protuario-nobd" aria-selected="false">Protuário</a> </li>{% endblock %}
 {% block tab1 %}
     <div class="tab-pane fade active show" id="pills-perfil-nobd" role="tabpanel" aria-labelledby="pills-perfil-tab-nobd">
         <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="form-group form-group-default">
-                    <label>Nome</label>
-                    <input type="text" readonly class="form-control" name="name" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.nome}}">
+            {% if pacientedepartamentoprofissional.paciente.mae == '' %}
+                <div class="col-md-6">
+                    <div class="form-group form-group-default">
+                        <label>Nome</label>
+                        <input type="text" readonly class="form-control" name="name" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.nome}}">
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group form-group-default">
-                    <label>Email</label>
-                    <input type="email" readonly class="form-control" name="email" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.email}}">
+                <div class="col-md-6">
+                    <div class="form-group form-group-default">
+                        <label>Email</label>
+                        <input type="email" readonly class="form-control" name="email" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.email}}">
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="col-md-4">
+                    <div class="form-group form-group-default">
+                        <label>Nome</label>
+                        <input type="text" readonly class="form-control" name="name" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.nome}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-default">
+                        <label>Nome da Mãe</label>
+                        <input type="text" readonly class="form-control" name="name" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.mae}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-default">
+                        <label>Email</label>
+                        <input type="email" readonly class="form-control" name="email" placeholder="Name" value="{{ pacientedepartamentoprofissional.paciente.email}}">
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <div class="row mt-3">
             <div class="col-md-4">
@@ -108,8 +129,17 @@
                 <th>PACIENTE</th>
                 <th>OBSERVACAO</th>
                 <th>AÇÃO</th>
-            </tr>
 
+            </tr>
+            <div class="col-lg-3 float-right mb-3">
+                <a class="btn btn-primary btn-block sombra"
+                   href="{% url 'profissional:modulo:prontuario:create_view' pacientedepartamentoprofissional.id %}">
+                    <span class="btn-label"><i class="fa fa-plus"></i></span>
+                    {% block bt_nova %}
+                        NOVO LAUDO
+                    {% endblock %}
+                </a>
+            </div>
             </thead>
             <tbody>
             {% for prontuario in prontuarios %}
@@ -122,7 +152,7 @@
                         <a type="button"
                            data-toggle="tooltip" data-placement="top" title="Editar Prontuário"
                            class="btn btn-rounded btn-primary"
-                           href="{% url 'profissional:modulo:prontuario:update_view' prontuario.pk %}">
+                           href="{% url 'profissional:modulo:prontuario:update_view' pacientedepartamentoprofissional.id prontuario.pk %}">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>

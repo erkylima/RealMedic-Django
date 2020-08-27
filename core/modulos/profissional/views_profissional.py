@@ -76,23 +76,24 @@ class ProfissionalCreateView(MyCreateViewProfissional):
     def form_valid(self, form):
 
         # departamento_profissional.save()
-        userProfile = form.save(commit=False)
+        profissional = form.save(commit=False)
         # TODO - Veriricar a estratégia de senha
         user = User.objects.create_user(
-            username=userProfile.usuario,
+            username=profissional.usuario,
             password='admin123admin',
         )
-        user.groups.add(userProfile.perfil_id)
+        profissional.perfil_id = 3
+        user.groups.add(profissional.perfil_id)
         user.save()
-        userProfile.user = user
+        profissional.user = user
         user.get_group_permissions()
         # userProfile.perfil_id = 3 # Perfil do Profissional Padrão
-        userProfile.save()
+        profissional.save()
         # Criar e popular os campos DepartamentoProfissional
         departamento_profissional = DepartamentoProfissional()
         departamento_profissional.departamento_id = self.request.POST.get('departamento')
         departamento_profissional.tipo_profissional_id = self.request.POST.get('tipo_profissional')
-        departamento_profissional.profissional = userProfile
+        departamento_profissional.profissional = profissional
         departamento_profissional.save()
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
@@ -116,8 +117,9 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         # solução abaixo está incompleta para atualizar grupo de usuário
-        """userProfile = form.save(commit=False)
-        user = User.objects.get(pk=userProfile.pk)
+        profissional = form.save(commit=False)
+        profissional.perfil_id = 3
+        """user = User.objects.get(pk=userProfile.pk)
         print(dir(userProfile))
         user.groups.add(userProfile.perfil_id)
         user.save()"""
@@ -170,7 +172,7 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
                          'className': "fc-danger",
                          'cliente': atendimento.paciente.nome.split(" ")[0],
                          'inicio': atendimento.inicio_atendimento.strftime("%Hh%M"),
-                         'tipo_atendimento': atendimento.tipoAtendimento.descricao,
+                         'tipo_atendimento': atendimento.tipoAtendimento.nome,
                          'fim': atendimento.fim_atendimento.strftime("%Hh%M")
                          }
                     if (

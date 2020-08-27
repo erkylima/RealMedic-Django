@@ -34,16 +34,16 @@
     </div>
     <div class="row">
         <div class="col-md-12 form-group ">
-            {{ form.tiposAtendimentos.label_tag }}
-            {{ form.tiposAtendimentos }}
-            {{ form.tiposAtendimentos.errors }}
+            {{ form.tipo_profissional.label_tag }}
+            {{ form.tipo_profissional }}
+            {{ form.tipo_profissional.errors }}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 form-group ">
-            {{ form.tipo_profissional.label_tag }}
-            {{ form.tipo_profissional }}
-            {{ form.tipo_profissional.errors }}
+            {{ form.tiposAtendimentos.label_tag }}
+            {{ form.tiposAtendimentos }}
+            {{ form.tiposAtendimentos.errors }}
         </div>
     </div>
     <div class="row">
@@ -86,16 +86,14 @@
     {#            </div>#}
     {#        </div>#}
     {#    </div>#}
-    {% if not profissional %}
-    <div class="row">
-        <div class="col-md-12 form-group">
-            <input type="hidden" name="perfil" id="id_perfil" value="{{ form.perfil.value }}">
+{#    <div class="row">#}
+{#        <div class="col-md-12 form-group">#}
+{#            <input type="hidden" readonly name="perfil" id="id_perfil" value="{{ form.perfil.value }}">#}
 {#            {{ form.perfil.label_tag }}#}
 {#            {{ form.perfil }}#}
 {#            {{ form.perfil.errors }}#}
-        </div>
-    </div>
-    {% endif %}
+{#        </div>#}
+{#    </div>#}
 
 {% endblock %}
 

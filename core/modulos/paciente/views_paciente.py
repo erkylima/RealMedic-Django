@@ -109,7 +109,6 @@ class PacienteUpdateView(MyUpdateViewPaciente):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         print(self.object.pk)
         try:
             context['paciente'] = Paciente.objects.get(pk=self.object.pk, departamento_id=self.request.user.userAtendente.departamento_id)

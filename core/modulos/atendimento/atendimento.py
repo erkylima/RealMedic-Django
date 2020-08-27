@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from core.models.base.time_stampable import Timestampable
+from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.modulos.escala.escala import EscalaIntervalo
 from core.modulos.paciente.paciente import Paciente
 
@@ -15,7 +16,7 @@ class Atendimento(Timestampable):
         verbose_name_plural = 'ATENDIMENTOS'
 
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT, default=1)
-    tipoAtendimento = models.ForeignKey(TipoAtendimento, on_delete=models.PROTECT)
+    tipoAtendimento = models.ForeignKey(AtendimentosDepartamento, on_delete=models.PROTECT)
     intervalo = models.ForeignKey(EscalaIntervalo,on_delete=models.PROTECT,null=True, blank=True, related_name='escala_intervalo')
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
     retorno = models.BooleanField(default=False)

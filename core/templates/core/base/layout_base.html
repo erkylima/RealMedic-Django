@@ -295,11 +295,11 @@
 
     }
 
-
-    function carregarElementoPorIdFK(url, id_item_selecionado, id_item_carregar, select_master) {
+    function carregarIdTipoProfissionalPorIdFK(url, id_item_selecionado, id_item_carregar, select_master) {
         var id_item_selecionado = $('#' + id_item_selecionado);
         var id_item_carregar = $('#' + id_item_carregar);
         var valor = id_item_selecionado.val();
+        console.log(id_item_selecionado);
         if (valor == '') {
             valor = 0
         }
@@ -316,6 +316,38 @@
                 select_master: valor       // add the select_master id to the GET parameters
             },
             success: function (data) {
+                id_item_carregar.val(data.idProfissional);
+
+                {#id_sub_setor.selectpicker('refresh')#}
+                {#seelct_setor.selectpicker('refresh')#}
+            }
+        })
+
+    }
+
+
+    function carregarElementoPorIdFK(url, id_item_selecionado, id_item_carregar, select_master) {
+        var id_item_selecionado = $('#' + id_item_selecionado);
+        var id_item_carregar = $('#' + id_item_carregar);
+        var valor = id_item_selecionado.val();
+
+        if (valor == '') {
+            valor = 0
+        }
+        if (select_master == '') {
+            select_master = ''
+        }
+
+        var url = url
+        url = url.replace('00', valor);
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                select_master: valor       // add the select_master id to the GET parameters
+            },
+            success: function (data) {
+
                 id_item_carregar.empty();
                 id_item_carregar.append('<option value >---------</option>');
                 $.each(data, function (key, value) {

@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.signing import Signer
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 
@@ -24,7 +25,7 @@ class MyCreateViewProntuario(MyGenericView, LoginRequiredMixin, MyLabls, CreateV
     pass
 
 
-class MyUpdateViewProntuario(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
+class MyUpdateViewProntuario(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
     permission_required = 'global_permissions.ver_prontuario'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -37,6 +38,14 @@ class ProntuarioCreateView(MyCreateViewProntuario):
         kwargs.update({'user': self.request.user})
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # signer = Signer() # Sistema de criptografia
+        # pk = signer.sign(self.kwargs.get('pk')) # criptografando ID
+        context['pk'] = self.kwargs.get('pk') # Lançando no contexto
+        print(context['pk'])
+        return context
+
     def form_invalid(self, form):
         print(form.errors, len(form.errors))
 
@@ -46,7 +55,6 @@ class ProntuarioCreateView(MyCreateViewProntuario):
         self.request.session['save_model'] = 'true'
         prontuario = form.save(commit=False)
 
-        form.save(commit=False)
         return super().form_valid(form)
 
 
@@ -57,6 +65,15 @@ class ProntuarioUpdateView(MyUpdateViewProntuario):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs.update({'user': self.request.user})
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['prontuariopaciente'] = self.kwargs.get('prontuariopaciente')  # Lançando no contexto
+        context['pk'] = self.kwargs.get('pk')  # Lançando no contexto
+
+        print(context['pk'])
+        return context
 
     def form_invalid(self, form):
         print(form.errors, len(form.errors))

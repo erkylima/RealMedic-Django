@@ -1,6 +1,16 @@
 {% extends 'core/base/create_update_view_base.html' %}
 {% load static %}
 
+{% block corpo_formulario %}
+    <div class="row">
+        <input type="hidden" name="departamento_profissional_paciente" id="id_departamento_profissional_paciente" value="{{ prontuariopaciente }}">
+        <div class="col-md-6 form-group">
+            {{ form.observacao.label_tag }}
+            {{ form.observacao }}
+            {{ form.observacao.errors }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block botoes %}
     <a class="btn btn-danger" href="{% url 'profissional:modulo:meus_pacientes:list_view' %}">{{ labels.CANCELAR }}</a>

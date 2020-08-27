@@ -11,7 +11,8 @@ class Paciente(Timestampable):
         verbose_name_plural = 'PACIENTES'
 
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT)
-    nome = models.CharField('Nome', max_length=255)
+    nome = models.CharField('Nome', max_length=80)
+    mae = models.CharField('Nome da Mãe', max_length=80, null=True, blank=True)
     email = models.CharField('Email', max_length=255)
     idade = models.IntegerField('Idade',default=10)
     telefone = models.CharField('Telefone', max_length=40, default='(87) 912345678')

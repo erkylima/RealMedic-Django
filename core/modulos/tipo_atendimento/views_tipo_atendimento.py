@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import TipoAtendimento
+from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.tipo_atendimento.form_tipo_atendimento import TipoAtendimentoForm
 from core.util.labels_property import LabesProperty
@@ -34,7 +35,7 @@ class MyCreateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, Cr
     pass
 
 
-class MyUpdateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
+class MyUpdateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
@@ -49,9 +50,9 @@ class TipoAtendimentoListView(MyListViewTipoAtendimento):
 
     def get_queryset(self):
         if (self.request.GET.get('q')):
-            queryset = TipoAtendimento.objects.filter(Q(descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+            queryset = TipoAtendimento.objects.filter(Q(descricao__icontains=self.request.GET.get('q')) )
         else:
-            queryset = TipoAtendimento.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+            queryset = TipoAtendimento.objects.all()
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_tipos_atendimentos'], raise_exception=True))
@@ -72,6 +73,7 @@ class TipoAtendimentoCreateView(MyCreateViewTipoAtendimento):
 
     def form_valid(self, form):
         self.request.session['save_model'] = 'true'
+        print("teste")
         form.save(commit=False)
 
         return super().form_valid(form)
@@ -102,10 +104,9 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
 
 @login_required()
 def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional):
-    print(idTipoProfissional)
     subs = {}
-    departamentos = TipoAtendimento.objects.filter(departamento_id=idTipoProfissional)
-    print(departamentos)
-    for dep in departamentos:
-        subs[dep.id] = dep.descricao
+    tipos_atendimentos = AtendimentosDepartamento.objects.filter(tipo_atendimento__tipo_profissional=idTipoProfissional)
+    for dep in tipos_atendimentos:
+        subs[dep.id] = dep.tipo_atendimento.descricao
+
     return JsonResponse(subs)

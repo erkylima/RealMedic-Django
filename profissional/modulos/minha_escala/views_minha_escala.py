@@ -37,6 +37,7 @@ class MinhaEscalaUpdateView(MyUpdateViewMinhaEscala):
         # print(self.object.departamentoProfissional_id)
         profissional = Profissional.objects.get(pk=self.request.user.userProfissional.pk)
         context['idProfissional'] = profissional.pk
+        context['profissional'] = profissional
         escalas = Escala.objects.filter(departamentoProfissional__profissional=self.request.user.userProfissional.pk, dia__gte=datetime.now().date())
         intervalos = []
         for escala in escalas:
@@ -53,7 +54,7 @@ class MinhaEscalaUpdateView(MyUpdateViewMinhaEscala):
                          'className': "fc-danger",
                          'cliente': atendimento.paciente.nome.split(" ")[0],
                          'inicio': atendimento.inicio_atendimento.strftime("%Hh%M"),
-                         'tipo_atendimento': atendimento.tipoAtendimento.descricao,
+                         'tipo_atendimento': atendimento.tipoAtendimento.nome,
                          'fim': atendimento.fim_atendimento.strftime("%Hh%M")
                          }
                     if (

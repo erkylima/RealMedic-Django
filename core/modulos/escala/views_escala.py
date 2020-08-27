@@ -121,7 +121,7 @@ def limparIntervaloDia(request):
         #         inter.delete()
         #     atendimento.delete()
         # else:
-        if intervalo_obj.atendimento_id is None:
+        if intervalo_obj.atendimento is None:
             intervalo_obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

@@ -86,10 +86,11 @@
                                 <input type="hidden" id="id_escala_intervalo" name="id_escala_intervalo">
                                 <div class="form-group">
                                     <label for="tipo_atendimento">Tipo de Atendimento</label>
+
                                     <select class="form-control form-control select2" name="tipo_atendimento" id="tipo_atendimento">
                                         <option value="">---------</option>
                                         {% for tipo_atendimento in profissional.tiposAtendimentos.values %}
-                                            <option value="{{ tipo_atendimento.id }}-{{ tipo_atendimento.valor_padrao }}-{{ tipo_atendimento.tempo_padrao }}">{{ tipo_atendimento.descricao }}</option>
+                                            <option value="{{ tipo_atendimento.id }}-{{ tipo_atendimento.valor_padrao }}-{{ tipo_atendimento.tempo_padrao }}">{{ tipo_atendimento.nome }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

@@ -65,7 +65,7 @@ class MeusPacientesDetalheView(MyDetalheViewMeusPacientes):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        prontuarios = Prontuario.objects.filter(departamento_profissional_paciente__paciente=self.object.pk)
+        prontuarios = Prontuario.objects.filter(departamento_profissional_paciente=self.object.pk)
 
         context['prontuarios'] = prontuarios
         return context

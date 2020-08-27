@@ -1,43 +1,36 @@
-    {% extends 'core/base/list_view_base.html' %}
-    {% load static %}
+{% extends 'core/base/list_view_base.html' %}
+{% load static %}
 
-    {% block bt_nova %}
-        {{ labels.NOVO }}
-    {% endblock %}
+{% block bt_nova %}
+    {{ labels.NOVO }}
+{% endblock %}
 
 
-    {% block tbody %}
-        <tbody>
-        {% for atendimento in atendimento_list %}
-            <tr>
-                {% for valor  in atendimento.getListAtributes %}
-                    <td>{{ valor }}</td>
-                {% endfor %}
-                <td>
-                    <a type="button"
-                       class="btn btn-rounded btn-primary"
-                       href="{% url 'core:modulo:profissional:update_view' atendimento.id %}">
-                        <i class="fa fa-info"></i>
-                    </a>
-                    <a type="button"
-                       class="btn btn-rounded btn-primary"
-                       href="{% url 'core:modulo:profissional:profissional_escala_view' atendimento.id %}">
-                        <i class="fa fa-clock"></i>
-                    </a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
+{% block tbody %}
+    <tbody>
+    {% for atendimento in atendimento_list %}
+        <tr>
+            {% for valor  in atendimento.getListAtributes %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+
+        </tr>
+    {% empty %}
+        <tr>
             <td>Nenhum atendimento cadastrado</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            </tr>
-        {% endfor %}
+        </tr>
+    {% endfor %}
 
 
-        </tbody>
+    </tbody>
 
 
-    {% endblock %}
+{% endblock %}
+
+
+{% block column_acoes %} <!-- Limpando coluna ações -->
+{% endblock %}

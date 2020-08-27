@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 
 from core.models import Profissional, Empresa, DepartamentoProfissional, Departamento,TipoProfissional
+from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.modulos.tipo_atendimento.tipo_atendimento import TipoAtendimento
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import adiciona_form_control
@@ -28,6 +29,7 @@ class ProfissionalForm(forms.ModelForm):
         # select_master_empresa = 'empresa'
         select_master_departamento = 'departamento'
         self.fields['departamento'].queryset = departamentos
+        self.fields['perfil'].required = False
         # # Request Requisição Ajax Empresa
         # self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
         # self.fields['empresa'].widget.attrs[
@@ -36,26 +38,25 @@ class ProfissionalForm(forms.ModelForm):
         #     kwargs={'idEmpresa': '00'}).__str__() + f'","id_empresa","id_departamento","{select_master_empresa}")'
 
         # Request Requisição Ajax Departamento
-        self.fields['departamento'].widget.attrs[
-            'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
-            "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
-            kwargs={
-                'idTipoProfissional': '00'}).__str__() + f'","id_departamento","id_tiposAtendimentos","{select_master_departamento}")'
+        # self.fields['departamento'].widget.attrs[
+        #     'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
+        #     "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
+        #     kwargs={
+        #         'idTipoProfissional': '00'}).__str__() + f'","id_departamento","id_tiposAtendimentos","{select_master_departamento}")'
 
         # Request Requisição Ajax Tipo Profissional
         self.fields['tipo_profissional'].widget.attrs[
             'onchange'] = 'carregarElementoPorIdFK("' + reverse_lazy(
             "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
             kwargs={
-                'idTipoProfissional': '00'}).__str__() + f'","id_departamento","id_tiposAtendimentos","{select_master_departamento}")'        # Se o campo empresa possui algum dado atualizar o queryset
+                'idTipoProfissional': '00'}).__str__() + f'","id_tipo_profissional","id_tiposAtendimentos","{select_master_departamento}")'        # Se o campo empresa possui algum dado atualizar o queryset
         self.fields['perfil'].initial = 3 # Profissional id 3
-
         if select_master_departamento in self.data:
             try:
                 departamento_id = int(self.data.get('departamento'))
-                self.fields['tiposAtendimentos'].queryset = TipoAtendimento.objects.filter(
+                self.fields['tiposAtendimentos'].queryset = AtendimentosDepartamento.objects.filter(
                     departamento_id=departamento_id).order_by(
-                    'descricao')
+                    'tipo_atendimento__descricao')
             except (ValueError, TypeError):
                 pass
         # Se estiver editando o profissional recuperar dados já cadastrados inicialmente
@@ -66,9 +67,12 @@ class ProfissionalForm(forms.ModelForm):
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=dep.empresa).order_by(
                 'nome')
             self.fields['departamento'].initial = dep
+            self.fields['tiposAtendimentos'].queryset = AtendimentosDepartamento.objects.filter(
+                departamento_id=dep.pk).order_by(
+                'tipo_atendimento__descricao')
             self.fields['tipo_profissional'].initial = tipo
-
-        # Se o campo departamento possui algum dado atualizar o queryset
+        else:
+            self.fields['tiposAtendimentos'].queryset = AtendimentosDepartamento.objects.none()        # Se o campo departamento possui algum dado atualizar o queryset
           # invalid input from the client; ignore and fallback to empty City queryset
 
         adiciona_form_control(self)

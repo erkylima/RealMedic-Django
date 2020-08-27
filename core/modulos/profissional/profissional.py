@@ -3,6 +3,7 @@ from django.db import models
 
 from core.models import Departamento, TipoProfissional, TipoAtendimento
 from core.models.base.time_stampable import Timestampable
+from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.util.util_manager import UpperCaseCharField
 
 class Profissional(Timestampable):
@@ -18,7 +19,7 @@ class Profissional(Timestampable):
     senha = UpperCaseCharField('Senha', max_length=255)
     perfil = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name='Perfil', related_name='profissionais')
     ativo = models.BooleanField(default=True)
-    tiposAtendimentos = models.ManyToManyField(TipoAtendimento, verbose_name='Tipos de Atendimento')
+    tiposAtendimentos = models.ManyToManyField(AtendimentosDepartamento, verbose_name='Tipos de Atendimento')
 
 
     def __str__(self):

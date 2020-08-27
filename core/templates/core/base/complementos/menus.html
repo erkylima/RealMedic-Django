@@ -68,6 +68,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-item {% if "/tipo_atendimento/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:tipo_atendimento:list_view' %}">
+                            <i class="fas fa-first-aid"></i>
+                            <p>{{ labels.TIPO_ATENDIMENTO_GERAL }}</p>
+                        </a>
+                    </li>
+
                     <li class="nav-item {% if "/cliente/" in request.path %} active {% endif %}">
                         <a href="{% url 'core:modulo:cliente:list_view' %}">
                             <i class="fas fa-user-circle"></i>
@@ -99,8 +106,8 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {% if "/tipo_atendimento/" in request.path %} active {% endif %}">
-                        <a href="{% url 'core:modulo:tipo_atendimento:list_view' %}">
+                    <li class="nav-item {% if "/atendimentos_departamento/" in request.path %} active {% endif %}">
+                        <a href="{% url 'core:modulo:atendimentos_departamento:list_view' %}">
                             <i class="fas fa-first-aid"></i>
                             <p>{{ labels.TIPO_ATENDIMENTO }}</p>
                         </a>
