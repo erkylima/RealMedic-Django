@@ -57,6 +57,7 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
                                                   Q(departamentoProfissional_id=self.request.user.userProfissional.pk)).order_by('intervalo__escala__dia', 'inicio_atendimento')
         else:
             queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=self.request.user.userProfissional.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
+            print(dir(queryset.first()))
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_meus_atendimentos'], raise_exception=True))

@@ -131,15 +131,6 @@
                 <th>AÇÃO</th>
 
             </tr>
-            <div class="col-lg-3 float-right mb-3">
-                <a class="btn btn-primary btn-block sombra"
-                   href="{% url 'profissional:modulo:prontuario:create_view' pacientedepartamentoprofissional.id %}">
-                    <span class="btn-label"><i class="fa fa-plus"></i></span>
-                    {% block bt_nova %}
-                        NOVO LAUDO
-                    {% endblock %}
-                </a>
-            </div>
             </thead>
             <tbody>
             {% for prontuario in prontuarios %}

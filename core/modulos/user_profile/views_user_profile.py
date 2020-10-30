@@ -37,7 +37,7 @@ class MyCreateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, CreateV
     pass
 
 
-class MyUpdateViewUserProfile(MyGenericView,LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
+class MyUpdateViewUserProfile(MyGenericView,LoginRequiredMixin, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

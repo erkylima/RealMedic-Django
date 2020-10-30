@@ -38,8 +38,8 @@ class ValidarEmpresa:
                     return redirect('core:modulo:dashboard')
             except:
                 # departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=request.user.userProfissional.pk)
-                print(request.user.userProfissional.pk)
-                print(self.get_object().departamentoProfissional.pk)
+                # print(request.user.userProfissional.pk)
+                # print(self.get_object().departamentoProfissional.pk)
                 # departamento_profissional_do_objeto = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
                 
                 # if departamento_profissional.de*partamento.empresa == departamento_profissional_do_objeto.departamento.empresa:

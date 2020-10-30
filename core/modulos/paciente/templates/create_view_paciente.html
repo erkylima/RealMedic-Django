@@ -8,7 +8,7 @@
     {% if user.userProfile %}
 
         <div class="row">
-            {% if paciente.pk == '' %}
+            {% if paciente.pk != '' %}
                 <div class="col-md-3 form-group">
                     {{ form.departamento.label_tag }}
                     {{ form.departamento }}

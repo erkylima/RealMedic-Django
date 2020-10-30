@@ -1,3 +1,4 @@
+import calendar
 import datetime
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,7 +26,8 @@ class RelatorioView(MyViewRelatorio):
         context = super().get_context_data(**kwargs)
         mes_atual = int(datetime.date.today().month)
 
-        start = datetime.date(2020, mes_atual -1 , 31)
+        print(mes_atual-1)
+        start = datetime.date(2020, mes_atual - 1, calendar.monthrange(2020, mes_atual - 1)[1])
 
         end = datetime.date(2020, 8, 31)
         new_end = end + datetime.timedelta(days=1)

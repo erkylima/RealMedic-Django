@@ -10,7 +10,7 @@ class ProntuarioForm(forms.ModelForm):
     class Meta:
         model = Prontuario
         fields = '__all__'
-        exclude = ('senha', 'user')
+        exclude = ('senha', 'atendimento')
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')

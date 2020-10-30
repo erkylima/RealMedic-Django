@@ -13,9 +13,21 @@
             {% for valor  in atendimento.getListAtributes %}
                 <td>{{ valor }}</td>
             {% endfor %}
+            <td>
+{#                {{ atendimento.prontuario.departamento_profissional_paciente.id }}#}
+                {% if atendimento.prontuario.departamento_profissional_paciente.id %}
+                <a type="button"
+                   data-toggle="tooltip" data-placement="top" title="Editar Prontuário"
+                   class="btn btn-rounded btn-primary"
+                   href="{% url 'profissional:modulo:prontuario:update_view' atendimento.prontuario.departamento_profissional_paciente.id atendimento.prontuario.pk %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                {% endif %}
+            </td>
 
         </tr>
     {% empty %}
+
         <tr>
             <td>Nenhum atendimento cadastrado</td>
             <td></td>
@@ -31,6 +43,3 @@
 
 {% endblock %}
 
-
-{% block column_acoes %} <!-- Limpando coluna ações -->
-{% endblock %}

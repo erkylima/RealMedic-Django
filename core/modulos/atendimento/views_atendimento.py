@@ -15,6 +15,7 @@ from core.models import Atendimento, DepartamentoProfissional, Profissional, Esc
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
+from core.modulos.prontuario.prontuario import Prontuario
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 
@@ -150,7 +151,6 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
                          'className': "fc-success"
                          }
                 intervalos.append(b)
-
         context['clientes'] = pacientes
         context['intervalos'] = intervalos
         return context
@@ -207,8 +207,7 @@ def addAtendimento(request):
         #     quantidade_intervalos_necessarios += 1
         quantidade_intervalos_necessarios += (int(request.POST.get('tipo_atendimento').split('-')[2].split(':')[1]))/10
         # Fim do calculo de quantidade de intervalos
-        print(inicio.strftime("%H:%M") + ' inicio')
-        print(fim.strftime("%H:%M") + ' fim')
+
 
         escalas_todos_intervalos = EscalaIntervalo.objects.filter(escala_id=escala_intervalo_inicial.escala_id,
                                                                   inicio__range=[inicio, fim],atendimento=None).order_by(
@@ -216,15 +215,19 @@ def addAtendimento(request):
 
 
         if escalas_todos_intervalos.count() >= quantidade_intervalos_necessarios:
+            departamento_profissional_paciente=''
             for intervalo in escalas_todos_intervalos:
                 intervalo.atendimento = atendimento.pk
                 pacienteDoMedico = PacienteDepartamentoProfissional.objects.get_or_create(paciente=atendimento.paciente,departamentoProfissional_id=atendimento.departamentoProfissional.pk)
                 intervalo.save()
+                if intervalo != len(escalas_todos_intervalos) - 1:
+                    departamento_profissional_paciente=PacienteDepartamentoProfissional.objects.get(paciente=atendimento.paciente,departamentoProfissional_id=atendimento.departamentoProfissional.pk)
+            prontuario = Prontuario.objects.get_or_create(atendimento=atendimento, departamento_profissional_paciente=departamento_profissional_paciente)
             messages.success(request, 'Atendimento marcado com sucesso')
 
         else:
             atendimento.delete()
-            print(str(escalas_todos_intervalos.count()) + " CONT + QNT: "+ str(quantidade_intervalos_necessarios))
+
             messages.error(request, "Para marcar este tipo de consulta você precisa de " +
                            request.POST['tipo_atendimento'].split('-')[2] + " disponíveis")
         # dict_obj = model_to_dict(atendimento)
