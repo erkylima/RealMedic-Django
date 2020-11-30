@@ -20,13 +20,18 @@ from django.urls import include, path
 
 # from blog import *
 from django.views.generic import RedirectView
+from rest_framework.documentation import include_docs_urls
 
 from sistema import settings
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  path('api/', include('api.urls')),
+                  path('docs/', include_docs_urls(title='API de Documentação')),
                   path('', include('core.urls'), name='core_index'),
                   path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
                   # path('cliente/', include('cliente.urls')),
                   path('profissional/', include('profissional.urls')),
+
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + staticfiles_urlpatterns()

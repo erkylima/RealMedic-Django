@@ -47,12 +47,12 @@ class AtendimentosDepartamentoListView(MyListViewAtendimentosDepartamento):
         print(context)
         return context
 
-    # def get_queryset(self):
-    #     if (self.request.GET.get('q')):
-    #         queryset = AtendimentosDepartamento.objects.filter(Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
-    #     else:
-    #         queryset = AtendimentosDepartamento.objects.all()
-    #     return queryset
+    def get_queryset(self):
+        if (self.request.GET.get('q')):
+            queryset = AtendimentosDepartamento.objects.filter(Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+        else:
+            queryset = AtendimentosDepartamento.objects.filter(Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+        return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_tipos_atendimentos'], raise_exception=True))
     def dispatch(self, *args, **kwargs):

@@ -12,12 +12,14 @@ from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
 
 from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
+from core.modulos.atendente.atendente import Atendente
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.modulos.prontuario.prontuario import Prontuario
+from core.modulos.user_profile.user_profile import UserProfile
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -55,14 +57,16 @@ class AtendimentoListView(MyListViewAtendimento):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        try:
-            context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
-        except:
-            try:
-                context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
-            except:
-                redirect('/core/atendimento/list')
-            
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
+            context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento_id=usuario.departamento_id)
+        elif isinstance(usuario, UserProfile):
+            context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(
+                departamento__empresa_id=usuario.empresa_id)
+        else:
+            redirect('/core/atendimento/list')
+
+
         atendimentos = []
         for prof in context['departamentoprofissional_list']:
             atendimento = Atendimento.objects.filter(departamentoProfissional_id=prof.pk)

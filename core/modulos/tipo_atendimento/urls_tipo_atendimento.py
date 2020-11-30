@@ -8,6 +8,6 @@ urlpatterns = [
     path('list', views_tipo_atendimento.TipoAtendimentoListView.as_view(), name='list_view'),
     path('create', views_tipo_atendimento.TipoAtendimentoCreateView.as_view(), name='create_view'),
     path('update/<int:pk>', views_tipo_atendimento.TipoAtendimentoUpdateView.as_view(), name='update_view'),
-    path('getTiposAtendimentosPorIdTipoProfissional/<int:idTipoProfissional>', views_tipo_atendimento.getTiposAtendimentosPorIdTipoProfissional,
+    path('getTiposAtendimentosPorIdTipoProfissional/<int:idTipoProfissional>/<int:idDepartamento>/', views_tipo_atendimento.getTiposAtendimentosPorIdTipoProfissional,
          name='getTiposAtendimentosPorIdTipoProfissional'),
 ]

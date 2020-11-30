@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional, Paciente
 from core.modulos.profissional.profissional import DepartamentoProfissional
-from core.util.util_manager import MyLabls
+from core.util.util_manager import MyLabls, get_user_type
 
 
 class MyViewRelatorio(LoginRequiredMixin, MyLabls, TemplateView):
@@ -31,42 +31,42 @@ class RelatorioView(MyViewRelatorio):
 
         end = datetime.date(2020, 8, 31)
         new_end = end + datetime.timedelta(days=1)
-
+        usuario = get_user_type(self.request.user)
         atendimentos_profissional_janeiro = Atendimento.objects.filter(intervalo__escala__dia__month=1).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_fevereiro = Atendimento.objects.filter(intervalo__escala__dia__month=2).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_marco = Atendimento.objects.filter(intervalo__escala__dia__month=3).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_abril = Atendimento.objects.filter(intervalo__escala__dia__month=4).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_maio = Atendimento.objects.filter(intervalo__escala__dia__month=5).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_junho = Atendimento.objects.filter(intervalo__escala__dia__month=6).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_julho = Atendimento.objects.filter(intervalo__escala__dia__month=7).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_agosto = Atendimento.objects.filter(intervalo__escala__dia__month=8).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_setembro = Atendimento.objects.filter(intervalo__escala__dia__month=9).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_outubro = Atendimento.objects.filter(intervalo__escala__dia__month=10).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_novembro = Atendimento.objects.filter(intervalo__escala__dia__month=11).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         atendimentos_profissional_dezembro = Atendimento.objects.filter(intervalo__escala__dia__month=12).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         # JANEIRO
         qnt_atendimentos_profissional_janeiro = 0
@@ -193,43 +193,43 @@ class RelatorioView(MyViewRelatorio):
 
         # CLIENTES DO MÊS CORRENTE
         pacientes_profissional_mes = PacienteDepartamentoProfissional.objects.filter(data_cadastro__range=[start, end],
-                                                                                     departamentoProfissional__profissional_id=self.request.user.userProfissional.pk)
+                                                                                     departamentoProfissional__profissional_id=usuario.pk)
         qnt_clientes_profissional_mes = len(pacientes_profissional_mes)
 
         context['qnt_clientes_profissional_mes'] = qnt_clientes_profissional_mes
 
         qnt_mes_atual = Atendimento.objects.filter(intervalo__escala__dia__month=mes_atual).filter(
-            departamentoProfissional__profissional_id=self.request.user.userProfissional.pk).filter(pago=True)
+            departamentoProfissional__profissional_id=usuario.pk).filter(pago=True)
 
         total = valor_atendimentos_profissional_janeiro + valor_atendimentos_profissional_fevereiro + valor_atendimentos_profissional_marco + valor_atendimentos_profissional_abril + valor_atendimentos_profissional_maio + valor_atendimentos_profissional_junho + valor_atendimentos_profissional_julho + valor_atendimentos_profissional_agosto + valor_atendimentos_profissional_setembro + valor_atendimentos_profissional_outubro + valor_atendimentos_profissional_novembro + valor_atendimentos_profissional_dezembro
 
         context['qnt_mes_atual'] = qnt_mes_atual.count()
         context['total'] = total
 
-        dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.request.user.userProfissional.pk)
+        dep_prof = DepartamentoProfissional.objects.get(profissional_id=usuario.pk)
         pacientes_10 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[0, 10])).count()
         pacientes_20 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[11, 20])).count()
         pacientes_30 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[21, 30])).count()
         pacientes_40 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[31, 40])).count()
         pacientes_50 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[41, 50])).count()
         pacientes_60 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[51, 60])).count()
         pacientes_70 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[61, 79])).count()
         pacientes_80 = PacienteDepartamentoProfissional.objects.filter(
-            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=self.request.user.userProfissional.pk,
+            Q(departamentoProfissional__departamento_id=dep_prof.departamento_id, departamentoProfissional__profissional_id=usuario.pk,
               paciente__idade__range=[80, 100])).count()
 
 

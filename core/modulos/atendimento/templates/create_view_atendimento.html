@@ -50,7 +50,7 @@
 {% block botao_save %}
 {% endblock %}
 {% block botoes %}
-    <a class="btn btn-info" href="{% url 'core:modulo:atendimento:list_view' %}">{{ labels.VOLTAR }}</a>
+    <a class="btn btn-danger" href="{{ request.META.HTTP_REFERER }}">{{ labels.CANCELAR }}</a>
 {% endblock %}
 
 {% block modals %}

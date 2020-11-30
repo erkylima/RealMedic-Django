@@ -26,6 +26,18 @@ class UserProfile(Timestampable):
     def __str__(self):
         return self.nome.upper()
 
+    def getJson(self):
+        return dict(
+            id=self.pk,
+            nome=self.nome,
+            login=self.usuario,
+            tipo='adm',
+            token=self.getToken(),
+        )
+
+    def getToken(self):
+        return self.user.auth_token.key
+
     @property
     def getNamePerfil(self):
         return self.perfil.name

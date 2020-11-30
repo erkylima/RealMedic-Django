@@ -12,7 +12,7 @@ from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
 from core.models import Escala, EscalaIntervalo, Profissional, Atendimento
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -34,11 +34,12 @@ class MinhaEscalaUpdateView(MyUpdateViewMinhaEscala):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        usuario = get_user_type(self.request.user)
         # print(self.object.departamentoProfissional_id)
-        profissional = Profissional.objects.get(pk=self.request.user.userProfissional.pk)
+        profissional = Profissional.objects.get(pk=usuario.pk)
         context['idProfissional'] = profissional.pk
         context['profissional'] = profissional
-        escalas = Escala.objects.filter(departamentoProfissional__profissional=self.request.user.userProfissional.pk, dia__gte=datetime.now().date())
+        escalas = Escala.objects.filter(departamentoProfissional__profissional=usuario.pk, dia__gte=datetime.now().date())
         intervalos = []
         for escala in escalas:
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)

@@ -8,9 +8,10 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Paciente
+from core.modulos.atendente.atendente import Atendente
 from core.modulos.paciente.form_paciente import PacienteForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -54,16 +55,17 @@ class PacienteListView(MyListViewPaciente):
         return context
 
     def get_queryset(self):
-        try:
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
             if (self.request.GET.get('q')):
-                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento_id=self.request.user.userAtendente.departamento_id))
+                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento_id=usuario.departamento_id))
             else:
-                queryset = Paciente.objects.filter(departamento_id=self.request.user.userAtendente.departamento_id)
-        except:
+                queryset = Paciente.objects.filter(departamento_id=usuario.departamento_id)
+        else:
             if (self.request.GET.get('q')):
-                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.empresa_id))
             else:
-                queryset = Paciente.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+                queryset = Paciente.objects.filter(departamento__empresa_id=usuario.empresa_id)
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_pacientes'], raise_exception=True))
@@ -86,12 +88,12 @@ class PacienteCreateView(MyCreateViewPaciente):
     def form_valid(self, form):
         self.request.session['save_model'] = 'true'
         paciente = form.save(commit=False)
-        try:
-            if self.request.user.userAtendente:
-                paciente.departamento_id = self.request.user.userAtendente.departamento_id
-        except:
-            if self.request.user.userProfile:
-                paciente.departamento_id = self.request.POST.get('departamento')
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
+            paciente.departamento_id = usuario.departamento_id
+        else:
+            paciente.departamento_id = self.request.POST.get('departamento')
+
         form.save(commit=False)
         return super().form_valid(form)
 
@@ -110,13 +112,14 @@ class PacienteUpdateView(MyUpdateViewPaciente):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         print(self.object.pk)
-        try:
-            context['paciente'] = Paciente.objects.get(pk=self.object.pk, departamento_id=self.request.user.userAtendente.departamento_id)
-        except:
-            try:
-                context['paciente'] = Paciente.objects.get(pk=self.object.pk, departamento__empresa_id=self.request.user.userProfile.empresa_id)
-            except:
-                pass
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
+            context['paciente'] = Paciente.objects.get(pk=self.object.pk, departamento_id=usuario.departamento_id)
+        else:
+            context['paciente'] = Paciente.objects.get(pk=self.object.pk,
+                                                       departamento__empresa_id=usuario.empresa_id)
+
+
 
         return context
 
@@ -127,12 +130,12 @@ class PacienteUpdateView(MyUpdateViewPaciente):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         paciente = form.save(commit=False)
-        try:
-            if self.request.user.userAtendente:
-                paciente.departamento_id = self.request.user.userAtendente.departamento_id
-        except:
-            if self.request.user.userProfile:
-                paciente.departamento_id = self.request.POST.get('departamento')
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
+            paciente.departamento_id = usuario.departamento_id
+        else:
+            paciente.departamento_id = self.request.POST.get('departamento')
+
         return super().form_valid(form)
 
     @method_decorator(permission_required(['global_permissions.editar_pacientes'], raise_exception=True))

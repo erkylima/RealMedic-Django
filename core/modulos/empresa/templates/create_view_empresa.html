@@ -3,5 +3,5 @@
 
 
 {% block botoes %}
-    <a class="btn btn-danger" href="{% url 'core:modulo:empresa:list_view' %}">{{ labels.CANCELAR }}</a>
+    <a class="btn btn-danger" href="{{ request.META.HTTP_REFERER }}">{{ labels.CANCELAR }}</a>
 {% endblock %}

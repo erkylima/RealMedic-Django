@@ -6,7 +6,7 @@ from core.models import Atendente
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.empresa.empresa import Empresa
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import adiciona_form_control
+from core.util.util_manager import adiciona_form_control, get_user_type
 
 
 class AtendenteForm(forms.ModelForm):
@@ -19,8 +19,9 @@ class AtendenteForm(forms.ModelForm):
         self.user = kwargs.pop('user')
         super(AtendenteForm, self).__init__(*args, **kwargs)
         instancia = self.instance
+        usuario = get_user_type(self.user)
 
-        self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=self.user.userProfile.empresa_id)
+        self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.empresa_id)
         self.fields['perfil'].initial = 2 # Atendente id 2
         if self.instance.pk:
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)

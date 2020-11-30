@@ -30,6 +30,18 @@ class Atendente(Timestampable):
     def getDepartamento(self):
         return self.departamento
 
+    def getJson(self):
+        return dict(
+            id=self.pk,
+            nome=self.nome,
+            login=self.usuario,
+            tipo='atendente',
+            token=self.getToken(),
+        )
+
+    def getToken(self):
+        return self.user.auth_token.key
+
     @property
     def getListAtributes(self):
         atributos = ['nome', 'usuario', 'getDepartamento']

@@ -8,7 +8,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Atendente
 from core.modulos.atendente.form_atendente import AtendenteForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -48,10 +48,12 @@ class AtendenteListView(MyListViewAtendente):
     template_name = 'atendente/templates/list_view_atendente.html'
 
     def get_queryset(self):
+        usuario = get_user_type(self.request.user)
+
         if (self.request.GET.get('q')):
-            queryset = Atendente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+            queryset = Atendente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.empresa_id))
         else:
-            queryset = Atendente.objects.filter(departamento__empresa_id=self.request.user.userProfile.empresa_id)
+            queryset = Atendente.objects.filter(departamento__empresa_id=usuario.empresa_id)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):

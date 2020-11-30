@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from core.models import Atendimento
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 from profissional.modulos.meus_atendimentos.form_meus_atendimentos import MeusAtendimentosForm
 
 
@@ -17,7 +17,6 @@ class MyGenericView(object):
     form_class = MeusAtendimentosForm
     success_url = reverse_lazy('profissional:modulo:meus_atendimentos:list_view')
     search_fields = ['paciente__nome', 'tipoAtendimento__descricao','departamentoProfissional__pk']
-
     COLUMNS = [LabesProperty.NOME, LabesProperty.ATENDIMENTO, LabesProperty.VALOR, LabesProperty.DATA]
     NAME_MODEL = Atendimento._meta.verbose_name
     NAME_MODEL_PLURAL = Atendimento._meta.verbose_name_plural
@@ -50,13 +49,14 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
         return context
 
     def get_queryset(self):
+        usuario = get_user_type(self.request.user)
         if(self.request.GET.get('q')):
             queryset = Atendimento.objects.filter((Q(paciente__nome__icontains=self.request.GET.get('q')) |
                                                    Q(tipoAtendimento__descricao__icontains=self.request.GET.get('q').upper()) |
                                                    Q(valor__contains=self.request.GET.get('q'))) &
-                                                  Q(departamentoProfissional_id=self.request.user.userProfissional.pk)).order_by('intervalo__escala__dia', 'inicio_atendimento')
+                                                  Q(departamentoProfissional_id=usuario.pk)).order_by('intervalo__escala__dia', 'inicio_atendimento')
         else:
-            queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=self.request.user.userProfissional.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
+            queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=usuario.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
             print(dir(queryset.first()))
         return queryset
 

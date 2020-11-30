@@ -42,7 +42,19 @@ INSTALLED_APPS = [
     'core',
     'cliente',
     'profissional',
+    'django_filters',
+
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,6 +79,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'core/modulos'),
             os.path.join(BASE_DIR, 'cliente/modulos'),
             os.path.join(BASE_DIR, 'profissional/modulos'),
+            os.path.join(BASE_DIR,'api/modulos')
 
         ],
         'APP_DIRS': True,

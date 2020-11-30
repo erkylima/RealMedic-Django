@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 
 from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.modulos.departamento.departamento import Departamento
-from core.util.util_manager import adiciona_form_control
+from core.modulos.user_profile.user_profile import UserProfile
+from core.util.util_manager import adiciona_form_control, get_user_type
 
 
 class AtendimentosDepartamentoForm(forms.ModelForm):
@@ -16,6 +17,8 @@ class AtendimentosDepartamentoForm(forms.ModelForm):
         self.user = kwargs.pop('user')
         super(AtendimentosDepartamentoForm, self).__init__(*args, **kwargs)
         select_master_tipo_profissional = 'tipo_profissional'
+        usuario = get_user_type(self.user)
+
         print("OLa" + reverse_lazy(
             "core:modulo:atendimentos_departamento:getTiposAtendimentosPorIdTipoProfissional",
             kwargs={
@@ -27,11 +30,10 @@ class AtendimentosDepartamentoForm(forms.ModelForm):
                 'idTipoAtendimento': '00'}).__str__() + f'","id_tipo_atendimento","id_tipo_profissional","{select_master_tipo_profissional}")'
         self.fields['tipo_atendimento'].empty_label = '---------'
         self.fields['tipo_atendimento'].initial = 0
-        try:
-            if self.user.userProfile:
-                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=self.user.userProfile.empresa_id)
-        except:
-            pass
+
+        if isinstance(usuario, UserProfile):
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.empresa_id)
+
         CHOICES = ([('00:10:00', '00h'), ('00:20:00', '00h'), ('00:30:00', '00h'), ('00:40:00', '00h'),('00:50:00', '00h'),
                     ('01:00:00', '01h'), ('01:10:00', '01h'), ('01:20:00', '01h'), ('01:30:00', '01h'), ('01:40:00', '01h'), ('01:50:00', '01h'), ('02:00:00', '02h'),])
         self.fields['tempo_padrao'] = forms.ChoiceField(choices=CHOICES,label='Tempo Padrão', widget=forms.RadioSelect)

@@ -9,11 +9,12 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
+from core.modulos.atendente.atendente import Atendente
 from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.escala.views_escala import mobile
 from core.modulos.profissional.form_profissional import ProfissionalForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -47,10 +48,12 @@ class ProfissionalListView(MyListViewProfissional):
     template_name = 'profissional/templates/list_view_profissional.html'
 
     def get_queryset(self):
+        usuario = get_user_type(self.request.user)
+
         if (self.request.GET.get('q')):
-            queryset = Profissional.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamentoprofissional__departamento__empresa_id=self.request.user.userProfile.empresa_id))
+            queryset = Profissional.objects.filter((Q(nome__icontains=self.request.GET.get('q')) | Q(usuario__icontains=self.request.GET.get('q')) )& Q(departamentoprofissional__departamento__empresa_id=usuario.empresa_id))
         else:
-            queryset = Profissional.objects.filter(departamentoprofissional__departamento__empresa_id=self.request.user.userProfile.empresa_id)
+            queryset = Profissional.objects.filter(departamentoprofissional__departamento__empresa_id=usuario.empresa_id)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -119,6 +122,9 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
         # solução abaixo está incompleta para atualizar grupo de usuário
         profissional = form.save(commit=False)
         profissional.perfil_id = 3
+        print(dir(profissional.user))
+        profissional.user.username = profissional.usuario
+        profissional.user.save()
         """user = User.objects.get(pk=userProfile.pk)
         print(dir(userProfile))
         user.groups.add(userProfile.perfil_id)
@@ -134,16 +140,18 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
     @method_decorator(permission_required(['global_permissions.editar_profissionais'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
         dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
-        try:
-            if self.request.user.userAtendente.departamento.empresa == dep_prof.departamento.empresa:
+        usuario = get_user_type(self.request.user)
+        if isinstance(usuario, Atendente):
+            if usuario.departamento.empresa == dep_prof.departamento.empresa:
                 return super().dispatch(self.request, *args, **kwargs)
             else:
                 return redirect('core:modulo:dashboard')
-        except:
-            if self.request.user.userProfile.empresa ==  dep_prof.departamento.empresa:
+        else:
+            if usuario.empresa ==  dep_prof.departamento.empresa:
                 return super().dispatch(self.request, *args, **kwargs)
             else:
                 return redirect('core:modulo:dashboard')
+
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
     template_name = 'escala/templates/create_view_escala.html'

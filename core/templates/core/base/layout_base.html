@@ -53,7 +53,7 @@
     <div class="main-panel">
         <div class="container">
             {% block header %}
-            
+
             {% endblock %}
             <div class="page-inner">
                 {% block content %}
@@ -202,59 +202,59 @@
     {% endif %}
 
     function mensagem_erro(mensagem) {
-         $.notify({
-                        // options
-                        icon: 'flaticon-alarm-1',
-                        title: 'Opss...',
-                        message: mensagem,
-                    }, {
-                        // settings
-                        element: 'body',
-                        position: null,
-                        type: "danger",
-                        placement: {
-                            from: "top",
-                            align: "right"
-                        },
-                        offset: 20,
-                        spacing: 10,
-                        z_index: 1031,
-                        delay: 6000,
-                        url_target: '_blank',
-                        mouse_over: null,
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                    });
+        $.notify({
+            // options
+            icon: 'flaticon-alarm-1',
+            title: 'Opss...',
+            message: mensagem,
+        }, {
+            // settings
+            element: 'body',
+            position: null,
+            type: "danger",
+            placement: {
+                from: "top",
+                align: "right"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 6000,
+            url_target: '_blank',
+            mouse_over: null,
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
     }
 
     function mensagem_sucesso(mensagem) {
-         $.notify({
-                        // options
-                        icon: 'flaticon-alarm-1',
-                        title: 'Sucesso',
-                        message: mensagem,
-                    }, {
-                        // settings
-                        element: 'body',
-                        position: null,
-                        type: "success",
-                        placement: {
-                            from: "top",
-                            align: "right"
-                        },
-                        offset: 20,
-                        spacing: 10,
-                        z_index: 1031,
-                        delay: 3000,
-                        url_target: '_blank',
-                        mouse_over: null,
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                    });
+        $.notify({
+            // options
+            icon: 'flaticon-alarm-1',
+            title: 'Sucesso',
+            message: mensagem,
+        }, {
+            // settings
+            element: 'body',
+            position: null,
+            type: "success",
+            placement: {
+                from: "top",
+                align: "right"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 3000,
+            url_target: '_blank',
+            mouse_over: null,
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
     }
 
     {#PRE_LOADER#}
@@ -330,7 +330,7 @@
         var id_item_selecionado = $('#' + id_item_selecionado);
         var id_item_carregar = $('#' + id_item_carregar);
         var valor = id_item_selecionado.val();
-
+        var id_departamento = $('#id_departamento').val();
         if (valor == '') {
             valor = 0
         }
@@ -338,8 +338,8 @@
             select_master = ''
         }
 
-        var url = url
-        url = url.replace('00', valor);
+        var url = url;
+        url = url.replace('00', valor).replace('11',id_departamento);
         $.ajax({
             url: url,
             type: "GET",
@@ -347,12 +347,17 @@
                 select_master: valor       // add the select_master id to the GET parameters
             },
             success: function (data) {
-
                 id_item_carregar.empty();
                 id_item_carregar.append('<option value >---------</option>');
                 $.each(data, function (key, value) {
                     id_item_carregar.append('<option value="' + key + '">' + value + '</option>');
                 });
+                try {
+
+                }
+                catch(err) {
+
+                }
 
                 {#id_sub_setor.selectpicker('refresh')#}
                 {#seelct_setor.selectpicker('refresh')#}

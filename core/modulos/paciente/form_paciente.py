@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from core.models import Paciente
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.empresa.empresa import Empresa
-from core.util.util_manager import adiciona_form_control
+from core.modulos.user_profile.user_profile import UserProfile
+from core.util.util_manager import adiciona_form_control, get_user_type
 
 
 class PacienteForm(forms.ModelForm):
@@ -18,20 +19,21 @@ class PacienteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(PacienteForm, self).__init__(*args, **kwargs)
+        usuario = get_user_type(self.user)
 
         empresas = Empresa.objects.all()
         self.fields['departamento'].empty_label = '---------'
         self.fields['departamento'].required = False
 
         self.fields['departamento'].queryset = Departamento.objects.none()
+        if isinstance(usuario, UserProfile):
+            self.fields['departamento'].queryset = Departamento.objects.filter(
+                empresa_id=usuario.empresa_id)
+        else:
+            self.fields['departamento'].queryset = Departamento.objects.filter(
+                empresa_id=usuario.departamento.empresa_id)
 
-        try:
-            if self.user.userProfile: #verificar se é gerente
-                self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=self.user.userProfile.empresa_id)
-        except:
-            if self.user.userAtendente:  # verificar se é gerente
-                self.fields['departamento'].queryset = Departamento.objects.filter(
-                    empresa_id=self.user.userAtendente.departamento.empresa_id)
+
 
         if self.instance.pk:
             inicio = Paciente.objects.get(pk=self.instance.pk)

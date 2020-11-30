@@ -9,7 +9,7 @@ from core.models import Paciente, Prontuario
 
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 from profissional.modulos.meus_pacientes.form_meus_pacientes import MeusPacientesForm
 
 
@@ -46,14 +46,15 @@ class MeusPacientesListView(MyListViewMeusPacientes):
 
         return context
     def get_queryset(self):
+        usuario = get_user_type(self.request.user)
         if (self.request.GET.get('q')):
             queryset = PacienteDepartamentoProfissional.objects.filter(
                 (Q(paciente__nome__icontains=self.request.GET.get('q')) | Q(
                     paciente__email__icontains=self.request.GET.get('q'))) & Q(
-                    departamentoProfissional_id=self.request.user.userProfissional.pk))
+                    departamentoProfissional_id=usuario.pk))
         else:
             queryset = PacienteDepartamentoProfissional.objects.filter(
-                departamentoProfissional_id=self.request.user.userProfissional.pk)
+                departamentoProfissional_id=usuario.pk)
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))

@@ -1,44 +1,29 @@
 import os
 
 from django import forms
-#
-#
-# def createPathPhotoHealthTips(instance, filename):
-#     directory = 'health_tips/' + str(instance.id)
-#     full_path = str(directory) + "/%s" % (filename)
-#     return full_path
-#
-#
-#
-# def createPathPhotoLogPost(instance, filename):
-#     directory = 'blog_post/' + str(instance.id)
-#     full_path = str(directory) + "/%s" % (filename)
-#     return full_path
-
 from django.shortcuts import redirect
 from extra_views import SearchableListMixin
-
-
 from core.util.labels_property import LabesProperty
+from django.db import models
 
 class ValidarEmpresa:
     def dispatch(self, request, *args, **kwargs):
+        usuario = get_user_type(request.user)
         if not request.user.is_authenticated:
             return redirect('core:login')
         try:
-            if request.user.userAtendente.departamento.empresa ==  self.get_object().departamento.empresa:                
+            if usuario.departamento.empresa ==  self.get_object().departamento.empresa:
                 return super().dispatch(request, *args, **kwargs) 
             else:
                 return redirect('core:modulo:dashboard')
         except:
             try:
-                if request.user.userProfile.empresa ==  self.get_object().departamento.empresa:
+                if usuario.empresa ==  self.get_object().departamento.empresa:
                     return super().dispatch(request, *args, **kwargs)
                 else:
                     return redirect('core:modulo:dashboard')
             except:
                 # departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=request.user.userProfissional.pk)
-                # print(request.user.userProfissional.pk)
                 # print(self.get_object().departamentoProfissional.pk)
                 # departamento_profissional_do_objeto = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
                 
@@ -46,7 +31,6 @@ class ValidarEmpresa:
                 return super().dispatch(request, *args, **kwargs)
                 # else:
                 #     return redirect('profissional:modulo:relatorio:ver')
-
 
 def adiciona_form_control(self):
     for field_name, field in self.fields.items():
@@ -102,6 +86,26 @@ def adiciona_form_control(self):
         if field.required:
             field.label = field.label + '*'
 
+def get_user_type(user):
+    try:
+        usuario = user.userProfile
+        return usuario
+    except:
+        try:
+            usuario = user.userProfissional
+            return usuario
+        except:
+            try:
+                usuario = user.userAtendente
+                return usuario
+            except:
+                try:
+                    usuario = user.userCliente
+                    return usuario
+                except:
+                    return None
+
+
 
 class MyListViewSearcheGeneric(SearchableListMixin):
     COLUMNS = []
@@ -112,8 +116,6 @@ class MyListViewSearcheGeneric(SearchableListMixin):
         context['q'] = q
         context['COLUMNS'] = self.COLUMNS
         return context
-
-
 
 class MyLabls(object):
     NAME_MODEL = None
@@ -139,11 +141,6 @@ class MyLabls(object):
 
         return context
 
-
-from django.db import models
-from six import with_metaclass
-
-
 class UpperCaseCharField(models.CharField):
     def __init__(self, *args, **kwargs):
         super(UpperCaseCharField, self).__init__(*args, **kwargs)
@@ -156,3 +153,17 @@ class UpperCaseCharField(models.CharField):
             return value
         else:
             return super(UpperCaseCharField, self).pre_save(model_instance, add)
+
+#
+#
+# def createPathPhotoHealthTips(instance, filename):
+#     directory = 'health_tips/' + str(instance.id)
+#     full_path = str(directory) + "/%s" % (filename)
+#     return full_path
+#
+#
+#
+# def createPathPhotoLogPost(instance, filename):
+#     directory = 'blog_post/' + str(instance.id)
+#     full_path = str(directory) + "/%s" % (filename)
+#     return full_path
