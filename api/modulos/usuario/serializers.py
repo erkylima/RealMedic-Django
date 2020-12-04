@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 
 from core.models import UserProfile
+from core.modulos.cliente.cliente import Cliente
 
 
 class UsuarioListSerializer(serializers.ModelSerializer):
@@ -17,7 +18,7 @@ class UsuarioCreateSerializer(serializers.ModelSerializer):
     senha = serializers.CharField(required=True)
 
     class Meta:
-        model = UserProfile
+        model = Cliente
         # fields = '__all__'
         fields = ['nome', 'usuario', 'senha']
 
