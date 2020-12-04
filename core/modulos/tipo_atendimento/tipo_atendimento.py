@@ -14,8 +14,7 @@ class TipoAtendimento(Timestampable):
         verbose_name_plural = 'TIPOS DE ATENDIMENTOS GERAL'
     tipo_profissional = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, default=1)
     descricao = models.CharField('Descricao', max_length=255)
-    areaAtendimento = models.ForeignKey(AreaAtendimento,
-                                        on_delete=models.PROTECT, verbose_name='Area de Atendimento')
+    areaAtendimento = models.ManyToManyField(AreaAtendimento, verbose_name='Area de Atendimento')
 
     def __str__(self):
         return self.descricao
