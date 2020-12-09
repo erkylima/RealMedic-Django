@@ -25,6 +25,7 @@ class Atendimento(Timestampable):
     inicio_atendimento = models.TimeField(null=True, blank=True) # Horario de inicialização do atendimento
     fim_atendimento = models.TimeField(null=True, blank=True) # Horario de finalização do atendimento
     pago = models.BooleanField(default=False)
+    crm_soliciante = models.CharField("CRM Médico Solicitante", max_length=7, blank=True)
 
     def __str__(self):
         return self.paciente.nome

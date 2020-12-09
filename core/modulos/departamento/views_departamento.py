@@ -83,5 +83,5 @@ def getDepartamentosPorIdEmpresa(request, idEmpresa):
     departamentos = Departamento.objects.filter(empresa_id=idEmpresa)
 
     for dep in departamentos:
-        subs[dep.id] = dep.nome
+        subs[dep.id] = dep.__str__()
     return JsonResponse(subs)

@@ -1,3 +1,4 @@
+from core.modulos.convenio.convenio import Convenio
 from .base import *
 from core.modulos.empresa.empresa import Empresa
 from core.modulos.user_profile.user_profile import UserProfile

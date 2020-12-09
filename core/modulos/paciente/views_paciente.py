@@ -144,6 +144,7 @@ class PacienteUpdateView(MyUpdateViewPaciente):
         endereco.estado = form.cleaned_data['estado']
         endereco.numero = form.cleaned_data['numero']
         endereco.save()
+        paciente.endereco = endereco
         if isinstance(usuario, Atendente):
             paciente.departamento_id = usuario.departamento_id
         else:

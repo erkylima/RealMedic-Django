@@ -7,10 +7,15 @@
 {% block corpo_formulario %}
 
     <div class="row">
-        <div class="col-md-12 form-group ">
+        <div class="col-md-6 form-group ">
             {{ form.empresa.label_tag }}
             {{ form.empresa }}
             {{ form.empresa.errors }}
+        </div>
+        <div class="col-md-6 form-group ">
+            {{ form.departamento.label_tag }}
+            {{ form.departamento }}
+            {{ form.departamento.errors }}
         </div>
     </div>
     <div class="row">
@@ -31,6 +36,7 @@
             {{ form.email }}
             {{ form.email.errors }}
         </div>
+
     </div>
     {#    <div class="row">#}
     {#        <div class="col-md-6 form-group">#}
@@ -51,9 +57,9 @@
     <div class="row">
         <div class="col-md-12 form-group">
             <input type="hidden" name="perfil" id="id_perfil" value="{{ form.perfil.value }}">
-{#            {{ form.perfil.label_tag }}#}
-{#            {{ form.perfil }}#}
-{#            {{ form.perfil.errors }}#}
+            {#            {{ form.perfil.label_tag }}#}
+            {#            {{ form.perfil }}#}
+            {#            {{ form.perfil.errors }}#}
         </div>
     </div>
 

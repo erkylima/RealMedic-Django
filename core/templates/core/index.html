@@ -211,12 +211,61 @@
         var mytotalIncomeChart = new Chart(totalIncomeChart, {
             type: 'bar',
             data: {
-                labels: [{% if True %}"Jan"{% endif %}, "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                labels: [
+                    {% if atendimentos_janeiro.sum != None %}"Jan",{% endif %}
+                    {% if atendimentos_fevereiro.sum != None %}"Fev",{% endif %}
+                    {% if atendimentos_marco.sum != None %}"Mar",{% endif %}
+                    {% if atendimentos_abril.sum != None %}"Abr",{% endif %}
+                    {% if atendimentos_maio.sum != None %}"Mai",{% endif %}
+                    {% if atendimentos_junho.sum != None %}"Jun",{% endif %}
+                    {% if atendimentos_julho.sum != None %}"Jul",{% endif %}
+                    {% if atendimentos_agosto.sum != None %}"Ago",{% endif %}
+                    {% if atendimentos_setembro.sum != None %}"Set",{% endif %}
+                    {% if atendimentos_outubro.sum != None %}"Out",{% endif %}
+                    {% if atendimentos_novembro.sum != None %}"Nov",{% endif %}
+                    {% if atendimentos_dezembro.sum != None %}"Dez",{% endif %}
+                ],
                 datasets : [{
-                    label: "Total Income",
+                    label: "Total Mensal",
                     backgroundColor: '#ff9e27',
                     borderColor: 'rgb(23, 125, 255)',
-                    data: [{% if True %}30 {% endif %}, 4, 9, 5, 4, 6, 4, 3, 8, 10,20,24, 15],
+                    data: [
+                        {% if atendimentos_janeiro.sum != None %}
+                            {{ atendimentos_janeiro.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_fevereiro.sum != None %}
+                            {{ atendimentos_fevereiro.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_marco.sum != None %}
+                            {{ atendimentos_marco.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_abril.sum != None %}
+                            {{ atendimentos_abril.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_maio.sum != None %}
+                            {{ atendimentos_maio.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_junho.sum != None %}
+                            {{ atendimentos_junho.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_julho.sum != None %}
+                            {{ atendimentos_julho.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_agosto.sum != None %}
+                            {{ atendimentos_agosto.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_setembro.sum != None %}
+                            {{ atendimentos_setembro.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_outubro.sum != None %}
+                            {{ atendimentos_outubro.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_novembro.sum != None %}
+                            {{ atendimentos_novembro.sum | safe }},
+                        {% endif %}
+                        {% if atendimentos_dezembro.sum != None %}
+                            {{ atendimentos_dezembro.sum | safe }},
+                        {% endif %}],
                 }],
             },
             options: {

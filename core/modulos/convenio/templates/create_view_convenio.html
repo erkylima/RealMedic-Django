@@ -1,0 +1,50 @@
+{% extends 'core/base/create_update_view_base.html' %}
+{% load static %}
+
+{% block corpo_formulario %}
+
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.descricao.label_tag }}
+            {{ form.descricao }}
+            {{ form.descricao.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group ">
+            {{ form.areaAtendimento.label_tag }}
+            {{ form.areaAtendimento }}
+            {{ form.areaAtendimento.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
+            {{ form.tiposAtendimentos.label_tag }}
+            {{ form.tiposAtendimentos }}
+            {{ form.tiposAtendimentos.errors }}
+        </div>
+    </div>
+
+    {#    <div class="row">#}
+    {#        <div class="col-md-6 form-group">#}
+    {#            {{ form.password.label_tag }}#}
+    {#            {{ form.password }}#}
+    {#            <div class="errorList">#}
+    {#                {{ form.password.errors }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="col-md-6 form-group">#}
+    {#            {{ form.confirmpassword.label_tag }}#}
+    {#            {{ form.confirmpassword }}#}
+    {#            <div class="errorList">#}
+    {#                {{ form.confirmpassword.errors }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+
+{% endblock %}
+
+{% block botoes %}
+    <a class="btn btn-danger" href="{{ request.META.HTTP_REFERER }}">{{ labels.CANCELAR }}</a>
+{% endblock %}

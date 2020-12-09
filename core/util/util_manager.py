@@ -1,10 +1,22 @@
-import os
+import datetime
 
+
+from dateutil.relativedelta import relativedelta
 from django import forms
 from django.shortcuts import redirect
 from extra_views import SearchableListMixin
 from core.util.labels_property import LabesProperty
 from django.db import models
+
+def get_data_por_idade(idade): # Retorna a idade em datetime
+    today = datetime.date.today()
+    idade = (today - relativedelta(years=idade))
+    return idade
+
+def get_idade_por_data(data): # Retorna a conversão da data para idade
+    today = datetime.date.today()
+    idade = (today - relativedelta(years=data.year)).year
+    return idade
 
 class ValidarEmpresa:
     def dispatch(self, request, *args, **kwargs):
@@ -88,6 +100,8 @@ def adiciona_form_control(self):
         else:
             field.label = field.label
 
+
+
 def get_user_type(user):
     try:
         usuario = user.userProfile
@@ -101,11 +115,9 @@ def get_user_type(user):
                 usuario = user.userAtendente
                 return usuario
             except:
-                try:
-                    usuario = user.userCliente
-                    return usuario
-                except:
-                    return None
+                usuario = user.userCliente
+                return usuario
+
 
 
 
