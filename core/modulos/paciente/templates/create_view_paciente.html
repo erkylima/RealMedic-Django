@@ -49,13 +49,14 @@
                 </div>
             {% endif %}
         </div>
+
         <div class="row">
             <div class="col-md-4 form-group">
                 {{ form.email.label_tag }}
                 {{ form.email }}
                 {{ form.email.errors }}
             </div>
-            <div class="col-md-2 form-group mr-2">
+            <div class="col-md-3 form-group">
                 {{ form.genero.label_tag }}
                 <select class="form-control form-control" id="id_genero" name="genero">
                     <option {% if paciente.genero == 0 %} selected {% endif %} value="0">Masculino</option>
@@ -74,6 +75,7 @@
                 {{ form.cliente_app.errors }}
             </div>
         </div>
+
     {% else %}
         <div class="row">
             <div class="col-md-6 form-group">
@@ -105,14 +107,53 @@
             {{ form.telefone }}
             {{ form.telefone.errors }}
         </div>
-            <div class="col-md-2 form-group">
-                {{ form.cliente_app.label_tag }}
-                {{ form.cliente_app }}
-                {{ form.cliente_app.errors }}
-            </div>
+            {#            <div class="col-md-2 form-group">#}
+            {#                {{ form.cliente_app.label_tag }}#}
+            {#                {{ form.cliente_app }}#}
+            {#                {{ form.cliente_app.errors }}#}
+            {#            </div>#}
         </div>
     {% endif %}
+    <div class="row">
+        <div class="col-4 form-group">
+            {{ form.cpf.label_tag }}
+            {{ form.cpf }}
+            {{ form.cpf.errors }}
+        </div>
+        <div class="col-4 form-group">
+            {{ form.rg.label_tag }}
+            {{ form.rg }}
+            {{ form.rg.errors }}
+        </div>
+        <div class="col-4 form-group">
+            {{ form.data_nascimento.label_tag }}
+            {{ form.data_nascimento }}
+            {{ form.data_nascimento.errors }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 form-group">
+            {{ form.rua.label_tag }}
+            {{ form.rua }}
+            {{ form.rua.errors }}
 
+        </div>
+        <div class="col-lg-4 form-group">
+            {{ form.cidade.label_tag }}
+            {{ form.cidade }}
+            {{ form.cidade.errors }}
+        </div>
+        <div class="col-lg-2 form-group">
+            {{ form.estado.label_tag }}
+            {{ form.estado }}
+            {{ form.estado.errors }}
+        </div>
+        <div class="col-lg-2 form-group">
+            {{ form.numero.label_tag }}
+            {{ form.numero }}
+            {{ form.numero.errors }}
+        </div>
+    </div>
     {#    <div class="row">#}
     {#        <div class="col-md-6 form-group">#}
     {#            {{ form.password.label_tag }}#}
@@ -129,6 +170,10 @@
     {#            </div>#}
     {#        </div>#}
     {#    </div>#}
+
+{% endblock %}
+
+{% block extra_scripts %}
 
 {% endblock %}
 

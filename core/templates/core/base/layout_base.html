@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{% static 'core/base/assets/css/demo.css' %}">
     <link rel="stylesheet" href="{% static 'core/commum/novo_estilo.css' %}">
     <link rel="stylesheet" href="{% static 'core/commum/pre_loader.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
     {% block extra_css %}
 
     {% endblock %}
@@ -88,11 +89,15 @@
 <!-- jQuery Scrollbar -->
 <script src="{% static 'core/base/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
 <!-- DateTimePicker -->
-<script src="{% static 'core/base/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
+
+{#<script src="{% static 'core/base/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js' %}"></script>#}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js" integrity="sha512-mVkLPLQVfOWLRlC2ZJuyX5+0XrTlbW2cyAwyqgPkLGxhoaHNSWesYMlcUjX8X+k45YB8q90s88O7sos86636NQ==" crossorigin="anonymous"></script>
 <!-- Select2 -->
+
 <script src="{% static 'core/base/assets/js/plugin/select2/select2.full.min.js' %}"></script>
 <!-- Bootstrap Tagsinput -->
-{#<script src="{% static 'core/base/assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>#}
+<script src="{% static 'core/base/assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
 <!-- Atlantis JS -->
 <script src="{% static 'core/base/assets/js/plugin/jquery.validate/jquery.validate.min.js' %}"></script>
 
@@ -100,15 +105,33 @@
 <script src="{% static 'core/base/assets/js/atlantis.min.js' %}"></script>
 <!-- Atlantis DEMO methods, don't include it in your project! -->
 <script src="{% static 'core/base/assets/js/setting-demo2.js' %}"></script>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js"></script>
 
-    $('#datetime').datetimepicker({
+<script>
+    $('#id_cpf').mask('000.000.000-00', {reverse: true});
+    $('#id_rg').mask('0.000.000', {reverse: true});
+    $('#id_telefone').mask("(99) 99999-9999")
+        .focusout(function (event) {
+            var target, phone, element;
+            target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+            phone = target.value.replace(/\D/g, '');
+            element = $(target);
+            element.unmask();
+            if(phone.length > 10) {
+                element.mask("(99) 99999-999?9");
+            } else {
+                element.mask("(99) 9999-9999?9");
+            }
+        });
+
+    $('#datetime').datepicker({
         format: 'DD/MM/YYYY H:mm',
     });
-    $('#datepicker').datetimepicker({
-        format: 'DD/MM/YYYY',
+    $('#datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR'
     });
-    $('#timepicker').datetimepicker({
+    $('#timepicker').datepicker({
         format: 'h:mm',
     });
 
@@ -365,7 +388,6 @@
         })
 
     }
-
 
 </script>
 

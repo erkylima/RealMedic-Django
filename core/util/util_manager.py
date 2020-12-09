@@ -85,6 +85,8 @@ def adiciona_form_control(self):
             field.widget.attrs['class'] = 'form-control'
         if field.required:
             field.label = field.label + '*'
+        else:
+            field.label = field.label
 
 def get_user_type(user):
     try:

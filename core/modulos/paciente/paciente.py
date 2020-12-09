@@ -1,3 +1,6 @@
+from datetime import date
+
+from core.models.base.endereco import Endereco
 from core.models.base.time_stampable import Timestampable
 from django.db import models
 
@@ -14,10 +17,13 @@ class Paciente(Timestampable):
     nome = models.CharField('Nome', max_length=80)
     mae = models.CharField('Nome da Mãe', max_length=80, null=True, blank=True)
     email = models.CharField('Email', max_length=255)
+    data_nascimento = models.DateField(default=date.today)
+    cpf = models.CharField('CPF',default='000.000.000-00', max_length=14, blank=True)
+    rg = models.CharField('RG', default='0.000.000',max_length=9, blank=True)
     idade = models.IntegerField('Idade',default=10)
     telefone = models.CharField('Telefone', max_length=40, default='(87) 912345678')
     genero = models.IntegerField('Genero', default=1)
-    endereco = models.CharField('Endereço', max_length=255,blank=True, null=True)
+    endereco = models.ForeignKey(Endereco, models.PROTECT, blank=True)
     sobre = models.CharField('Sobre', max_length=255,blank=True,default='')
     cliente_app = models.CharField('Cliente App', max_length=255, default=None, blank=True)
 

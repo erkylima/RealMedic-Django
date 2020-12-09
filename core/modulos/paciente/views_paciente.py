@@ -8,6 +8,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from core.models import Paciente
+from core.models.base.endereco import Endereco
 from core.modulos.atendente.atendente import Atendente
 from core.modulos.paciente.form_paciente import PacienteForm
 from core.util.labels_property import LabesProperty
@@ -89,11 +90,16 @@ class PacienteCreateView(MyCreateViewPaciente):
         self.request.session['save_model'] = 'true'
         paciente = form.save(commit=False)
         usuario = get_user_type(self.request.user)
+        endereco = Endereco.objects.create(rua=form.cleaned_data['rua'],cidade=form.cleaned_data['cidade'],estado=form.cleaned_data['estado']
+                                           ,numero=form.cleaned_data['numero'])
+
+        paciente.endereco = endereco
         if isinstance(usuario, Atendente):
             paciente.departamento_id = usuario.departamento_id
         else:
             paciente.departamento_id = self.request.POST.get('departamento')
 
+        paciente.save()
         form.save(commit=False)
         return super().form_valid(form)
 
@@ -131,6 +137,13 @@ class PacienteUpdateView(MyUpdateViewPaciente):
         self.request.session['update_model'] = 'true'
         paciente = form.save(commit=False)
         usuario = get_user_type(self.request.user)
+        endereco = Endereco.objects.get(paciente = paciente)
+        endereco.rua = form.cleaned_data['rua']
+        endereco.bairro = form.cleaned_data['bairro']
+        endereco.cidade = form.cleaned_data['cidade']
+        endereco.estado = form.cleaned_data['estado']
+        endereco.numero = form.cleaned_data['numero']
+        endereco.save()
         if isinstance(usuario, Atendente):
             paciente.departamento_id = usuario.departamento_id
         else:
