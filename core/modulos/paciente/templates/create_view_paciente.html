@@ -102,16 +102,17 @@
                     <option {% if paciente.genero == 1 %} checked {% endif %} value="1">Feminino</option>
                 </select>
                 {{ form.genero.errors }}
-            </div>            <div class="col-md-4 form-group">
-            {{ form.telefone.label_tag }}
-            {{ form.telefone }}
-            {{ form.telefone.errors }}
-        </div>
-            {#            <div class="col-md-2 form-group">#}
-            {#                {{ form.cliente_app.label_tag }}#}
-            {#                {{ form.cliente_app }}#}
-            {#                {{ form.cliente_app.errors }}#}
-            {#            </div>#}
+            </div>
+            <div class="col-md-4 form-group">
+                {{ form.telefone.label_tag }}
+                {{ form.telefone }}
+                {{ form.telefone.errors }}
+            </div>
+            <div class="col-md-2 form-group">
+                {{ form.cliente_app.label_tag }}
+                {{ form.cliente_app }}
+                {{ form.cliente_app.errors }}
+            </div>
         </div>
     {% endif %}
     <div class="row">
