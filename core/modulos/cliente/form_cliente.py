@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.urls import reverse_lazy
 
 from core.models import Cliente
@@ -19,7 +19,7 @@ class ClienteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
 
-        self.fields['perfil'].initial = Cliente.objects.get(nome='Cliente').pk # Pegar id do grupo de permissão Cliente
+        self.fields['perfil'].initial = Group.objects.get(name='Cliente').pk # Pegar id do grupo de permissão Cliente
 
         adiciona_form_control(self)
 

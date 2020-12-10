@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from core.models import Atendente
 from core.modulos.departamento.departamento import Departamento
 from core.util.labels_property import LabesProperty
@@ -19,7 +19,7 @@ class AtendenteForm(forms.ModelForm):
         usuario = get_user_type(self.user)
 
         self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.empresa_id)
-        self.fields['perfil'].initial = Atendente.objects.get(nome='Atendente').pk # Pegar id do grupo de permissão Atendente
+        self.fields['perfil'].initial = Group.objects.get(name='Atendente').pk # Pegar id do grupo de permissão Atendente
         if self.instance.pk:
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
 
