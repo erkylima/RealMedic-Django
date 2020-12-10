@@ -80,9 +80,9 @@ def deploy(request):
             #     gunicorn_name = 'covid_19_dev'
             #
             # else:
-            folder = 'covid_19'
-            nome_projeto = 'COVID-19-ST-Backend'
-            gunicorn_name = 'covid_19'
+            folder = 'realconsulta'
+            nome_projeto = 'iconsultasweb'
+            gunicorn_name = 'realconsulta'
 
             projeto = '/webapps/{}/{}/'.format(folder, nome_projeto)
 
