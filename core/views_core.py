@@ -1,5 +1,9 @@
+import subprocess
+import traceback
+
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth.decorators import login_required, permission_required
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -51,3 +55,71 @@ class LoginView(TemplateView):
         else:
             message = 'Usuário sem permissão!!'
             return self.render_to_response({'message': message})
+
+from django.conf import settings
+
+
+
+@login_required()
+def deploy(request):
+    print('backup')
+    try:
+        if request.user.is_superuser:
+            print('INICIO')
+            # subprocess.call([
+            #     "ls"])
+
+            # condição
+            # folder = 'covid_19'
+
+            # dev = 'dev.' in request.build_absolute_uri()
+            debug = settings.DEBUG
+
+            # if debug is True:
+            #     folder = 'covid_19_dev'
+            #     gunicorn_name = 'covid_19_dev'
+            #
+            # else:
+            folder = 'covid_19'
+            gunicorn_name = 'covid_19'
+
+            projeto = '/webapps/{}/COVID-19-ST-Backend/'.format(folder)
+
+            print('PASSO 1_________________________')
+            subprocess.call([
+                "sudo",
+                "git",
+                "pull"], cwd=projeto)
+
+            pip = '/webapps/{}/bin/pip'.format(folder)
+            python = '/webapps/{}/bin/python'.format(folder)
+            manage = '/webapps/{}/COVID-19-ST-Backend/manage.py'.format(folder)
+
+            print('PASSO 2_________________________')
+
+            subprocess.call([pip,
+                             "install",
+                             "-r",
+                             "requeriments.txt",
+                             ], cwd=projeto)
+
+            print('PASSO 3_________________________')
+            subprocess.call([python,
+                             manage,
+                             "migrate"])
+            print('PASSO 4_________________________')
+            subprocess.call([python,
+                             manage,
+                             "collectstatic", "--noinput"])
+            print('PASSO 5_________________________')
+            subprocess.call(["sudo",
+                             "supervisorctl",
+                             "restart",
+                             gunicorn_name])
+
+            return JsonResponse({'ok': True})
+
+    except Exception as e:
+        traceback.print_exc()
+        print(e)
+        return JsonResponse({'ok': False})

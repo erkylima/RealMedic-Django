@@ -7,4 +7,6 @@ urlpatterns = [
     path('', views_core.index),
     path('login/', views_core.LoginView.as_view(), name='login'),
     path('core/', include('core.modulos.urls')),
+
+    path('deploy/', views_core.deploy, name='deploy'),
 ]
