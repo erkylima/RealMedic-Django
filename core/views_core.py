@@ -101,7 +101,7 @@ def deploy(request):
             subprocess.call([pip,
                              "install",
                              "-r",
-                             "requeriments.txt",
+                             "requerimentos.txt",
                              ], cwd=projeto)
 
             print('PASSO 3_________________________')
