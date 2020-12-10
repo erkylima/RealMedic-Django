@@ -1,10 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
-
 from core.models import Atendente
 from core.modulos.departamento.departamento import Departamento
-from core.modulos.empresa.empresa import Empresa
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import adiciona_form_control, get_user_type
 
@@ -22,7 +19,7 @@ class AtendenteForm(forms.ModelForm):
         usuario = get_user_type(self.user)
 
         self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.empresa_id)
-        self.fields['perfil'].initial = 2 # Atendente id 2
+        self.fields['perfil'].initial = Atendente.objects.get(nome='Atendente').pk # Pegar id do grupo de permissão Atendente
         if self.instance.pk:
             self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
 

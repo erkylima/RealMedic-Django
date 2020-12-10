@@ -19,7 +19,7 @@ class ClienteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
 
-        self.fields['perfil'].initial = 4 # Cliente id 4
+        self.fields['perfil'].initial = Cliente.objects.get(nome='Cliente').pk # Pegar id do grupo de permissão Cliente
 
         adiciona_form_control(self)
 

@@ -34,7 +34,7 @@ class UserProfileForm(forms.ModelForm):
 
         self.fields['departamento'].queryset = departamentos
 
-        self.fields['perfil'].initial = 1 # Gerente id 1
+        self.fields['perfil'].initial = UserProfile.objects.get(nome='Gerenciador').pk # Pegar id do grupo de permissão Gerente
         if select_master_empresa in self.data:
             try:
                 empresa_id = int(self.data.get('empresa'))

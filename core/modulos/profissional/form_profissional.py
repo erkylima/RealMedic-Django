@@ -54,7 +54,7 @@ class ProfissionalForm(forms.ModelForm):
             "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
             kwargs={
                 'idTipoProfissional': '00','idDepartamento':'11'}).__str__() + f'","id_tipo_profissional","id_tiposAtendimentos","{select_master_departamento}")'        # Se o campo empresa possui algum dado atualizar o queryset
-        self.fields['perfil'].initial = 3 # Profissional id 3
+        self.fields['perfil'].initial = Profissional.objects.get(nome='Profissional').pk # Pegar id do grupo de permissão Profissional
 
         if select_master_departamento in self.data:
             try:
