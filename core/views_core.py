@@ -81,9 +81,10 @@ def deploy(request):
             #
             # else:
             folder = 'covid_19'
+            nome_projeto = 'COVID-19-ST-Backend'
             gunicorn_name = 'covid_19'
 
-            projeto = '/webapps/{}/COVID-19-ST-Backend/'.format(folder)
+            projeto = '/webapps/{}/{}/'.format(folder, nome_projeto)
 
             print('PASSO 1_________________________')
             subprocess.call([
@@ -93,7 +94,7 @@ def deploy(request):
 
             pip = '/webapps/{}/bin/pip'.format(folder)
             python = '/webapps/{}/bin/python'.format(folder)
-            manage = '/webapps/{}/COVID-19-ST-Backend/manage.py'.format(folder)
+            manage = '/webapps/{}/{}/manage.py'.format(folder, nome_projeto)
 
             print('PASSO 2_________________________')
 
