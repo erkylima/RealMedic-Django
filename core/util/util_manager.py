@@ -103,20 +103,21 @@ def adiciona_form_control(self):
 
 
 def get_user_type(user):
-    try:
-        usuario = user.userProfile
-        return usuario
-    except:
-        try:
-            usuario = user.userProfissional
-            return usuario
-        except:
-            try:
-                usuario = user.userAtendente
-                return usuario
-            except:
-                usuario = user.userCliente
-                return usuario
+    if user.is_superuser:
+        return user
+    from core.modulos.user_profile.user_profile import UserProfile
+    if UserProfile.objects.filter(user=user).exists():
+        return user.userProfile
+    from core.modulos.profissional.profissional import Profissional
+    if Profissional.objects.filter(user=user).exists():
+        return user.userProfissional
+    from core.modulos.atendente.atendente import Atendente
+    if Atendente.objects.filter(user=user).exists():
+        return user.userAtendente
+    from core.modulos.cliente.cliente import Cliente
+    if Cliente.objects.filter(user=user).exists():
+        return user.userCliente
+
 
 
 

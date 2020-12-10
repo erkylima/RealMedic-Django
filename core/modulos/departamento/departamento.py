@@ -15,7 +15,7 @@ class Departamento(Timestampable):
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='empresa', null=True)
     nome = UpperCaseCharField('Nome', max_length=255)
     descricao = UpperCaseCharField('Descricao', max_length=255)
-    endereco = models.ForeignKey(Endereco,models.PROTECT,default=2)
+    endereco = models.ForeignKey(Endereco,models.PROTECT, null=True)
     def __str__(self):
         return self.empresa.nome_razao_social + " - " +self.nome.upper()
 

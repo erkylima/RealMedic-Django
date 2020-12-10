@@ -23,7 +23,7 @@ class Paciente(Timestampable):
     idade = models.IntegerField('Idade',default=10, blank=True)
     telefone = models.CharField('Telefone', max_length=40, default='(87) 912345678')
     genero = models.IntegerField('Genero', default=1)
-    endereco = models.ForeignKey(Endereco, models.PROTECT, blank=True)
+    endereco = models.ForeignKey(Endereco, models.PROTECT, null=True)
     sobre = models.CharField('Sobre', max_length=255,blank=True,default='')
     cliente_app = models.CharField('Cliente App', max_length=255, default=None, blank=True)
 
