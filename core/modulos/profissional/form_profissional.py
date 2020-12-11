@@ -1,6 +1,6 @@
 from django import forms
 from django.urls import reverse_lazy
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from core.models import Profissional, Empresa, DepartamentoProfissional, Departamento,TipoProfissional
 from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
@@ -54,7 +54,7 @@ class ProfissionalForm(forms.ModelForm):
             "core:modulo:tipo_atendimento:getTiposAtendimentosPorIdTipoProfissional",
             kwargs={
                 'idTipoProfissional': '00','idDepartamento':'11'}).__str__() + f'","id_tipo_profissional","id_tiposAtendimentos","{select_master_departamento}")'        # Se o campo empresa possui algum dado atualizar o queryset
-        self.fields['perfil'].initial = 3 # Profissional id 3
+        self.fields['perfil'].initial = Group.objects.get(name='Profissional').pk # Pegar id do grupo de permissão Profissional
 
         if select_master_departamento in self.data:
             try:

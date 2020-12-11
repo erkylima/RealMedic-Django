@@ -15,7 +15,7 @@ class Convenio(Timestampable):
     desconto = models.IntegerField('Desconto')
 
     def __str__(self):
-        return self.descricao
+        return self.nome
 
     @property
     def getListAtributes(self):
