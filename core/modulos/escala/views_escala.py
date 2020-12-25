@@ -57,7 +57,8 @@ def addEditEscala(request):
         horaend = request.POST['horaend']
         descricao = request.POST['descricao']
         cor = request.POST['color']
-        start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M')
+        print(datastart + " " + horastart)
+        start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M' )
         end = datetime.strptime(dataend + " " + horaend, '%d/%m/%Y %H:%M')
 
         if start.timestamp() < end.timestamp():

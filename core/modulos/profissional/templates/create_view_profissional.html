@@ -86,17 +86,33 @@
     {#            </div>#}
     {#        </div>#}
     {#    </div>#}
-{#    <div class="row">#}
-{#        <div class="col-md-12 form-group">#}
-{#            <input type="hidden" readonly name="perfil" id="id_perfil" value="{{ form.perfil.value }}">#}
-{#            {{ form.perfil.label_tag }}#}
-{#            {{ form.perfil }}#}
-{#            {{ form.perfil.errors }}#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="row">#}
+    {#        <div class="col-md-12 form-group">#}
+    {#            <input type="hidden" readonly name="perfil" id="id_perfil" value="{{ form.perfil.value }}">#}
+    {#            {{ form.perfil.label_tag }}#}
+    {#            {{ form.perfil }}#}
+    {#            {{ form.perfil.errors }}#}
+    {#        </div>#}
+    {#    </div>#}
 
 {% endblock %}
 
 {% block botoes %}
     <a class="btn btn-danger" href="{{ request.META.HTTP_REFERER }}">{{ labels.CANCELAR }}</a>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script> //id_tipo_profissional
+    $('#id_departamento').addEventListener("change", function () {
+        $('#id_tipo_profissional').setAttribute("readonly", "false");
+    });
+
+    $('#id_tipo_profissional').addEventListener("change", function () {
+        $('#id_tiposAtendimentos').setAttribute("readonly", "false");
+    }).setAttribute("readonly", "true");
+
+    $('#id_tiposAtendimentos').setAttribute("readonly", "true");
+
+    // TODO CONFERIR ISSO AQUI PARA DESATIVAR TIPO DE PROFISSIONAL ANTES DE SELECIONAR DEPARTAMENTO
+    </script>
 {% endblock %}

@@ -57,7 +57,7 @@
 
     <!-- Modal - View event -->
     <div class="modal modal-top fade" id="modal-view-event" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title" id="title-view">Marcar Atendimento</h5>
@@ -84,10 +84,10 @@
                             <div class="form-group">
                                 <input type="hidden" id="profissional" name="profissional" value="{{ profissional.id }}">
                                 <input type="hidden" id="id_escala_intervalo" name="id_escala_intervalo">
-                                <div class="form-group">
+                                <div class="form-group ">
                                     <label for="tipo_atendimento">Tipo de Atendimento</label>
 
-                                    <select class="form-control form-control select2" name="tipo_atendimento" id="tipo_atendimento">
+                                    <select class="select2" name="tipo_atendimento" id="tipo_atendimento">
                                         <option value="">---------</option>
                                         {% for tipo_atendimento in profissional.tiposAtendimentos.values %}
                                             <option value="{{ tipo_atendimento.id }}-{{ tipo_atendimento.valor_padrao }}-{{ tipo_atendimento.tempo_padrao }}">{{ tipo_atendimento.nome }}</option>
@@ -98,10 +98,10 @@
                                     <label for="cliente">Cliente</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <a class="btn btn-primary stretched-link" href="{% url 'core:modulo:cliente:create_view' %}">Adicionar Cliente</a>
+                                            <a class="btn btn-primary stretched-link" target="_blank" href="{% url 'core:modulo:paciente:create_view' %}">Adicionar Cliente</a>
                                         </div>
-                                        <select class="form-control select2" name="cliente" id="cliente">
-                                            <option value="">---------</option>
+                                        <select class="select2" name="cliente" id="cliente">
+                                            <option value="">--</option>
                                             {% for cliente in clientes %}
                                                 <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
                                             {% endfor %}
