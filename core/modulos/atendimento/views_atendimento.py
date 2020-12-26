@@ -248,11 +248,13 @@ def desmarcarAtendimento(request):
     intervalo_obj = EscalaIntervalo.objects.get(pk=intervalo)
     if intervalo_obj.atendimento is not None:
         atendimento = Atendimento.objects.get(pk=intervalo_obj.atendimento)
+        prontuario = Prontuario.objects.get(atendimento=atendimento)
         intervalos_obj = EscalaIntervalo.objects.filter(atendimento=intervalo_obj.atendimento)
         if atendimento.pago is not False:
             for inter in intervalos_obj:
                 inter.atendimento = None
                 inter.save()
+            prontuario.delete()
             atendimento.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
