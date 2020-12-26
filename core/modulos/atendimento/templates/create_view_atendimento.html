@@ -78,7 +78,11 @@
                             <dt class="col-sm-3" id="labeldesc"></dt>
                             <dd class="col-sm-9" id="desc"></dd>
                         </dl>
-
+                        <a target="_blank" class="float-right" href="{% url 'core:modulo:paciente:create_view' %}"> Novo Paciente
+                            <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Novo Paciente">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </a>
                         <form name="marcar_atendimento" id="marcar_atendimento" method="post" action="{% url 'core:modulo:atendimento:add_atendimento' %}">
                             {% csrf_token %}
                             <div class="form-group">
@@ -94,19 +98,17 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="cliente">Cliente</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <a class="btn btn-primary stretched-link" target="_blank" href="{% url 'core:modulo:paciente:create_view' %}">Adicionar Cliente</a>
-                                        </div>
-                                        <select class="select2" name="cliente" id="cliente">
-                                            <option value="">--</option>
-                                            {% for cliente in clientes %}
-                                                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <label for="cliente">Paciente</label>
+
+
+                                    <select class="select2" name="cliente" id="cliente">
+                                        <option value="">---------</option>
+                                        {% for cliente in clientes %}
+                                            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                                        {% endfor %}
+                                    </select>
 
                                 </div>
                                 <div class="row">
