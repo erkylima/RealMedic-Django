@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
+from rest_framework.authtoken.models import Token
+
 from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
 from core.modulos.atendente.atendente import Atendente
 from core.modulos.atendimento.atendimento import Atendimento
@@ -88,6 +90,7 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         profissional.perfil_id = 3
         user.groups.add(profissional.perfil_id)
         user.save()
+        Token.objects.get_or_create(user=user)
         profissional.user = user
         user.get_group_permissions()
         # userProfile.perfil_id = 3 # Perfil do Profissional Padrão
@@ -125,6 +128,7 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
         print(dir(profissional.user))
         profissional.user.username = profissional.usuario
         profissional.user.save()
+        Token.objects.get_or_create(user=profissional.user)
         """user = User.objects.get(pk=userProfile.pk)
         print(dir(userProfile))
         user.groups.add(userProfile.perfil_id)

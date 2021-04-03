@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
+from rest_framework.authtoken.models import Token
+
 from core.models import UserProfile
 from core.modulos.user_profile.form_user_profile import UserProfileForm
 from core.util.labels_property import LabesProperty
@@ -73,6 +75,8 @@ class UserProfileCreateView(MyCreateViewUserProfile):
         user.save()
         userProfile.user = user
         userProfile.save()
+        Token.objects.get_or_create(user=user)
+
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 
@@ -89,6 +93,10 @@ class UserProfileUpdateView(MyUpdateViewUserProfile):
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
+        userProfile = form.save(commit=False)
+        user = userProfile.user
+        Token.objects.get_or_create(user=user)
+
         return super().form_valid(form)
 
     @method_decorator(permission_required(['global_permissions.editar_gerente'], raise_exception=True))

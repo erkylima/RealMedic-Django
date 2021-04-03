@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
+from rest_framework.authtoken.models import Token
+
 from core.models import Atendente
 from core.modulos.atendente.form_atendente import AtendenteForm
 from core.util.labels_property import LabesProperty
@@ -86,6 +88,7 @@ class AtendenteCreateView(MyCreateViewAtendente):
         )
         user.groups.add(userProfile.perfil_id)
         user.save()
+        Token.objects.get_or_create(user=user)
         userProfile.user = user
         userProfile.save()
         self.request.session['save_model'] = 'true'

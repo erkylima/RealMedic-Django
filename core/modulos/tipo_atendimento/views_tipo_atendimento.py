@@ -43,7 +43,6 @@ class MyUpdateViewTipoAtendimento(MyGenericView, LoginRequiredMixin, MyLabls, Up
 
 class TipoAtendimentoListView(MyListViewTipoAtendimento):
     template_name = 'tipo_atendimento/templates/list_view_tipo_atendimento.html'
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context

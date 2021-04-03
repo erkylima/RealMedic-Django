@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
+from rest_framework.authtoken.models import Token
+
 from core.models import Cliente
 from core.modulos.cliente.form_cliente import ClienteForm
 from core.util.labels_property import LabesProperty
@@ -71,6 +73,7 @@ class ClienteCreateView(MyCreateViewCliente):
         )
         user.groups.add(userProfile.perfil_id)
         user.save()
+        Token.objects.get_or_create(user=user)
         userProfile.user = user
         userProfile.save()
         self.request.session['save_model'] = 'true'

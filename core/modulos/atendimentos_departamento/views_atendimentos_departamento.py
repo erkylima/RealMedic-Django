@@ -40,6 +40,7 @@ class MyUpdateViewAtendimentosDepartamento(MyGenericView, LoginRequiredMixin, Va
 
 class AtendimentosDepartamentoListView(MyListViewAtendimentosDepartamento):
     template_name = 'atendimentos_departamento/templates/list_view_atendimentos_departamento.html'
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
