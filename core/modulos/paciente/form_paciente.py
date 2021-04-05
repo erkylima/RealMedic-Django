@@ -69,10 +69,10 @@ class PacienteForm(forms.ModelForm):
         self.fields['endereco'].initial= 0
         if isinstance(usuario, UserProfile):
             self.fields['departamento'].queryset = Departamento.objects.filter(
-                empresa_id=usuario.empresa_id)
+                empresa_id=usuario.userProfile.departamento.empresa_id)
         else:
             self.fields['departamento'].queryset = Departamento.objects.filter(
-                empresa_id=usuario.departamento.empresa_id)
+                empresa_id=usuario.userProfile.departamento.empresa_id)
 
 
 

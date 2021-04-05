@@ -11,11 +11,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from django.views.generic.base import View
 
-from core.models import Atendimento, DepartamentoProfissional, Profissional, Escala, Paciente, EscalaIntervalo
+from core.models import Atendimento, DepartamentoProfissional, Escala, Paciente, EscalaIntervalo
 from core.modulos.atendente.atendente import Atendente
 from core.modulos.atendimento.form_atendimento import AtendimentoForm
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.paciente.paciente import PacienteDepartamentoProfissional
+from core.modulos.profissional.profissional import Profissional
 from core.modulos.prontuario.prontuario import Prontuario
 from core.modulos.user_profile.user_profile import UserProfile
 from core.util.labels_property import LabesProperty
@@ -180,8 +181,9 @@ def addAtendimento(request):
     else:
         atendimento = Atendimento()
         atendimento.paciente_id = int(request.POST.get('cliente'))
-        profissional = DepartamentoProfissional.objects.get(profissional_id=request.POST.get('profissional'))
-        atendimento.departamentoProfissional = profissional
+        departamento = request.user.userProfile.departamento_id
+        departamentoProfissional = DepartamentoProfissional.objects.get(profissional_id=request.POST.get('profissional'), departamento_id=departamento)
+        atendimento.departamentoProfissional = departamentoProfissional
         atendimento.tipoAtendimento_id = request.POST.get('tipo_atendimento').split('-')[0] # split [0] é o id, [1] é o valor padrao [2] é tempo padrao
         if request.POST.get('retorno') == 1:
             atendimento.retorno = True

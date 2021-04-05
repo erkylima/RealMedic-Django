@@ -1,10 +1,8 @@
 from django.db import models
 
-from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.endereco import Endereco
 from core.models.base.time_stampable import Timestampable
-from core.util.util_manager import UpperCaseCharField
-from core.models import Empresa
+from core.modulos.empresa.empresa import Empresa
 
 
 class Departamento(Timestampable):
@@ -13,15 +11,19 @@ class Departamento(Timestampable):
         verbose_name_plural = 'DEPARTAMENTOS'
 
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='empresa', null=True)
-    nome = UpperCaseCharField('Nome', max_length=255)
-    descricao = UpperCaseCharField('Descricao', max_length=255)
+    nome = models.CharField('Nome', max_length=255)
+    descricao = models.CharField('Descricao', max_length=255)
     endereco = models.ForeignKey(Endereco,models.PROTECT, null=True)
+
     def __str__(self):
         return self.empresa.nome_razao_social + " - " +self.nome.upper()
 
     @property
     def getEmpresa(self):
         return self.empresa.nome_razao_social
+
+    def getNome(self):
+        return self.empresa.nome_razao_social + " - " +self.nome.upper()
 
     @property
     def getListAtributes(self):

@@ -1,7 +1,7 @@
 from django.db import models
 
-from core.models import DepartamentoProfissional
 from core.models.base.time_stampable import Timestampable
+from core.modulos.profissional.profissional import DepartamentoProfissional
 
 
 class Escala(Timestampable):

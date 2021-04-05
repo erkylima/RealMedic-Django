@@ -4,13 +4,12 @@ from core.models.base.time_stampable import Timestampable
 from core.modulos.user_profile.user_profile import UserProfile
 
 
-class Atendente(Timestampable):
+class Gerente(Timestampable):
     class Meta:
-        verbose_name = 'ATENDENTE'
-        verbose_name_plural = 'ATENDENTES'
+        verbose_name = 'GERENTE'
+        verbose_name_plural = 'GERENTES'
 
-    userProfile = models.OneToOneField(UserProfile, on_delete=models.PROTECT, related_name='atendente')
-
+    userProfile = models.OneToOneField(UserProfile, on_delete=models.PROTECT, related_name='gerente')
 
 
     # hasSuperAdministrador = models.BooleanField('Super', default=False)
@@ -18,29 +17,21 @@ class Atendente(Timestampable):
     def __str__(self):
         return self.userProfile.nome.upper()
 
-    @property
-    def getDepartamento(self):
-        return self.userProfile.departamento
-
     def getJson(self):
         return dict(
             id=self.pk,
             nome=self.userProfile.nome,
             login=self.userProfile.usuario,
-            tipo='atendente',
+            tipo='ger',
             token=self.userProfile.getToken(),
         )
-
     @property
-    def getNome(self):
-        return self.userProfile.nome
-
-    def getUsuario(self):
-        return self.userProfile.usuario
+    def getNamePerfil(self):
+        return self.userProfile.perfil.name
 
     @property
     def getListAtributes(self):
-        atributos = ['getNome', 'getUsuario', 'getDepartamento']
+        atributos = ['nome', 'usuario', 'getNamePerfil']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

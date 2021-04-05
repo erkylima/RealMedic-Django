@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 
 from core.models import Escala, EscalaIntervalo, Atendimento
 from core.modulos.escala.form_escala import EscalaForm
+from core.modulos.profissional.profissional import DepartamentoProfissional
 from core.util.labels_property import LabesProperty
 
 
@@ -60,9 +61,12 @@ def addEditEscala(request):
         print(datastart + " " + horastart)
         start = datetime.strptime(datastart + " " + horastart, '%d/%m/%Y %H:%M' )
         end = datetime.strptime(dataend + " " + horaend, '%d/%m/%Y %H:%M')
+        print(profissional)
+        departamento = request.user.userProfile.departamento_id
+        depatamentoProfissional = DepartamentoProfissional.objects.get(departamento_id=departamento, profissional_id=profissional)
 
         if start.timestamp() < end.timestamp():
-            escala = Escala.objects.get_or_create(dia=start.date(), departamentoProfissional_id=profissional)
+            escala = Escala.objects.get_or_create(dia=start.date(), departamentoProfissional_id=depatamentoProfissional.pk)
             escala[0].save()
             intervalostart = start.hour * 6  # Quantidade de intervalos inicialmente
             intervalostart = intervalostart + (start.minute / 10)

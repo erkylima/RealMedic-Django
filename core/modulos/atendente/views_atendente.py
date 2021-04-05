@@ -53,9 +53,9 @@ class AtendenteListView(MyListViewAtendente):
         usuario = get_user_type(self.request.user)
 
         if (self.request.GET.get('q')):
-            queryset = Atendente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.empresa_id))
+            queryset = Atendente.objects.filter(Q(userProfile__nome__icontains=self.request.GET.get('q')) & Q(userProfile__departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         else:
-            queryset = Atendente.objects.filter(departamento__empresa_id=usuario.empresa_id)
+            queryset = Atendente.objects.filter(userProfile__departamento__empresa_id=usuario.userProfile.departamento.empresa_id)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -89,8 +89,12 @@ class AtendenteCreateView(MyCreateViewAtendente):
         user.groups.add(userProfile.perfil_id)
         user.save()
         Token.objects.get_or_create(user=user)
+        userProfile.perfil_id = 4
         userProfile.user = user
         userProfile.save()
+        atendente = Atendente()
+        atendente.userProfile = userProfile
+        atendente.save()
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
 

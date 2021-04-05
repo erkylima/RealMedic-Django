@@ -10,7 +10,7 @@ from core.models import TipoAtendimento
 from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
 from core.modulos.atendimentos_departamento.form_atendimentos_departamento import AtendimentosDepartamentoForm
 from core.util.labels_property import LabesProperty
-from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
+from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
 
 class MyGenericView(object):
@@ -49,10 +49,13 @@ class AtendimentosDepartamentoListView(MyListViewAtendimentosDepartamento):
         return context
 
     def get_queryset(self):
+        usuario = get_user_type(self.request.user)
+
         if (self.request.GET.get('q')):
-            queryset = AtendimentosDepartamento.objects.filter(Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+
+            queryset = AtendimentosDepartamento.objects.filter(Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         else:
-            queryset = AtendimentosDepartamento.objects.filter(Q(departamento__empresa_id=self.request.user.userProfile.empresa_id))
+            queryset = AtendimentosDepartamento.objects.filter(Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_tipos_atendimentos'], raise_exception=True))
@@ -90,6 +93,7 @@ class AtendimentosDepartamentoUpdateView(MyUpdateViewAtendimentosDepartamento):
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs.update({'user': self.request.user})
+        print(kwargs.items())
         return kwargs
 
     def form_invalid(self, form):

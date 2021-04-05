@@ -45,6 +45,10 @@ class Paciente(Timestampable):
 
 
 class PacienteDepartamentoProfissional(Timestampable):
+    class Meta:
+        verbose_name = 'PACIENTE DO PROFISSINAL NO DEPARTAMENTO'
+        verbose_name_plural = 'PACIENTES DO PROFISSINAL NO DEPARTAMENTO'
+
     paciente = models.ForeignKey(Paciente, on_delete=models.PROTECT)
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
 

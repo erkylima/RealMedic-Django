@@ -1,6 +1,6 @@
 from django import forms
 
-from core.models import Empresa
+from core.modulos.empresa.empresa import Empresa
 from core.util.util_manager import adiciona_form_control
 
 

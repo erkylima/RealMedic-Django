@@ -5,22 +5,22 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 
 from core.modulos.cliente.cliente import Cliente
-from core.modulos.user_profile.user_profile import UserProfile
+from core.modulos.profissional.profissional import Profissional
 
 
-class UsuarioListSerializer(serializers.ModelSerializer):
+class ProfissionalListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = Profissional
         fields = ['nome', 'usuario']
 
 
-class UsuarioCreateSerializer(serializers.ModelSerializer):
+class ProfissionalCreateSerializer(serializers.ModelSerializer):
     senha = serializers.CharField(required=True)
 
     class Meta:
         model = Cliente
         # fields = '__all__'
-        fields = ['nome', 'usuario', 'senha']
+        fields = ['nome', 'usuario', 'senha','']
 
     def create(self, validated_data):
         print('create')
@@ -39,7 +39,7 @@ class UsuarioCreateSerializer(serializers.ModelSerializer):
         user.set_password(senha)
         user.save()
         token, _ = Token.objects.get_or_create(user=user)
-        usuario = UserProfile()
+        usuario = Profissional()
         usuario.user = user
         usuario.usuario = validated_data['usuario']
         usuario.nome = validated_data['nome']

@@ -1,8 +1,6 @@
 from django.db import models
 
 from core.models.base.time_stampable import Timestampable
-from core.modulos.convenio.convenio import Convenio
-from core.util.util_manager import UpperCaseCharField
 
 
 class Empresa(Timestampable):
@@ -10,9 +8,8 @@ class Empresa(Timestampable):
         verbose_name = 'EMPRESA'
         verbose_name_plural = 'EMPRESAS'
 
-    nome_razao_social = UpperCaseCharField('Nome/Razão Social', max_length=255)
+    nome_razao_social = models.CharField('Nome/Razão Social', max_length=255)
     documento = models.CharField('Documento',unique=True,max_length=18)
-    convenios = models.ManyToManyField(Convenio)
 
     def __str__(self):
         return self.nome_razao_social.upper()

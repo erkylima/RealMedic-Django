@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from core.modulos.atendente.atendente import Atendente
+from core.modulos.gerente.gerente import Gerente
 from core.modulos.profissional.profissional import Profissional
 from core.modulos.user_profile.user_profile import UserProfile
 from core.util.util_manager import get_user_type
@@ -46,7 +47,7 @@ class LoginView(TemplateView):
 
         if user.is_superuser:
             return redirect('/admin/')
-        elif isinstance(usuario, UserProfile):
+        elif isinstance(usuario, Gerente):
             return redirect('/core/')
         elif isinstance(usuario, Profissional):
             return redirect('/profissional/app/relatorio/relatorio/')

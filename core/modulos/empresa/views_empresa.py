@@ -5,7 +5,8 @@ from django.contrib.auth.models import Permission, User
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
-from core.models import Empresa
+
+from core.modulos.empresa.empresa import Empresa
 from core.modulos.empresa.form_empresa import EmpresaForm
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls

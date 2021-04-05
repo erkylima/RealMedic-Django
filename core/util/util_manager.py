@@ -5,6 +5,11 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.shortcuts import redirect
 from extra_views import SearchableListMixin
+
+from core.modulos.atendente.atendente import Atendente
+from core.modulos.cliente.cliente import Cliente
+from core.modulos.gerente.gerente import Gerente
+from core.modulos.profissional.profissional import Profissional
 from core.util.labels_property import LabesProperty
 from django.db import models
 
@@ -105,18 +110,14 @@ def adiciona_form_control(self):
 def get_user_type(user):
     if user.is_superuser:
         return user
-    from core.modulos.user_profile.user_profile import UserProfile
-    if UserProfile.objects.filter(user=user).exists():
-        return user.userProfile
-    from core.modulos.profissional.profissional import Profissional
-    if Profissional.objects.filter(user=user).exists():
-        return user.userProfissional
-    from core.modulos.atendente.atendente import Atendente
-    if Atendente.objects.filter(user=user).exists():
-        return user.userAtendente
-    from core.modulos.cliente.cliente import Cliente
-    if Cliente.objects.filter(user=user).exists():
-        return user.userCliente
+    if Gerente.objects.filter(userProfile__user=user).exists():
+        return user.userProfile.gerente
+    if Profissional.objects.filter(userComum__user=user).exists():
+        return user.userProfile.profissional
+    if Atendente.objects.filter(userProfile__user=user).exists():
+        return user.userProfile.atendente
+    if Cliente.objects.filter(userComum__user=user).exists():
+        return user.userProfile.atendente
 
 
 

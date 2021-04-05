@@ -57,16 +57,11 @@ class PacienteListView(MyListViewPaciente):
 
     def get_queryset(self):
         usuario = get_user_type(self.request.user)
-        if isinstance(usuario, Atendente):
-            if (self.request.GET.get('q')):
-                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento_id=usuario.departamento_id))
-            else:
-                queryset = Paciente.objects.filter(departamento_id=usuario.departamento_id)
+        if (self.request.GET.get('q')):
+            queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento_id=usuario.userProfile.departamento_id))
         else:
-            if (self.request.GET.get('q')):
-                queryset = Paciente.objects.filter(Q(nome__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.empresa_id))
-            else:
-                queryset = Paciente.objects.filter(departamento__empresa_id=usuario.empresa_id)
+            queryset = Paciente.objects.filter(departamento_id=usuario.userProfile.departamento_id)
+
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_pacientes'], raise_exception=True))
@@ -95,7 +90,7 @@ class PacienteCreateView(MyCreateViewPaciente):
 
         paciente.endereco = endereco
         if isinstance(usuario, Atendente):
-            paciente.departamento_id = usuario.departamento_id
+            paciente.departamento_id = usuario.userProfile.departamento_id
         else:
             paciente.departamento_id = self.request.POST.get('departamento')
 
@@ -119,11 +114,8 @@ class PacienteUpdateView(MyUpdateViewPaciente):
         context = super().get_context_data(**kwargs)
         print(self.object.pk)
         usuario = get_user_type(self.request.user)
-        if isinstance(usuario, Atendente):
-            context['paciente'] = Paciente.objects.get(pk=self.object.pk, departamento_id=usuario.departamento_id)
-        else:
-            context['paciente'] = Paciente.objects.get(pk=self.object.pk,
-                                                       departamento__empresa_id=usuario.empresa_id)
+        context['paciente'] = Paciente.objects.get(pk=self.object.pk,
+                                                       departamento__empresa_id=usuario.userProfile.departamento.empresa_id)
 
 
 

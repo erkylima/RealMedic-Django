@@ -99,7 +99,7 @@
                                         <img src="{% static "core/base/assets/img/generic-user.png" %}" alt="..." class="avatar-img rounded-circle">
                                     </div>
                                     <div class="info-user ml-3">
-                                        <div class="username">DR. {{ clinico.profissional.nome }}</div>
+                                        <div class="username">DR. {{ clinico.profissional.userComum.nome }}</div>
                                         <div class="status">{{ clinico.tipo_profissional.descricao}}</div>
                                     </div>
                                     <a href="{% url 'core:modulo:atendimento:update_view' clinico.profissional.id %}">

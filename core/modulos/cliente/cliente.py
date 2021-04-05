@@ -1,9 +1,8 @@
-from django.contrib.auth.models import User, Group
 from django.db import models
 
-from core.models import Departamento
 from core.models.base.time_stampable import Timestampable
-from core.util.util_manager import UpperCaseCharField
+from core.modulos.user_profile.user_profile import UserProfile
+
 
 
 class Cliente(Timestampable):
@@ -11,38 +10,37 @@ class Cliente(Timestampable):
         verbose_name = 'CLIENTE'
         verbose_name_plural = 'CLIENTES'
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userCliente')
-    nome = UpperCaseCharField('Nome', max_length=255)
-    usuario = UpperCaseCharField('Usuario', max_length=255, unique=True)
-    email = models.EmailField('Email', max_length=255, unique=True)
-    senha = UpperCaseCharField('Senha', max_length=255)
-    perfil = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name='Perfil', related_name='clientes')
-    ativo = models.BooleanField(default=True)
+    userProfile = models.OneToOneField(UserProfile, on_delete=models.PROTECT, related_name='cliente')
+
     cliente_app = models.CharField('Cliente App', max_length=255, default='', blank=True)
     # hasSuperAdministrador = models.BooleanField('Super', default=False)
 
     def __str__(self):
-        return self.nome.upper()
+        return self.userProfile.nome.upper()
 
     def getJson(self):
         return dict(
             id=self.pk,
-            nome=self.nome,
-            login=self.usuario,
+            nome=self.userProfile.nome,
+            login=self.userProfile.usuario,
             tipo='cliente',
-            token=self.getToken(),
+            token=self.userProfile.getToken(),
         )
-
-    def getToken(self):
-        return self.user.auth_token.key
 
     @property
     def getNamePerfil(self):
-        return self.perfil.name
+        return self.userProfile.perfil.name
+
+    @property
+    def getNome(self):
+        return self.userProfile.nome
+
+    def getUsuario(self):
+        return self.userProfile.usuario
 
     @property
     def getListAtributes(self):
-        atributos = ['nome', 'usuario', 'getNamePerfil']
+        atributos = ['getNome', 'getUsuario', 'getNamePerfil']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

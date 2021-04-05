@@ -47,12 +47,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 form-group">
+        <div class="col-md-3 form-group">
             {{ form.nome.label_tag }}
             {{ form.nome }}
             {{ form.nome.errors }}
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-7 form-group">
+            {{ form.descricao.label_tag }}
+            {{ form.descricao }}
+            {{ form.descricao.errors }}
+        </div>
+        <div class="col-md-2 form-group">
             {{ form.codigo.label_tag }}
             {{ form.codigo }}
             {{ form.codigo.errors }}

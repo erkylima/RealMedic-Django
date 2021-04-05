@@ -18,7 +18,6 @@ from core.models import Atendimento, Cliente
 from core.modulos.atendente.atendente import Atendente
 from core.modulos.paciente.paciente import Paciente
 from core.modulos.profissional.profissional import Profissional, DepartamentoProfissional
-from core.modulos.user_profile.user_profile import UserProfile
 from core.util.util_manager import MyLabls, get_user_type, get_data_por_idade
 
 
@@ -33,61 +32,62 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
         usuario = get_user_type(self.request.user)
         pacientes_10 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(10), get_data_por_idade(0)])).count()
         pacientes_20 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(20), get_data_por_idade(11)])).count()
         pacientes_30 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(30), get_data_por_idade(21)])).count()
         pacientes_40 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(40), get_data_por_idade(31)])).count()
         pacientes_50 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(50), get_data_por_idade(41)])).count()
         pacientes_60 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(60), get_data_por_idade(51)])).count()
         pacientes_70 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(70), get_data_por_idade(61)])).count()
         pacientes_80 = Paciente.objects.filter(
-            Q(departamento__empresa_id=usuario.departamento.empresa_id,
+            Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
               data_nascimento__range=[get_data_por_idade(120), get_data_por_idade(80)])).count()
 
         corpo_clinico = DepartamentoProfissional.objects.filter(
-            departamento_id=usuario.departamento_id)
-        pacientes = Paciente.objects.filter(departamento_id=usuario.departamento_id)
+            departamento_id=usuario.userProfile.departamento_id)
+        pacientes = Paciente.objects.filter(departamento_id=usuario.userProfile.departamento_id)
+        print(usuario.userProfile.departamento.empresa)
 
         atendimentos_janeiro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=1)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=1)
         atendimentos_fevereiro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=2)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=2)
         atendimentos_marco = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=3)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=3)
         atendimentos_abril = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=4)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=4)
         atendimentos_maio = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=5)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=5)
         atendimentos_junho = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=6)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=6)
         atendimentos_julho = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=7)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=7)
         atendimentos_agosto = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=8)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=8)
         atendimentos_setembro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=9)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=9)
         atendimentos_outubro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=10)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=10)
         atendimentos_novembro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=11)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=11)
         atendimentos_dezembro = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id).filter(intervalo__escala__dia__month=12)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=12)
 
         atendimentos = Atendimento.objects.filter(
-            departamentoProfissional__departamento_id=usuario.departamento_id)
+            departamentoProfissional__departamento_id=usuario.userProfile.departamento_id)
 
         context['pacientes_10'] = pacientes_10
         context['pacientes_20'] = pacientes_20

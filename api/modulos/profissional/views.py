@@ -3,21 +3,21 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from api.modulos.basicApiView import *
-from api.modulos.usuario.serializers import UsuarioCreateSerializer, UsuarioListSerializer
-from core.modulos.user_profile.user_profile import UserProfile
+from api.modulos.profissional.serializers import ProfissionalListSerializer, ProfissionalCreateSerializer
+from core.models import UserProfile
 from core.util.util_manager import get_user_type
 
 
-class UsuarioCreateView(IsAutenticatedCreateAPIView):
-    serializer_class = UsuarioCreateSerializer
+class ProfissionalCreateView(IsAutenticatedCreateAPIView):
+    serializer_class = ProfissionalCreateSerializer
 
 
-class UsuarioListView(IsAutenticatedListApiView):
+class ProfissionalListView(IsAutenticatedListApiView):
     queryset = UserProfile.objects.all()
-    serializer_class = UsuarioListSerializer
+    serializer_class = ProfissionalListSerializer
 
 
-class UsuarioGetView(IsAutenticatedApiView):
+class ProfissionalGetView(IsAutenticatedApiView):
     def post(self, request):
         print(request.data)
         nomedeusuario = str()

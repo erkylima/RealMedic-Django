@@ -10,11 +10,13 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from rest_framework.authtoken.models import Token
 
-from core.models import Profissional,Departamento,DepartamentoProfissional,Escala
+from core.models import Departamento,DepartamentoProfissional,Escala
 from core.modulos.atendente.atendente import Atendente
 from core.modulos.atendimento.atendimento import Atendimento
 from core.modulos.escala.views_escala import mobile
 from core.modulos.profissional.form_profissional import ProfissionalForm
+from core.modulos.profissional.profissional import Profissional
+from core.modulos.user_profile.user_profile import UserProfile, UserComum
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
@@ -23,7 +25,7 @@ class MyGenericView(object):
     model = Profissional
     form_class = ProfissionalForm
     success_url = reverse_lazy('core:modulo:profissional:list_view')
-    search_fields = ['nome', 'usuario']
+    search_fields = []
     COLUMNS = [LabesProperty.NOME, LabesProperty.USUARIO, LabesProperty.DEPARTAMENTO]
     NAME_MODEL = Profissional._meta.verbose_name
     NAME_MODEL_PLURAL = Profissional._meta.verbose_name_plural
@@ -53,9 +55,9 @@ class ProfissionalListView(MyListViewProfissional):
         usuario = get_user_type(self.request.user)
 
         if (self.request.GET.get('q')):
-            queryset = Profissional.objects.filter((Q(nome__icontains=self.request.GET.get('q')) | Q(usuario__icontains=self.request.GET.get('q')) )& Q(departamentoprofissional__departamento__empresa_id=usuario.empresa_id))
+            queryset = Profissional.objects.filter((Q(userProfile__nome=self.request.GET.get('q')) | Q(userProfile__usuario__icontains=self.request.GET.get('q')) )& Q(departamentoprofissional__departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         else:
-            queryset = Profissional.objects.filter(departamentoprofissional__departamento__empresa_id=usuario.empresa_id)
+            queryset = Profissional.objects.filter(departamentoprofissional__departamento__empresa_id=usuario.userProfile.departamento.empresa_id)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -81,27 +83,42 @@ class ProfissionalCreateView(MyCreateViewProfissional):
     def form_valid(self, form):
 
         # departamento_profissional.save()
-        profissional = form.save(commit=False)
-        # TODO - Veriricar a estratégia de senha
+        profissionalForm = form.save(commit=False)
+
         user = User.objects.create_user(
-            username=profissional.usuario,
+            first_name=self.request.POST.get('nome'),
+            username=self.request.POST.get('usuario'),
             password='admin123admin',
+            email=self.request.POST.get('email')
         )
-        profissional.perfil_id = 3
-        user.groups.add(profissional.perfil_id)
+        user.groups.add(3)  # Perfil do Profissional Padrão
         user.save()
+
+        userComum = UserComum()
+        userComum.nome = self.request.POST.get('nome')
+        userComum.usuario = self.request.POST.get('usuario')
+        userComum.senha = 'admin123admin'
+        userComum.user = user
+        userComum.perfil_id = 3  # Perfil do Profissional Padrão
+        userComum.email = self.request.POST.get('email')
+        userComum.save()
+        profissionalForm.userComum = userComum
+
+        # TODO - Veriricar a estratégia de senha
+
         Token.objects.get_or_create(user=user)
-        profissional.user = user
+
         user.get_group_permissions()
-        # userProfile.perfil_id = 3 # Perfil do Profissional Padrão
-        profissional.save()
+
+        profissionalForm.save()
         # Criar e popular os campos DepartamentoProfissional
         departamento_profissional = DepartamentoProfissional()
         departamento_profissional.departamento_id = self.request.POST.get('departamento')
         departamento_profissional.tipo_profissional_id = self.request.POST.get('tipo_profissional')
-        departamento_profissional.profissional = profissional
+        departamento_profissional.profissional = profissionalForm
         departamento_profissional.save()
         self.request.session['save_model'] = 'true'
+
         return super().form_valid(form)
 
     @method_decorator(permission_required(['global_permissions.criar_profissionais'], raise_exception=True))
@@ -123,12 +140,20 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
         # solução abaixo está incompleta para atualizar grupo de usuário
-        profissional = form.save(commit=False)
-        profissional.perfil_id = 3
-        print(dir(profissional.user))
-        profissional.user.username = profissional.usuario
-        profissional.user.save()
-        Token.objects.get_or_create(user=profissional.user)
+        profissionalForm = form.save(commit=False)
+        profissional = Profissional.objects.get(pk=self.object.pk)
+
+        profissional.userComum.perfil_id = 3
+        profissional.userComum.user.username =self.request.POST.get('usuario')
+        profissional.userComum.usuario = self.request.POST.get('usuario')
+        profissional.userComum.email =  self.request.POST.get('email')
+        profissional.userComum.user.email = self.request.POST.get('email')
+        profissional.userComum.user.first_name = self.request.POST.get('nome')
+        profissional.userComum.nome = self.request.POST.get('nome')
+        profissional.userComum.user.save()
+        profissional.userComum.save()
+        profissional.save()
+        Token.objects.get_or_create(user=profissional.userComum.user)
         """user = User.objects.get(pk=userProfile.pk)
         print(dir(userProfile))
         user.groups.add(userProfile.perfil_id)
@@ -139,22 +164,19 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
         departamento_profissional.tipo_profissional_id =self.request.POST.get('tipo_profissional')
 
         departamento_profissional.save()
+        profissionalForm.userComum=profissional.userComum
+        profissionalForm.save()
         return super().form_valid(form)
 
     @method_decorator(permission_required(['global_permissions.editar_profissionais'], raise_exception=True))
     def dispatch(self, *args, **kwargs):
         dep_prof = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
         usuario = get_user_type(self.request.user)
-        if isinstance(usuario, Atendente):
-            if usuario.departamento.empresa == dep_prof.departamento.empresa:
-                return super().dispatch(self.request, *args, **kwargs)
-            else:
-                return redirect('core:modulo:dashboard')
+
+        if usuario.userProfile.departamento.empresa ==  dep_prof.departamento.empresa:
+            return super().dispatch(self.request, *args, **kwargs)
         else:
-            if usuario.empresa ==  dep_prof.departamento.empresa:
-                return super().dispatch(self.request, *args, **kwargs)
-            else:
-                return redirect('core:modulo:dashboard')
+            return redirect('core:modulo:dashboard')
 
 
 class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
@@ -169,7 +191,10 @@ class ProfissionalEscalaUpdateView(MyUpdateViewProfissional):
         context = super().get_context_data(**kwargs)
         # print(self.object.pk)
         context['idProfissional'] = self.object.pk
-        escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
+        departamento = self.request.user.userProfile.departamento_id
+        depatamentoProfissional = DepartamentoProfissional.objects.get(departamento_id=departamento,
+                                                                       profissional_id=self.object.pk)
+        escalas = Escala.objects.filter(departamentoProfissional_id=depatamentoProfissional.pk)
         intervalos = []
         for escala in escalas:
             intervalo = escala.escalaintervalo_set.filter(escala_id=escala.pk)

@@ -1,41 +1,33 @@
-from django.contrib.auth.models import User, Group
 from django.db import models
 
-from core.models import Departamento, TipoProfissional, TipoAtendimento
 from core.models.base.time_stampable import Timestampable
 from core.modulos.atendimentos_departamento.atendimentos_departamento import AtendimentosDepartamento
-from core.util.util_manager import UpperCaseCharField
+from core.modulos.departamento.departamento import Departamento
+from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
+from core.modulos.user_profile.user_profile import UserComum
 
 class Profissional(Timestampable):
     class Meta:
         verbose_name = 'PROFISSIONAL'
         verbose_name_plural = 'PROFISSIONAIS'
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userProfissional')
-    nome = models.CharField('Nome', max_length=255)
-    codigo = UpperCaseCharField('Código', max_length=10,default="")
-    usuario = UpperCaseCharField('Usuario', max_length=255, unique=True)
-    email = models.EmailField('Email', max_length=255, unique=True)
-    senha = UpperCaseCharField('Senha', max_length=255)
-    perfil = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name='Perfil', related_name='profissionais')
-    ativo = models.BooleanField(default=True)
+    userComum = models.OneToOneField(UserComum, on_delete=models.PROTECT, related_name='profissional')
+    codigo = models.CharField('Código', max_length=10,default="")
+    descricao = models.CharField('Descrição', max_length=255, default="Um médico comum")
     tiposAtendimentos = models.ManyToManyField(AtendimentosDepartamento, verbose_name='Tipos de Atendimento')
 
 
     def __str__(self):
-        return self.nome.upper()
+        return self.userComum.nome
 
     def getJson(self):
         return dict(
             id=self.pk,
-            nome=self.nome,
-            login=self.usuario,
+            nome=self.userComum.nome,
+            login=self.userComum.usuario,
             tipo='profissional',
-            token=self.getToken(),
+            token=self.userComum.getToken(),
         )
-
-    def getToken(self):
-        return self.user.auth_token.key
 
     @property
     def getDepartamento(self):
@@ -46,8 +38,15 @@ class Profissional(Timestampable):
         return texto
 
     @property
+    def getNome(self):
+        return self.userComum.nome
+
+    def getUsuario(self):
+        return self.userComum.usuario
+
+    @property
     def getListAtributes(self):
-        atributos = ['nome', 'usuario', 'getDepartamento']
+        atributos = ['getNome', 'getUsuario', 'getDepartamento']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)
@@ -55,13 +54,13 @@ class Profissional(Timestampable):
         return inter_lista
 
 class DepartamentoProfissional(models.Model):
-    # class Meta:
-    #     verbose_name = 'PROFISSIONAL'
-    #     verbose_name_plural = 'PROFISSIONAIS'
+    class Meta:
+        verbose_name = 'PROFISSIONAL DO DEPARTAMENTO'
+        verbose_name_plural = 'PROFISSIONAIS DO DEPARTAMENTO'
 
     profissional = models.ForeignKey(Profissional, on_delete=models.PROTECT)
     departamento = models.ForeignKey(Departamento, on_delete=models.PROTECT)
     tipo_profissional = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, default=1)
 
     def __str__(self):
-        return self.profissional.nome
+        return self.profissional.userComum.nome + ' do ' + self.departamento.getNome()

@@ -10,7 +10,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
-from core.models import Escala, EscalaIntervalo, Profissional, Atendimento
+from core.models import Escala, EscalaIntervalo, Atendimento
+from core.modulos.profissional.profissional import Profissional
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
