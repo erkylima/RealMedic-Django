@@ -5,7 +5,6 @@
     {{ labels.NOVO }}
 {% endblock %}
 {% block corpo_formulario %}
-
     <div class="row">
         <div class="col-md-6 form-group ">
             {{ form.departamento.label_tag }}
@@ -46,14 +45,7 @@
     {#            </div>#}
     {#        </div>#}
     {#    </div>#}
-    <div class="row">
-        <div class="col-md-12 form-group">
-            <input type="hidden" name="perfil" id="id_perfil" value="{{ form.perfil.value }}">
-{#            {{ form.perfil.label_tag }}#}
-{#            {{ form.perfil }}#}
-{#            {{ form.perfil.errors }}#}
-        </div>
-    </div>
+
 
 {% endblock %}
 

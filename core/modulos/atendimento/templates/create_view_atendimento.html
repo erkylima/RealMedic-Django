@@ -11,14 +11,14 @@
 
 {% block header %}
 
-    {% if profissional %}
+    {% if departamentoprofissional.profissional %}
         <div class="panel-header bg-primary-gradient">
             <div class="page-inner border-bottom pb-0 mb-3">
                 <div class="d-flex align-items-left flex-column">
-                    <h2 class="pb-2 fw-bold text-white">ATENDIMENTOS DE {{ profissional.nome }}</h2>
+                    <h2 class="pb-2 fw-bold text-white">ATENDIMENTOS DE {{ departamentoprofissional.profissional.userComum.nome }}</h2>
                     <div class="nav-scroller d-flex">
                         <div class="nav nav-line nav-color-light d-flex align-items-center justify-contents-center">
-                            <a class="nav-link active" href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.pk %}">Escalas</a>
+                            <a class="nav-link active" href="{% url 'core:modulo:atendimento:update_view' departamentoprofissional.pk %}">Atendimentos</a>
                         </div>
                     </div>
                 </div>
@@ -86,14 +86,14 @@
                         <form name="marcar_atendimento" id="marcar_atendimento" method="post" action="{% url 'core:modulo:atendimento:add_atendimento' %}">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="hidden" id="profissional" name="profissional" value="{{ profissional.id }}">
+                                <input type="hidden" id="profissional" name="profissional" value="{{ departamentoprofissional.profissional.id }}">
                                 <input type="hidden" id="id_escala_intervalo" name="id_escala_intervalo">
                                 <div class="form-group ">
                                     <label for="tipo_atendimento">Tipo de Atendimento</label>
 
                                     <select class="select2" name="tipo_atendimento" id="tipo_atendimento">
                                         <option value="">---------</option>
-                                        {% for tipo_atendimento in profissional.tiposAtendimentos.values %}
+                                        {% for tipo_atendimento in departamentoprofissional.profissional.tiposAtendimentos.values %}
                                             <option value="{{ tipo_atendimento.id }}-{{ tipo_atendimento.valor_padrao }}-{{ tipo_atendimento.tempo_padrao }}">{{ tipo_atendimento.nome }}</option>
                                         {% endfor %}
                                     </select>

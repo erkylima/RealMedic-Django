@@ -119,8 +119,8 @@ class AtendimentoUpdateView(MyUpdateViewAtendimento):
     permission_required('se', raise_exception=True)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profissional = Profissional.objects.get(pk=self.object.pk)
-        print(dir(profissional.tiposAtendimentos.first()))
+        profissional = Profissional.objects.get(pk=self.object.profissional.pk)
+        profissional.userComum
         context['profissional'] = profissional
         escalas = Escala.objects.filter(departamentoProfissional_id=self.object.pk)
         pacientes = Paciente.objects.filter(departamento_id=self.object.departamento_id)

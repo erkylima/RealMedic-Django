@@ -85,8 +85,8 @@ class PacienteCreateView(MyCreateViewPaciente):
         self.request.session['save_model'] = 'true'
         paciente = form.save(commit=False)
         usuario = get_user_type(self.request.user)
-        endereco = Endereco.objects.create(rua=form.cleaned_data['rua'],cidade=form.cleaned_data['cidade'],estado=form.cleaned_data['estado']
-                                           ,numero=form.cleaned_data['numero'])
+        endereco = Endereco.objects.create(rua=self.request.POST.get('rua'),cidade=self.request.POST.get('cidade'),estado=self.request.POST.get('estado')
+                                           , numero=self.request.POST.get('numero'))
 
         paciente.endereco = endereco
         if isinstance(usuario, Atendente):
@@ -130,15 +130,15 @@ class PacienteUpdateView(MyUpdateViewPaciente):
         paciente = form.save(commit=False)
         usuario = get_user_type(self.request.user)
         endereco = Endereco.objects.get(paciente = paciente)
-        endereco.rua = form.cleaned_data['rua']
-        endereco.bairro = form.cleaned_data['bairro']
-        endereco.cidade = form.cleaned_data['cidade']
-        endereco.estado = form.cleaned_data['estado']
-        endereco.numero = form.cleaned_data['numero']
+        endereco.rua = self.request.POST.get('rua')
+        endereco.bairro = self.request.POST.get('bairro')
+        endereco.cidade = self.request.POST.get('cidade')
+        endereco.estado = self.request.POST.get('estado')
+        endereco.numero = self.request.POST.get('numero')
         endereco.save()
         paciente.endereco = endereco
         if isinstance(usuario, Atendente):
-            paciente.departamento_id = usuario.departamento_id
+            paciente.departamento_id = usuario.userProfile.departamento_id
         else:
             paciente.departamento_id = self.request.POST.get('departamento')
 

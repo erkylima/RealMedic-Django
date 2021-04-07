@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from core.models import Atendente
 from core.modulos.departamento.departamento import Departamento
 from core.modulos.user_profile.user_profile import UserProfile
@@ -11,18 +11,22 @@ class AtendenteForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = '__all__'
-        exclude = ('senha', 'user')
+        exclude = ('senha', 'user','perfil')
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(AtendenteForm, self).__init__(*args, **kwargs)
         instancia = self.instance
         usuario = get_user_type(self.user)
-
         self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.userProfile.departamento.empresa_id)
-        self.fields['perfil'].initial = Group.objects.get(name='Atendente').pk # Pegar id do grupo de permissão Atendente
+        # self.fields['perfil'].initial = Group.objects.get(name='Atendente').pk # Pegar id do grupo de permissão Atendente
         if self.instance.pk:
-            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=instancia.departamento.empresa)
+            self.fields['departamento'].queryset = Departamento.objects.filter(empresa=usuario.userProfile.departamento.empresa)
+            self.fields['departamento'].initial = instancia.userProfile.departamento
+            self.fields['nome'].initial = instancia.userProfile.nome
+            self.fields['usuario'].initial = instancia.userProfile.usuario
+            self.fields['email'].initial = instancia.userProfile.email
+
 
         self.fields['departamento'].required = False
 
@@ -39,10 +43,16 @@ class AtendenteForm(forms.ModelForm):
             self.validarLoginUsuario(login)
             self.validarEmailUsuario(email)
         else:
-            if instancia.usuario != login:
-                self.validarLoginUsuario(login)
-            if instancia.email != email:
-                self.validarEmailUsuario(email)
+            if type(instancia) == type(UserProfile):
+                if instancia.usuario != login:
+                    self.validarLoginUsuario(login)
+                if instancia.email != email:
+                    self.validarEmailUsuario(email)
+            else:
+                if instancia.userProfile.usuario != login:
+                    self.validarLoginUsuario(login)
+                if instancia.userProfile.email != email:
+                    self.validarEmailUsuario(email)
 
     def validarLoginUsuario(self, login):
         usuario = Atendente.objects.filter(userProfile__usuario=login)

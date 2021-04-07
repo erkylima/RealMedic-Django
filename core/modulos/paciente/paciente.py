@@ -20,7 +20,6 @@ class Paciente(Timestampable):
     data_nascimento = models.DateField(default=date.today)
     cpf = models.CharField('CPF',default='000.000.000-00', max_length=14, blank=True)
     rg = models.CharField('RG', default='0.000.000',max_length=9, blank=True)
-    idade = models.IntegerField('Idade',default=10, blank=True)
     telefone = models.CharField('Telefone', max_length=40, default='(87) 912345678')
     genero = models.IntegerField('Genero', default=1)
     endereco = models.ForeignKey(Endereco, models.PROTECT, blank=True)
@@ -53,7 +52,7 @@ class PacienteDepartamentoProfissional(Timestampable):
     departamentoProfissional = models.ForeignKey(DepartamentoProfissional, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.paciente.nome + ' paciente de ' + self.departamentoProfissional.profissional.nome
+        return self.paciente.nome + ' paciente de ' + self.departamentoProfissional.profissional.userComum.nome
 
     @property
     def getNome(self):

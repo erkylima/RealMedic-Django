@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 
 from core.models import Atendente
 from core.modulos.atendente.form_atendente import AtendenteForm
+from core.modulos.user_profile.user_profile import UserProfile
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa, get_user_type
 
@@ -80,20 +81,22 @@ class AtendenteCreateView(MyCreateViewAtendente):
 
     def form_valid(self, form):
 
-        userProfile = form.save(commit=False)
+        atendenteUserProfile = form.save(commit=False)
+        print(dir(atendenteUserProfile))
         # TODO - Veriricar a estratégia de senha
         user = User.objects.create_user(
-            username=userProfile.usuario,
+            first_name=atendenteUserProfile.nome,
+            username=atendenteUserProfile.usuario,
             password='admin123admin',
         )
-        user.groups.add(userProfile.perfil_id)
+        user.groups.add(Group.objects.get(name='Atendente').pk)
         user.save()
-        Token.objects.get_or_create(user=user)
-        userProfile.perfil_id = 4
-        userProfile.user = user
-        userProfile.save()
+        atendenteUserProfile.user=user
+        atendenteUserProfile.perfil_id=Group.objects.get(name='Atendente').pk
+        atendenteUserProfile.save()
         atendente = Atendente()
-        atendente.userProfile = userProfile
+        Token.objects.get_or_create(user=user)
+        atendente.userProfile = atendenteUserProfile
         atendente.save()
         self.request.session['save_model'] = 'true'
         return super().form_valid(form)
@@ -116,6 +119,18 @@ class AtendenteUpdateView(MyUpdateViewAtendente):
 
     def form_valid(self, form):
         self.request.session['update_model'] = 'true'
+        atendente = form.save(commit=False)
+
+        atendente.userProfile.user.username = self.request.POST.get('usuario')
+        atendente.userProfile.user.first_name = self.request.POST.get('nome')
+        atendente.userProfile.user.save()
+        atendente.userProfile.nome = self.request.POST.get('nome')
+        atendente.userProfile.usuario = self.request.POST.get('usuario')
+        atendente.userProfile.email = self.request.POST.get('email')
+        atendente.userProfile.save()
+        atendente.save()
+
+
         return super().form_valid(form)
 
     @method_decorator(permission_required(['global_permissions.editar_atendentes'], raise_exception=True))

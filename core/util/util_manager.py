@@ -29,23 +29,23 @@ class ValidarEmpresa:
         if not request.user.is_authenticated:
             return redirect('core:login')
         try:
-            if usuario.departamento.empresa ==  self.get_object().departamento.empresa:
-                return super().dispatch(request, *args, **kwargs) 
+            if usuario.userProfile.departamento.empresa ==  self.get_object().userProfile.departamento.empresa:
+                return super().dispatch(request, *args, **kwargs)
             else:
                 return redirect('core:modulo:dashboard')
         except:
-            try:
-                if usuario.empresa ==  self.get_object().departamento.empresa:
-                    return super().dispatch(request, *args, **kwargs)
-                else:
-                    return redirect('core:modulo:dashboard')
-            except:
+            # try:
+            #     if usuario.userPr.empresa ==  self.get_object().departamento.empresa:
+            #         return super().dispatch(request, *args, **kwargs)
+            #     else:
+            #         return redirect('core:modulo:dashboard')
+            # except:
                 # departamento_profissional = DepartamentoProfissional.objects.get(profissional_id=request.user.userProfissional.pk)
                 # print(self.get_object().departamentoProfissional.pk)
                 # departamento_profissional_do_objeto = DepartamentoProfissional.objects.get(profissional_id=self.get_object().pk)
-                
+
                 # if departamento_profissional.de*partamento.empresa == departamento_profissional_do_objeto.departamento.empresa:
-                return super().dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
                 # else:
                 #     return redirect('profissional:modulo:relatorio:ver')
 
@@ -91,8 +91,8 @@ def adiciona_form_control(self):
             field.widget.attrs['name'] = 'timepicker'
         elif field and isinstance(field, forms.CharField):
             field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['style'] = 'text-transform:uppercase'
             if field_name is not 'usuario':
+                field.widget.attrs['style'] = 'text-transform:uppercase'
                 field.widget.attrs['onkeyup'] = 'this.value = this.value.toUpperCase()'
             # field.widget.attrs['data-show-meridian'] = 'false'
         # elif field and isinstance(field, forms.BooleanField):

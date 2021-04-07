@@ -102,7 +102,7 @@
                                         <div class="username">DR. {{ clinico.profissional.userComum.nome }}</div>
                                         <div class="status">{{ clinico.tipo_profissional.descricao}}</div>
                                     </div>
-                                    <a href="{% url 'core:modulo:atendimento:update_view' clinico.profissional.id %}">
+                                    <a href="{% url 'core:modulo:atendimento:update_view' clinico.id %}">
                                         <button class="btn btn-icon btn-primary btn-round btn-xs" data-toggle="tooltip" data-placement="top" title="Marcar Atendimento">
                                             <i class="fa fa-plus"></i>
                                         </button>

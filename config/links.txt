@@ -10,3 +10,6 @@ https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-depen
 
 // Correção do problema de um select dentro de um modal
 https://select2.org/troubleshooting/common-problems
+
+System cooperativa de saúde onde os cooperados contribuem entre si
+
