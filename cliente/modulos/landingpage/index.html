@@ -54,10 +54,10 @@
                 <div class="col-lg-12">
                     <div class="filters portfolio-filter project_menu_item text-center">
                         <ul>
-                            <li class="active" data-filter="*">All</li>
-                            <li data-filter=".buildings">Web Design</li>
-                            <li data-filter=".clinica">Clinica</li>
-                            <li data-filter=".Digital">Digital marketing</li>
+                            <li class="active" data-filter="*">Todas</li>
+                            {% for empresa in empresas %}
+                                <li data-filter=".{{empresa.nome}}">{{ empresa.nome }}</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             <div class="filters-content">
                 <div class="row justify-content-between portfolio-grid">
                     {% for profissional in lista %}
-                        <div class="col-lg-3  all buildings">
+                        <div class="col-lg-3  all {{profissional.listaempresa.nome}}">
                             <div class="single_our_project">
                                 <div class="single_offer">
                                     <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />

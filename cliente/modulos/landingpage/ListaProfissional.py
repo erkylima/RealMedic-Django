@@ -6,12 +6,14 @@ class ListaEmpresa(Timestampable):
         verbose_name = 'Lista de Empresa LandingPage'
         verbose_name_plural = 'Lista de Empresa LandingPage'
     nome = models.CharField(max_length=100,default='')
+    def __str__(self):
+        return self.nome.upper()
 
 class ListaProfissional(Timestampable):
     class Meta:
         verbose_name = 'Lista de LandingPage'
         verbose_name_plural = 'Lista de LandingPage'
-    # listaempresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT,related_name='prof',default=1)
+    listaempresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT,related_name='prof',default=1)
     nome = models.CharField(max_length=100,default='')
     especialidade = models.CharField(max_length=100,default='')
     agenda = models.CharField(max_length=100,default='')
