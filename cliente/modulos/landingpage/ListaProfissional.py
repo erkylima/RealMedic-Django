@@ -1,3 +1,5 @@
+from django.core.files.storage import FileSystemStorage
+
 from core.models.base.time_stampable import Timestampable
 from django.db import models
 
@@ -9,6 +11,19 @@ class ListaEmpresa(Timestampable):
     def __str__(self):
         return self.nome.upper()
 
+
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length):
+        """
+        Retorna um filename disponível para a class storage e
+        o novo conteúdo para ser gravado
+        """
+        # Se o filename já existir, este é removido
+        if self.exists(name):
+            self.delete(name)
+        return name
+
+
 class ListaProfissional(Timestampable):
     class Meta:
         verbose_name = 'Lista de LandingPage'
@@ -18,7 +33,7 @@ class ListaProfissional(Timestampable):
     especialidade = models.CharField(max_length=100,default='')
     agenda = models.CharField(max_length=100,default='')
     local_atendimento = models.CharField(max_length=100,default='')
-    imagem = models.ImageField(upload_to='images/profs', default='')
+    imagem = models.ImageField(upload_to='images/profs', storage=OverwriteStorage(),default='')
 
     def __str__(self):
         return self.nome.upper()
@@ -32,3 +47,4 @@ class ListaProfissional(Timestampable):
     @property
     def getNome(self):
         return self.nome
+
