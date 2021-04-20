@@ -65,7 +65,27 @@
             <div class="filters-content">
                 <div class="row justify-content-between portfolio-grid">
                     {% for profissional in lista %}
-
+                        <div class="col-lg-3  all buildings">
+                            <div class="single_our_project">
+                                <div class="single_offer">
+                                    <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
+                                    <div class="hover_text">
+                                        <div id="inline1" style="display:none;">
+                                            <img src="{% static 'landingpage/img/lyndyanefreire.fisio_profile_photo.jpg'%}" alt="">
+                                            <h1>{{ profissional.nome }}</h1>
+                                            <h4>{{ profissional.especialidade }}</h4>
+                                            <p>{{ profissional.agenda }}</p>
+                                            <p>{{ profissional.local_atendimento }}</p>
+                                        </div>
+                                        <p>{{ profissional.especialidade }}</p>
+                                        <a style="color: #24BFB6;" href="#">
+                                            <h3>{{ profissional.nome }} <a href="#" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
+                                            </h3>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
 
                     <div class="col-lg-3  all buildings">
@@ -118,5 +138,11 @@
 {% endblock content %}
 
 {% block extra_scrips %}
-
+    <script>
+    {% for profissional in lista %}
+        $(".inline{{ profissional.pk }}").modaal({
+            content_source: '#inline{{ profissional.pk }}'
+        });
+    {% endfor%}
+    </script>
 {% endblock %}

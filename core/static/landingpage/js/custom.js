@@ -9,9 +9,7 @@
         }
     });
 
-    $(".inline1").modaal({
-        content_source: '#inline1'
-    });
+
     $(".inline2").modaal({
         content_source: '#inline2'
     });
