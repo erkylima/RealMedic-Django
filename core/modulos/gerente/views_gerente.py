@@ -39,7 +39,7 @@ class MyCreateViewGerente(MyGenericView,LoginRequiredMixin, MyLabls, CreateView)
     pass
 
 
-class MyUpdateViewGerente(MyGenericView,LoginRequiredMixin, MyLabls, UpdateView):
+class MyUpdateViewGerente(MyGenericView,LoginRequiredMixin, ValidarEmpresa, MyLabls, UpdateView):
     # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass

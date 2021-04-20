@@ -108,6 +108,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js"></script>
 
 <script>
+    {% if '/paciente/' in request.path %}
     $('#id_cpf').mask('000.000.000-00', {reverse: true});
     $('#id_rg').mask('0.000.000', {reverse: true});
     $('#id_telefone').mask("(99) 99999-9999")
@@ -123,7 +124,7 @@
                 element.mask("(99) 9999-9999?9");
             }
         });
-
+    {% endif %}
     $('#datetime').datepicker({
         format: 'DD/MM/YYYY H:mm',
     });

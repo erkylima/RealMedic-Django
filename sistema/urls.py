@@ -30,7 +30,6 @@ urlpatterns = [
                   path('docs/', include_docs_urls(title='API de Documentação')),
                   path('', include('core.urls'), name='core_index'),
                   path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
-                  # path('cliente/', include('cliente.urls')),
                   path('profissional/', include('profissional.urls')),
 
 

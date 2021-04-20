@@ -54,12 +54,12 @@ class DashBoard(MyLabls, LoginRequiredMixin, TemplateView):
               data_nascimento__range=[get_data_por_idade(70), get_data_por_idade(61)])).count()
         pacientes_80 = Paciente.objects.filter(
             Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id,
-              data_nascimento__range=[get_data_por_idade(120), get_data_por_idade(80)])).count()
+              data_nascimento__range=[get_data_por_idade(120), get_data_por_idade(71)])).count()
 
         corpo_clinico = DepartamentoProfissional.objects.filter(
             departamento_id=usuario.userProfile.departamento_id)
         pacientes = Paciente.objects.filter(departamento_id=usuario.userProfile.departamento_id)
-        print(usuario.userProfile.departamento.empresa)
+
 
         atendimentos_janeiro = Atendimento.objects.filter(
             departamentoProfissional__departamento_id=usuario.userProfile.departamento_id).filter(intervalo__escala__dia__month=1)

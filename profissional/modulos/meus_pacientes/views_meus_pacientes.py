@@ -51,10 +51,10 @@ class MeusPacientesListView(MyListViewMeusPacientes):
             queryset = PacienteDepartamentoProfissional.objects.filter(
                 (Q(paciente__nome__icontains=self.request.GET.get('q')) | Q(
                     paciente__email__icontains=self.request.GET.get('q'))) & Q(
-                    departamentoProfissional_id=usuario.pk))
+                    departamentoProfissional__profissional_id=usuario.pk))
         else:
             queryset = PacienteDepartamentoProfissional.objects.filter(
-                departamentoProfissional_id=usuario.pk)
+                departamentoProfissional__profissional_id=usuario.pk)
         return queryset
 
     @method_decorator(permission_required(['global_permissions.ver_meus_pacientes'], raise_exception=True))

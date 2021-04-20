@@ -113,11 +113,11 @@ def get_user_type(user):
     if Gerente.objects.filter(userProfile__user=user).exists():
         return user.userProfile.gerente
     if Profissional.objects.filter(userComum__user=user).exists():
-        return user.userProfile.profissional
+        return user.userComum.profissional
     if Atendente.objects.filter(userProfile__user=user).exists():
         return user.userProfile.atendente
     if Cliente.objects.filter(userComum__user=user).exists():
-        return user.userProfile.atendente
+        return user.userComum.atendente
 
 
 

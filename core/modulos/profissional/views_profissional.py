@@ -91,15 +91,16 @@ class ProfissionalCreateView(MyCreateViewProfissional):
             password='admin123admin',
             email=self.request.POST.get('email')
         )
-        user.groups.add(3)  # Perfil do Profissional Padrão
+        user.groups.add(Group.objects.get(name='Profissinal').pk)  # Perfil do Profissional Padrão
         user.save()
 
         userComum = UserComum()
+        userComum.user.groups.add(Group.objects.get(name='Profissinal').pk)
         userComum.nome = self.request.POST.get('nome')
         userComum.usuario = self.request.POST.get('usuario')
         userComum.senha = 'admin123admin'
         userComum.user = user
-        userComum.perfil_id = 3  # Perfil do Profissional Padrão
+        userComum.perfil_id = Group.objects.get(name='Profissinal').pk  # Perfil do Profissional Padrão
         userComum.email = self.request.POST.get('email')
         userComum.save()
         profissionalForm.userComum = userComum
@@ -143,13 +144,14 @@ class ProfissionalUpdateView(MyUpdateViewProfissional):
         profissionalForm = form.save(commit=False)
         profissional = Profissional.objects.get(pk=self.object.pk)
 
-        profissional.userComum.perfil_id = 3
         profissional.userComum.user.username =self.request.POST.get('usuario')
         profissional.userComum.usuario = self.request.POST.get('usuario')
         profissional.userComum.email =  self.request.POST.get('email')
         profissional.userComum.user.email = self.request.POST.get('email')
         profissional.userComum.user.first_name = self.request.POST.get('nome')
         profissional.userComum.nome = self.request.POST.get('nome')
+
+
         profissional.userComum.user.save()
         profissional.userComum.save()
         profissional.save()

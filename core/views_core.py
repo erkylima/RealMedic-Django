@@ -50,7 +50,7 @@ class LoginView(TemplateView):
         elif isinstance(usuario, Gerente):
             return redirect('/core/')
         elif isinstance(usuario, Profissional):
-            return redirect('/profissional/app/relatorio/relatorio/')
+            return redirect('/profissional/app/relatorio/')
         elif isinstance(usuario, Atendente):
             return redirect('/core/')
         else:

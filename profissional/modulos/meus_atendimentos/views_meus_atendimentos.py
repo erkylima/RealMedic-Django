@@ -54,9 +54,9 @@ class MeusAtendimentosListView(MyListViewMeusAtendimentos):
             queryset = Atendimento.objects.filter((Q(paciente__nome__icontains=self.request.GET.get('q')) |
                                                    Q(tipoAtendimento__descricao__icontains=self.request.GET.get('q').upper()) |
                                                    Q(valor__contains=self.request.GET.get('q'))) &
-                                                  Q(departamentoProfissional_id=usuario.pk)).order_by('intervalo__escala__dia', 'inicio_atendimento')
+                                                  Q(departamentoProfissional__profissional_id=usuario.pk)).order_by('intervalo__escala__dia', 'inicio_atendimento')
         else:
-            queryset = Atendimento.objects.filter(Q(departamentoProfissional_id=usuario.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
+            queryset = Atendimento.objects.filter(Q(departamentoProfissional__profissional_id=usuario.pk)).order_by('-intervalo__escala__dia', 'inicio_atendimento')
             print(dir(queryset.first()))
         return queryset
 

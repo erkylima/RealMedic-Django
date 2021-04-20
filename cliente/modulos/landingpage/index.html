@@ -1,0 +1,122 @@
+{% extends 'landingpage/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- banner part start-->
+    <section class="banner_part">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 offset-lg-1">
+                    <div class="banner_text">
+                        <div class="banner_text_iner">
+                            <h5>Encontre todos os médicos disponíveis em Floresta-PE</h5>
+                            <h1>Lista de médicos da cidade</h1>
+                            <a href="#portfolio" class="btn_1">Encontrar Médico</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- banner part start-->
+
+    <!--::client logo part end::-->
+    <section class="client_logo">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="client_logo_slider owl-carousel d-flex justify-content-between">
+                        <div class="single_client_logo">
+                            <img src="{% static 'landingpage/img/logo/Logo1.jpg'%}" alt="" />
+                        </div>
+                        <div class="single_client_logo">
+                            <img src="{% static 'landingpage/img/logo/Logo2.jpg'%}" alt="" />
+                        </div>
+                        <div class="single_client_logo">
+                            <img src="{% static 'landingpage/img/logo/Logo3.jpg'%}" alt="" />
+                        </div>
+                        <div class="single_client_logo">
+                            <img src="{% static 'landingpage/img/logo/Logo4.jpg'%}" alt="" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--::client logo part end::-->
+
+    <!-- our_project part start-->
+    <section class="our_project section_padding single_page_project" id="portfolio">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-12">
+                    <div class="filters portfolio-filter project_menu_item text-center">
+                        <ul>
+                            <li class="active" data-filter="*">All</li>
+                            <li data-filter=".buildings">Web Design</li>
+                            <li data-filter=".clinica">Clinica</li>
+                            <li data-filter=".Digital">Digital marketing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="filters-content">
+                <div class="row justify-content-between portfolio-grid">
+                    {% for profissional in lista %}
+
+                    {% endfor %}
+
+                    <div class="col-lg-3  all buildings">
+                        <div class="single_our_project">
+                            <div class="single_offer">
+                                <img src="{% static 'landingpage/img/lyndyanefreire.fisio_profile_photo.jpg'%}" alt="offer_img_1" />
+                                <div class="hover_text">
+                                    <div id="inline1" style="display:none;">
+                                        <img src="{% static 'landingpage/img/lyndyanefreire.fisio_profile_photo.jpg'%}" alt="">
+                                        <h1>Dr. Lyndyane Freire</h1>
+                                        <h4>Fisioterapeuta</h4>
+                                        <p>Agenda: Sexta 8:00 às 12:00 e 14:00 às 17:00</p>
+                                        <p>Atendimentos em: Integra Clinic (87) 9-98069048</p>
+                                    </div>
+                                    <p>Fisioterapeuta</p>
+                                    <a style="color: #24BFB6;" href="#">
+                                        <h3>Dr. Lyndyane Freire <a href="#" class="genric-btn primary small inline1">Ver Contato</a>
+                                        </h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 all clinica">
+                        <div class="single_our_project">
+                            <div class="single_offer">
+                                <img src="{% static 'landingpage/img/nutriligiabfreire_profile_photo.jpg'%}" alt="offer_img_2" />
+                                <div class="hover_text">
+                                    <div id="inline2" style="display:none;">
+                                        <img src="{% static 'landingpage/img/nutriligiabfreire_profile_photo.jpg'%}" alt="">
+                                        <h1>Dr. Lídia Freire</h1>
+                                        <h4>Nutricionista</h4>
+                                        <p>Agenda: Sexta 8:00 às 12:00 e 14:00 às 17:00</p>
+                                        <p>Atendimentos em: Integra Clinic (87) 9-98069048</p>
+                                    </div>
+                                    <p>Nutricionista</p>
+                                    <a style="color: #24BFB6;" href="#">
+                                        <h3>Dr. Lídia Freire <a href="#" class="genric-btn primary small inline2">Ver Contato</a>
+                                        </h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- our_project part end-->
+{% endblock content %}
+
+{% block extra_scrips %}
+
+{% endblock %}

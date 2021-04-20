@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="user-profile text-center">
-                                    <div class="name">DR. {{ profissional.profissional.nome }}</div>
+                                    <div class="name">DR. {{ profissional.profissional.userComum.nome }}</div>
                                     <div class="job">{{ profissional.tipo_profissional}}</div>
                                     <div class="desc">
                                         {% for atends in profissional.profissional.tiposAtendimentos.values %}

@@ -59,11 +59,9 @@ class AtendimentoListView(MyListViewAtendimento):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         usuario = get_user_type(self.request.user)
-        if isinstance(usuario, Atendente):
-            context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(departamento_id=usuario.departamento_id)
-        elif isinstance(usuario, UserProfile):
+        if isinstance(usuario, UserProfile):
             context['departamentoprofissional_list'] = DepartamentoProfissional.objects.filter(
-                departamento__empresa_id=usuario.empresa_id)
+                departamento__empresa_id=usuario.userProfile.departamento.empresa_id)
         else:
             redirect('/core/atendimento/list')
 

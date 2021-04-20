@@ -20,7 +20,7 @@ class MyGenericView(object):
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:prontuario:create_view')
 
 class MyCreateViewProntuario(MyGenericView, LoginRequiredMixin, MyLabls, CreateView):
-    permission_required = 'global_permissions.controla_licitacao'
+    # permission_required = 'global_permissions.controla_licitacao'
     # permission_denied_message = 'Permission Denied'
     pass
 
