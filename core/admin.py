@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from cliente.modulos.landingpage.ListaProfissional import ListaProfissional
+from cliente.modulos.landingpage.ListaProfissional import ListaProfissional, ListaEmpresa
 from core.models.base.area_atendimento import AreaAtendimento
 from core.models.base.endereco import Endereco
 from core.models.base.lat_lng import LatLng
@@ -22,7 +22,7 @@ from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 # BASE
 from core.modulos.user_profile.user_profile import UserProfile, UserComum
 
-
+admin.site.register(ListaEmpresa)
 admin.site.register(ListaProfissional)
 admin.site.register(AreaAtendimento)
 admin.site.register(LatLng)
