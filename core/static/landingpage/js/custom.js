@@ -9,11 +9,6 @@
         }
     });
 
-
-    $(".inline2").modaal({
-        content_source: '#inline2'
-    });
-
     $(".popup-youtube, .popup-vimeo").magnificPopup({
         // disableOn: 700,
         type: "iframe",

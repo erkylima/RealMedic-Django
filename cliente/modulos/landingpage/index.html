@@ -70,8 +70,8 @@
                                 <div class="single_offer">
                                     <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
                                     <div class="hover_text">
-                                        <div id="inline1" style="display:none;">
-                                            <img src="{% static 'landingpage/img/lyndyanefreire.fisio_profile_photo.jpg'%}" alt="">
+                                        <div id="inline{{profissional.pk}}" style="display:none;">
+                                            <img src="{{ profissional.imagem.url }}" alt="">
                                             <h1>{{ profissional.nome }}</h1>
                                             <h4>{{ profissional.especialidade }}</h4>
                                             <p>{{ profissional.agenda }}</p>
