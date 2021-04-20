@@ -82,7 +82,7 @@ def deploy(request):
             #
             # else:
             folder = 'realconsulta'
-            nome_projeto = 'iconsultasweb'
+            nome_projeto = 'RealMedic-Django'
             gunicorn_name = 'realconsulta'
 
             projeto = '/webapps/{}/{}/'.format(folder, nome_projeto)
