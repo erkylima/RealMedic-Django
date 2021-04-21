@@ -33,7 +33,7 @@ class ListaProfissional(Timestampable):
     especialidade = models.CharField(max_length=100,default='')
     agenda = models.CharField(max_length=100,default='')
     local_atendimento = models.CharField(max_length=100,default='')
-    imagem = models.ImageField(upload_to='images/profs', storage=OverwriteStorage(),default='')
+    imagem = models.ImageField(upload_to='images/profs', name='', storage=OverwriteStorage(),default='')
 
     def __str__(self):
         return self.nome.upper()
