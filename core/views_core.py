@@ -101,6 +101,12 @@ def deploy(request):
 
             subprocess.call([pip,
                              "install",
+                             "django",
+                             "--upgrade",
+                             ], cwd=projeto)
+
+            subprocess.call([pip,
+                             "install",
                              "-r",
                              "requerimentos.txt",
                              ], cwd=projeto)
