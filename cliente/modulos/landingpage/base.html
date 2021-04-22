@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{% static 'landingpage/css/themify-icons.css' %}" />
     <!-- flaticon CSS -->
     <link rel="stylesheet" href="{% static 'landingpage/css/flaticon.css' %}" />
+    <!-- nice select CSS -->
+    <link rel="stylesheet" href="{% static 'landingpage/css/nice-select.css' %}" />
     <!-- font awesome CSS -->
     <link rel="stylesheet" href="{% static 'landingpage/css/magnific-popup.css' %}" />
     <!-- swiper CSS -->
@@ -26,6 +28,7 @@
     <link rel="stylesheet" href="{% static 'landingpage/css/style.css' %}" />
     <!-- animated Modal -->
     <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/modaal.min.css' %}">
+
 
 
 </head>
@@ -112,24 +115,27 @@
                         <h4>A empresa</h4>
                         <ul>
                             <li>
-                                <a href="#">Sobre</a>
+                                <a href="{% url 'core:cliente:sobre' %}">Sobre</a>
                             </li>
 
 
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 col-md-3">
-                    <div class="single-footer-widget footer_2">
-                        <h4>Recursos</h4>
-                        <ul>
-                            <li>
-                                <a href="#">UI kit</a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
+{#                <div class="col-xl-3 col-sm-6 col-md-3">#}
+{#                    <div class="single-footer-widget footer_2">#}
+{#                        <h4>Recursos</h4>#}
+{#                        <ul>#}
+{#                            <li>#}
+{#                                <a href="#">Sou profissional</a>#}
+{#                            </li>#}
+{#                            <li>#}
+{#                                <a href="#">Minha clínica</a>#}
+{#                            </li>#}
+{##}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
                 <div class="col-xl-3 col-sm-6 col-md-3">
                     <div class="single-footer-widget footer_2">
                         <h4>Contato</h4>
@@ -175,6 +181,8 @@
     <script src="{% static 'landingpage/js/bootstrap.min.js'%}"></script>
     <!-- easing js -->
     <script src="{% static 'landingpage/js/jquery.magnific-popup.js'%}"></script>
+    <!-- isotope js -->
+    <script src="{% static 'landingpage/js/swiper.min.js'%}"></script>
     <!-- isotope js -->
     <script src="{% static 'landingpage/js/isotope.pkgd.min.js'%}"></script>
     <!-- particles js -->

@@ -3,6 +3,9 @@ from django.core.files.storage import FileSystemStorage
 from core.models.base.time_stampable import Timestampable
 from django.db import models
 
+from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
+
+
 class ListaEmpresa(Timestampable):
     class Meta:
         verbose_name = 'Lista de Empresa LandingPage'
@@ -30,7 +33,7 @@ class ListaProfissional(Timestampable):
         verbose_name_plural = 'Lista de LandingPage'
     listaempresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT,related_name='prof',default=1)
     nome = models.CharField(max_length=100,default='')
-    especialidade = models.CharField(max_length=100,default='')
+    especi = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, related_name='espec', default=1)
     agenda = models.CharField(max_length=100,default='')
     local_atendimento = models.CharField(max_length=100,default='')
     imagem = models.ImageField(upload_to='images/profs', name='', storage=OverwriteStorage(),default='')
