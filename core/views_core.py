@@ -98,13 +98,6 @@ def deploy(request):
             manage = '/webapps/{}/{}/manage.py'.format(folder, nome_projeto)
 
             print('PASSO 2_________________________')
-
-            subprocess.call([pip,
-                             "install",
-                             "django",
-                             "--upgrade",
-                             ], cwd=projeto)
-
             subprocess.call([pip,
                              "install",
                              "-r",
