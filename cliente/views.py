@@ -17,7 +17,6 @@ class ListaProfissionalListView(TemplateView):
         context['especialidades'] = TipoProfissional.objects.all().order_by('descricao')
         pesquisa = self.request.GET.get('q')
         context['pesquisa'] = str(pesquisa)
-        print(str(pesquisa))
         if(pesquisa!=None):
             context['lista'] = ListaProfissional.objects.all().order_by('?').filter(especi__descricao__icontains=str(pesquisa))
         else:

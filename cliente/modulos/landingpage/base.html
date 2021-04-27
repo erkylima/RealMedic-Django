@@ -29,173 +29,181 @@
     <!-- animated Modal -->
     <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/modaal.min.css' %}">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4NKZWEGVY7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
+        gtag('config', 'G-4NKZWEGVY7');
+    </script>
 
 </head>
 
 <body>
-    <!--::header part start::-->
-    <header class="main_menu home_menu">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="index.html">
-                            <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
-                        </a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="ti-menu"></span>
-              </button>
+<!--::header part start::-->
+<header class="main_menu home_menu">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
+                        <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="ti-menu"></span>
+                    </button>
 
-                        <div class="collapse navbar-collapse main-menu-item justify-content-center" id="navbarSupportedContent">
-                            <ul class="navbar-nav align-items-center">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'core:cliente:lista_prof' %}">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'core:cliente:sobre' %}">Sobre</a>
-                                </li>
-                                
-                            </ul>
-                        </div>
-                        <div class="social_icon d-none d-lg-block">
-                            <a href="#"><i class="ti-facebook"></i></a>
-                            <a href="#"><i class="ti-instagram"></i></a>
-                        </div>
-                    </nav>
+                    <div class="collapse navbar-collapse main-menu-item justify-content-center" id="navbarSupportedContent">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'core:cliente:lista_prof' %}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'core:cliente:sobre' %}">Sobre</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="social_icon d-none d-lg-block">
+                        <a href="#"><i class="ti-facebook"></i></a>
+                        <a href="#"><i class="ti-instagram"></i></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header part end-->
+{% block content %}
+
+
+
+
+
+{% endblock content %}
+
+
+<!--::cta_part start::-->
+<div class="cta_part">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="cta_iner">
+                    <h1>Vamos facilitar o seu acesso à médicos</h1>
+                    <a href="{% url 'core:cliente:sobre' %}" class="btn_1">Nos conheça</a>
                 </div>
             </div>
         </div>
-    </header>
-    <!-- Header part end-->
-    {% block content %}
+    </div>
+</div>
+<!--::cta_part end::-->
+
+<!-- footer part start-->
+<footer class="footer-area">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-sm-6 col-md-3 col-xl-3">
+                <div class="single-footer-widget footer_1">
+                    <a href="{% url 'core:cliente:lista_prof' %}">
+                        <img src="{% static 'landingpage/img/footer_logo.png'%}" alt="" />
+                    </a>
+                    <ul>
+                        <li>Na RealMedic, nosso objetivo é ajudar você a estar em sua melhor forma,
+                            interna e externamente. Encontramos os melhores profissionais para você,
+                            facilitamos o caminho para um estilo de vida saudável.</li>
+                    </ul>
+                    <div class="social_icon">
+                        <a href="#"><i class="ti-facebook"></i></a>
+                        <a href="#"><i class="ti-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-md-3">
+                <div class="single-footer-widget footer_2">
+                    <h4>A empresa</h4>
+                    <ul>
+                        <li>
+                            <a href="{% url 'core:cliente:sobre' %}">Sobre</a>
+                        </li>
 
 
+                    </ul>
+                </div>
+            </div>
+            {#                <div class="col-xl-3 col-sm-6 col-md-3">#}
+            {#                    <div class="single-footer-widget footer_2">#}
+            {#                        <h4>Recursos</h4>#}
+            {#                        <ul>#}
+            {#                            <li>#}
+            {#                                <a href="#">Sou profissional</a>#}
+            {#                            </li>#}
+            {#                            <li>#}
+            {#                                <a href="#">Minha clínica</a>#}
+            {#                            </li>#}
+            {##}
+            {#                        </ul>#}
+            {#                    </div>#}
+            {#                </div>#}
+            <div class="col-xl-3 col-sm-6 col-md-3">
+                <div class="single-footer-widget footer_2">
+                    <h4>Contato</h4>
+                    <div class="single_contact_info">
+                        <h3>Floresta - PE</h3>
+                        <p>(87) 99938-0279</p>
+                    </div>
 
-
-
-    {% endblock content %}
-
-
-    <!--::cta_part start::-->
-    <div class="cta_part">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-7">
-                    <div class="cta_iner">
-                        <h1>Vamos facilitar o seu acesso à médicos</h1>
-                        <a href="{% url 'core:cliente:sobre' %}" class="btn_1">Nos conheça</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="copyright_part_text text-center">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="footer-text m-0">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script> Todos os direitos reservados| Esse site foi criado com <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--::cta_part end::-->
+    <img src="{% static 'landingpage/img/animate_icon/icon_2.png'%}" class="animation_icon_2" alt="">
 
-    <!-- footer part start-->
-    <footer class="footer-area">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-sm-6 col-md-3 col-xl-3">
-                    <div class="single-footer-widget footer_1">
-                        <a href="{% url 'core:cliente:lista_prof' %}">
-                            <img src="{% static 'landingpage/img/footer_logo.png'%}" alt="" />
-                        </a>
-                        <ul>
-                            <li>Na RealMedic, nosso objetivo é ajudar você a estar em sua melhor forma,
-                            interna e externamente. Encontramos os melhores profissionais para você,
-                            facilitamos o caminho para um estilo de vida saudável.</li>
-                        </ul>
-                        <div class="social_icon">
-                            <a href="#"><i class="ti-facebook"></i></a>
-                            <a href="#"><i class="ti-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-md-3">
-                    <div class="single-footer-widget footer_2">
-                        <h4>A empresa</h4>
-                        <ul>
-                            <li>
-                                <a href="{% url 'core:cliente:sobre' %}">Sobre</a>
-                            </li>
+</footer>
+<!-- footer part end-->
 
-
-                        </ul>
-                    </div>
-                </div>
-{#                <div class="col-xl-3 col-sm-6 col-md-3">#}
-{#                    <div class="single-footer-widget footer_2">#}
-{#                        <h4>Recursos</h4>#}
-{#                        <ul>#}
-{#                            <li>#}
-{#                                <a href="#">Sou profissional</a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">Minha clínica</a>#}
-{#                            </li>#}
-{##}
-{#                        </ul>#}
-{#                    </div>#}
-{#                </div>#}
-                <div class="col-xl-3 col-sm-6 col-md-3">
-                    <div class="single-footer-widget footer_2">
-                        <h4>Contato</h4>
-                        <div class="single_contact_info">
-                            <h3>Floresta - PE</h3>
-                            <p>(87) 99938-0279</p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="copyright_part_text text-center">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <p class="footer-text m-0">
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;
-                                    <script>
-                                        document.write(new Date().getFullYear());
-                                    </script> Todos os direitos reservados| Esse site foi criado com <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <img src="{% static 'landingpage/img/animate_icon/icon_2.png'%}" class="animation_icon_2" alt="">
-
-    </footer>
-    <!-- footer part end-->
-
-    <!-- jquery plugins here-->
-    <script src="{% static 'landingpage/js/jquery-1.12.1.min.js'%}"></script>
-    <!-- popper js -->
-    <script src="{% static 'landingpage/js/popper.min.js'%}"></script>
-    <!-- bootstrap js -->
-    <script src="{% static 'landingpage/js/bootstrap.min.js'%}"></script>
-    <!-- easing js -->
-    <script src="{% static 'landingpage/js/jquery.magnific-popup.js'%}"></script>
-    <!-- isotope js -->
-    <script src="{% static 'landingpage/js/swiper.min.js'%}"></script>
-    <!-- isotope js -->
-    <script src="{% static 'landingpage/js/isotope.pkgd.min.js'%}"></script>
-    <!-- particles js -->
-    <script src="{% static 'landingpage/js/owl.carousel.min.js'%}"></script>
-    <script src="{% static 'landingpage/js/jquery.nice-select.min.js'%}"></script>
-    <!-- animated Modal -->
-    <script src="{% static 'landingpage/js/modaal.min.js'%}"></script>
-    <!-- custom js -->
-    <script src="{% static 'landingpage/js/custom.js'%}"></script>
-    {% block extra_scrips %}
-    {% endblock %}
+<!-- jquery plugins here-->
+<script src="{% static 'landingpage/js/jquery-1.12.1.min.js'%}"></script>
+<!-- popper js -->
+<script src="{% static 'landingpage/js/popper.min.js'%}"></script>
+<!-- bootstrap js -->
+<script src="{% static 'landingpage/js/bootstrap.min.js'%}"></script>
+<!-- easing js -->
+<script src="{% static 'landingpage/js/jquery.magnific-popup.js'%}"></script>
+<!-- isotope js -->
+<script src="{% static 'landingpage/js/swiper.min.js'%}"></script>
+<!-- isotope js -->
+<script src="{% static 'landingpage/js/isotope.pkgd.min.js'%}"></script>
+<!-- particles js -->
+<script src="{% static 'landingpage/js/owl.carousel.min.js'%}"></script>
+<script src="{% static 'landingpage/js/jquery.nice-select.min.js'%}"></script>
+<!-- animated Modal -->
+<script src="{% static 'landingpage/js/modaal.min.js'%}"></script>
+<!-- custom js -->
+<script src="{% static 'landingpage/js/custom.js'%}"></script>
+{% block extra_scrips %}
+{% endblock %}
 </body>
 
 </html>
