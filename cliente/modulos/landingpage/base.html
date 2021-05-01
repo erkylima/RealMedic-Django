@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{% static 'landingpage/css/style.css' %}" />
     <!-- animated Modal -->
     <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/modaal.min.css' %}">
-    <meta property="og:image" content="{% static 'landingpage/img/LOGO REAL MEDIC TRANSPARENTE.png' %}">
+    <meta property="og:image" content="{{ request.build_absolute_uri }}static/landingpage/img/LOGO REAL MEDIC TRANSPARENTE.png">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4NKZWEGVY7"></script>
