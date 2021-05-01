@@ -11,6 +11,7 @@ class ListaEmpresa(Timestampable):
         verbose_name = 'Lista de Empresa LandingPage'
         verbose_name_plural = 'Lista de Empresa LandingPage'
     nome = models.CharField(max_length=100,default='')
+    nome_slug = models.CharField(max_length=50, default='all')
     def __str__(self):
         return self.nome.upper()
 
