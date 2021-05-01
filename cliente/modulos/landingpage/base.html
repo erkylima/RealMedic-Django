@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="title" content="RealMedic - Conectando você à saúde">
     <link rel='preload' as='image' href="{% static 'landingpage/img/banner_img.png' %}">
-    <meta name="msapplication-TileImage" content="{{ request.get_full_path  }}{% static 'landingpage/img/banner_img.png' %}">
-    <meta property="og:image" content="{{ request.get_full_path  }}/static/landingpage/img/logo_transparente.png">
+    <meta name="msapplication-TileImage" content="{{ request.build_absolute_uri  }}{% static 'landingpage/img/banner_img.png' %}">
+    <meta property="og:image" content="{{ request.build_absolute_uri  }}/static/landingpage/img/logo_transparente.png">
     <meta property="og:site_name" content="Blog do Elvis"/>
     <meta property="og:image:width" content="800"/>
     <meta property="og:image:height" content="600"/>
