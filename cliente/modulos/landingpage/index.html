@@ -57,7 +57,7 @@
 
                     <select onchange="pesquisar()" name="especialidade" id="especialidade">
                         <option value="">Todas as Especialidades</option>
-{#                        <option {% if  pesquisa == 'cirurgião dentista'%} selected {% endif %} value="cirurgião dentista">Cirurgião Dentista</option>#}
+                        {#                        <option {% if  pesquisa == 'cirurgião dentista'%} selected {% endif %} value="cirurgião dentista">Cirurgião Dentista</option>#}
 
                         {% for especialidade in especialidades %}
                             <option {% if  pesquisa == especialidade.descricao %} selected {% endif %} value="{{ especialidade.descricao }}">{{especialidade.descricao}}</option>
@@ -89,13 +89,23 @@
                                     <div class="hover_text">
                                         <div id="inline{{profissional.pk}}" style="display:none;">
                                             <img src="{{ profissional.imagem.url }}" alt="">
-                                            <h1>{{ profissional.nome }}</h1>
-                                            <h4>{{ profissional.especialidade }}</h4>
+                                            <h1>{{ profissional.nome }}
+                                            </h1>
+                                            <h4>
+                                                {% for atends in profissional.especi.values %}
+                                                    {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                                {% endfor %}
+                                                {{ profissional.especialidade }}</h4>
                                             <p>{{ profissional.agenda }}</p>
                                             <p>{{ profissional.local_atendimento }}</p>
+                                            <p>Serviços:</p>
+                                            <p>{{ profissional.servicos | linebreaks  }}
+                                            </p>
+
                                         </div>
-                                        <p>{{ profissional.especialidade }}</p>
-                                        {{profissional.especi}}
+                                        <p>{% for atends in profissional.especi.values %}
+                                            {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                        {% endfor %}</p>
 
                                         <a style="color: #24BFB6;" href="#">
                                             <h3>{{ profissional.nome }} <a href="#" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>

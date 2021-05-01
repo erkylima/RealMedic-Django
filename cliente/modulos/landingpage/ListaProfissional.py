@@ -34,10 +34,11 @@ class ListaProfissional(Timestampable):
         verbose_name_plural = 'Lista de LandingPage'
     listaempresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT,related_name='prof',default=1)
     nome = models.CharField(max_length=100,default='')
-    especi = models.ForeignKey(TipoProfissional, on_delete=models.PROTECT, related_name='espec', default=1)
+    especi = models.ManyToManyField(TipoProfissional, related_name='espec')
     agenda = models.CharField(max_length=100,default='')
     local_atendimento = models.CharField(max_length=100,default='')
     imagem = models.ImageField(upload_to='images/profs', name='', storage=OverwriteStorage(),default='')
+    servicos = models.TextField(default='')
 
     def __str__(self):
         return self.nome.upper()
