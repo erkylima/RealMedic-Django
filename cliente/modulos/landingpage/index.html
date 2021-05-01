@@ -72,7 +72,7 @@
                         <ul>
                             <li class="active" data-filter="*">Todas</li>
                             {% for empresa in empresas %}
-                                <li data-filter=".{{empresa.nome}}">{{ empresa.nome }}</li>
+                                <li data-filter=".{{empresa.nome_slug}}">{{ empresa.nome }}</li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -82,7 +82,7 @@
             <div class="filters-content">
                 <div class="row justify-content-between portfolio-grid">
                     {% for profissional in lista %}
-                        <div class="col-lg-3  all {{profissional.listaempresa.nome}}">
+                        <div class="col-lg-3  all {{profissional.listaempresa.nome_slug}}">
                             <div class="single_our_project">
                                 <div class="single_offer">
                                     <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
