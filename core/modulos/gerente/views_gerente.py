@@ -6,8 +6,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView
 from rest_framework.authtoken.models import Token
 
-from core.models import Gerente
-from core.modulos.user_profile.form_user_profile import GerenteForm
+from core.modulos.gerente.form_gerente import GerenteForm
+from core.modulos.gerente.gerente import Gerente
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import MyListViewSearcheGeneric, MyLabls, ValidarEmpresa
 

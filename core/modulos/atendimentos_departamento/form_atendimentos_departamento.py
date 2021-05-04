@@ -32,7 +32,7 @@ class AtendimentosDepartamentoForm(forms.ModelForm):
         self.fields['tipo_atendimento'].initial = 0
 
 
-        self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.departamento.empresa_id)
+        self.fields['departamento'].queryset = Departamento.objects.filter(empresa_id=usuario.userProfile.departamento.empresa_id)
 
         CHOICES = ([('00:10:00', '00h'), ('00:20:00', '00h'), ('00:30:00', '00h'), ('00:40:00', '00h'),('00:50:00', '00h'),
                     ('01:00:00', '01h'), ('01:10:00', '01h'), ('01:20:00', '01h'), ('01:30:00', '01h'), ('01:40:00', '01h'), ('01:50:00', '01h'), ('02:00:00', '02h'),])

@@ -2,13 +2,13 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from django.urls import reverse_lazy
 
-from core.models import Empresa, UserProfile
 from core.modulos.departamento.departamento import Departamento
+from core.modulos.gerente.gerente import Gerente
 from core.util.labels_property import LabesProperty
 from core.util.util_manager import adiciona_form_control
 
 
-class UserProfileForm(forms.ModelForm):
+class GerenteForm(forms.ModelForm):
     # password = forms.CharField(label="Senha",
     #                            widget=forms.PasswordInput(
     #                                attrs={"id": "password", }), )
@@ -17,12 +17,12 @@ class UserProfileForm(forms.ModelForm):
     #                                       attrs={"id": "confirmpassword", }), )
 
     class Meta:
-        model = UserProfile
+        model = Gerente
         fields = '__all__'
         exclude = ('senha', 'user')
 
     def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
+        super(GerenteForm, self).__init__(*args, **kwargs)
         select_master_empresa = 'empresa'
 
         self.fields['empresa'].widget.attrs['id'] = 'id_empresa'
@@ -64,12 +64,12 @@ class UserProfileForm(forms.ModelForm):
                 self.validarEmailUsuario(email)
 
     def validarLoginUsuario(self, login):
-        usuario = UserProfile.objects.filter(usuario=login)
+        usuario = Gerente.objects.filter(usuario=login)
         user = User.objects.filter(username=login)
         if usuario.exists() or user.exists():
             self.add_error('usuario', LabesProperty.ERROR_NOME_USUARIO_EXISTE)
 
     def validarEmailUsuario(self, email):
-        email = UserProfile.objects.filter(email=email)
+        email = Gerente.objects.filter(email=email)
         if email.exists():
             self.add_error('email', LabesProperty.ERROR_EMAIL_USUARIO_EXISTE)
