@@ -15,12 +15,13 @@
             {% endfor %}
             <td>
                 <a type="button"
-                   class="btn btn-rounded btn-primary"
+                   class="btn btn-rounded btn-primary" data-placement="top" title="Editar informações"
                    href="{% url 'core:modulo:profissional:update_view' profissional.id %}">
                     <i class="fa fa-edit"></i>
                 </a>
                 <a type="button"
                    class="btn btn-rounded btn-primary"
+                   data-toggle="tooltip" data-placement="top" title="Editar escala"
                    href="{% url 'core:modulo:profissional:profissional_escala_view' profissional.id %}">
                     <i class="fa fa-clock"></i>
                 </a>
