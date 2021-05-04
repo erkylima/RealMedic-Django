@@ -95,6 +95,7 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         user.save()
 
         userComum = UserComum()
+        userComum.save()
         userComum.user.groups.add(Group.objects.get(name='Profissional').pk)
         userComum.nome = self.request.POST.get('nome')
         userComum.usuario = self.request.POST.get('usuario')
