@@ -95,12 +95,12 @@ class ProfissionalCreateView(MyCreateViewProfissional):
         user.save()
 
         userComum = UserComum()
-        userComum.user.groups.add(Group.objects.get(name='Profissinal').pk)
+        userComum.user.groups.add(Group.objects.get(name='Profissional').pk)
         userComum.nome = self.request.POST.get('nome')
         userComum.usuario = self.request.POST.get('usuario')
         userComum.senha = 'admin123admin'
         userComum.user = user
-        userComum.perfil_id = Group.objects.get(name='Profissinal').pk  # Perfil do Profissional Padrão
+        userComum.perfil_id = Group.objects.get(name='Profissional').pk  # Perfil do Profissional Padrão
         userComum.email = self.request.POST.get('email')
         userComum.save()
         profissionalForm.userComum = userComum
