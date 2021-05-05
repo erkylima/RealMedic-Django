@@ -26,15 +26,14 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12">
-                    <div class="single_client_logo">
-                            <img src="{% static 'landingpage/img/logo/SANTA SARAH 2.png'%}" alt="" />
-                        </div>
+
                     <div class="client_logo_slider owl-carousel d-flex justify-content-between">
                         <div class="single_client_logo">
-{#                            <img src="{% static 'landingpage/img/logo/SANTA SARAH 2.png'%}" alt="" />#}
+                            <img src="{% static 'landingpage/img/logo/SANTASARAH2.png'%}" alt="" />
                         </div>
-
-
+                        <div class="single_client_logo">
+                            <img src="{% static 'landingpage/img/logo/integraclinic.png'%}" alt="" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,6 +67,7 @@
                             {% for empresa in empresas %}
                                 <li data-filter=".{{empresa.nome_slug}}">{{ empresa.nome }}</li>
                             {% endfor %}
+
                         </ul>
                     </div>
 
