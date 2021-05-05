@@ -17,8 +17,8 @@ class MyGenericView(object):
     model = AtendimentosDepartamento
     form_class = AtendimentosDepartamentoForm
     success_url = reverse_lazy('core:modulo:atendimentos_departamento:list_view')
-    search_fields = ['descricao']
-    COLUMNS = [LabesProperty.DESCRICAO, LabesProperty.DEPARTAMENTO]
+    search_fields = ['descricao', 'tipo_atendimento__tipo_profissional__descricao']
+    COLUMNS = [LabesProperty.DESCRICAO, LabesProperty.TIPO_PROFISSIONAL, LabesProperty.DEPARTAMENTO]
     NAME_MODEL = AtendimentosDepartamento._meta.verbose_name
     NAME_MODEL_PLURAL = AtendimentosDepartamento._meta.verbose_name_plural
     PAGE_CREATE_VIEW = reverse_lazy('core:modulo:atendimentos_departamento:create_view')
@@ -52,8 +52,7 @@ class AtendimentosDepartamentoListView(MyListViewAtendimentosDepartamento):
         usuario = get_user_type(self.request.user)
 
         if (self.request.GET.get('q')):
-
-            queryset = AtendimentosDepartamento.objects.filter(Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) & Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
+            queryset = AtendimentosDepartamento.objects.filter((Q(tipo_atendimento__descricao__icontains=self.request.GET.get('q')) | Q(tipo_atendimento__tipo_profissional__descricao__icontains=self.request.GET.get('q'))) & Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         else:
             queryset = AtendimentosDepartamento.objects.filter(Q(departamento__empresa_id=usuario.userProfile.departamento.empresa_id))
         return queryset
@@ -114,7 +113,7 @@ class AtendimentosDepartamentoUpdateView(MyUpdateViewAtendimentosDepartamento):
 @login_required()
 def getTipoProfissionalPorIdTipoAtendimento(request, idTipoAtendimento):
     subs = {}
-    tipo_atendimento = TipoAtendimento.objects.get(pk=idTipoAtendimento)
-
-    subs['idProfissional'] = tipo_atendimento.tipo_profissional.pk
+    tipo_atendimento = TipoAtendimento.objects.filter(tipo_profissional=idTipoAtendimento)
+    for dep in tipo_atendimento:
+        subs[dep.id] = dep.descricao
     return JsonResponse(subs)

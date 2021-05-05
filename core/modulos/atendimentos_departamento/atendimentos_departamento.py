@@ -14,7 +14,6 @@ class AtendimentosDepartamento(Timestampable):
         verbose_name_plural = 'ATENDIMENTOS DO DEPARTAMENTO'
     departamento  = models.ForeignKey(Departamento, on_delete=models.PROTECT, default=1)
     nome = models.CharField('Nome', max_length=255, blank=True, null=True)
-    tipo_profissional = models.IntegerField()
     tipo_atendimento = models.ForeignKey(TipoAtendimento, on_delete=models.PROTECT, default=1)
     tempo_padrao = models.TimeField(verbose_name='Tempo Padrão',default=timezone.now)
     valor_padrao = models.DecimalField(verbose_name='Preço Padrão',decimal_places=2,max_digits=5, default=0)
@@ -31,8 +30,12 @@ class AtendimentosDepartamento(Timestampable):
         return self.departamento
 
     @property
+    def getTipoProfissional(self):
+        return self.tipo_atendimento.tipo_profissional.descricao
+
+    @property
     def getListAtributes(self):
-        atributos = ['getDescricao', 'getDepartamento']
+        atributos = ['getDescricao', 'getTipoProfissional','getDepartamento']
         inter_lista = []
         for row in atributos:
             field_value = getattr(self, row, None)

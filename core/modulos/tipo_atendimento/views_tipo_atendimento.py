@@ -104,6 +104,7 @@ class TipoAtendimentoUpdateView(MyUpdateViewTipoAtendimento):
 @login_required()
 def getTiposAtendimentosPorIdTipoProfissional(request, idTipoProfissional, idDepartamento):
     subs = {}
+
     tipos_atendimentos = AtendimentosDepartamento.objects.filter(tipo_atendimento__tipo_profissional=idTipoProfissional,departamento_id=idDepartamento)
     for dep in tipos_atendimentos:
         subs[dep.id] = dep.tipo_atendimento.descricao

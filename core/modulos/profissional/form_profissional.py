@@ -13,7 +13,7 @@ from core.util.util_manager import adiciona_form_control, get_user_type
 class ProfissionalForm(forms.ModelForm):
     # empresa = forms.ModelChoiceField(label="Empresa", queryset=None, widget=forms.Select())
     departamento = forms.ModelChoiceField(label="Departamento", queryset=Departamento.objects.none(), widget=forms.Select())
-    tipo_profissional = forms.ModelChoiceField(label="Tipo de Profissional", queryset=TipoProfissional.objects.all(), widget=forms.Select())
+    tipo_profissional = forms.ModelChoiceField(label="Especialidade", queryset=TipoProfissional.objects.all(), widget=forms.Select())
     # codigo = forms.CharField(label="Código")
     nome = forms.CharField(label="Nome")
     descricao = forms.CharField(label="Descrição")

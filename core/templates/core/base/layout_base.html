@@ -5,7 +5,7 @@
 <!-- Mirrored from themekita.com/demo-atlantis-bootstrap/livepreview/examples/demo1/forms/formwidget.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2020 16:24:26 GMT -->
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Real Consulta</title>
+    <title>RealMedic</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
     <link rel="icon" href="{% static 'core/base/assets/img/icon.ico' %}" type="image/x-icon"/>
 
@@ -340,10 +340,17 @@
                 select_master: valor       // add the select_master id to the GET parameters
             },
             success: function (data) {
-                id_item_carregar.val(data.idProfissional);
+                id_item_carregar.empty();
+                id_item_carregar.append('<option value >---------</option>');
+                $.each(data, function (key, value) {
+                    id_item_carregar.append('<option value="' + key + '">' + value + '</option>');
+                });
+                try {
 
-                {#id_sub_setor.selectpicker('refresh')#}
-                {#seelct_setor.selectpicker('refresh')#}
+                }
+                catch(err) {
+
+                }
             }
         })
 

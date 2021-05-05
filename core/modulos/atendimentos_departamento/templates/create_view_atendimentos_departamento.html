@@ -2,27 +2,39 @@
 {% load static %}
 
 {% block corpo_formulario %}
-    <input type="hidden" name="tipo_profissional" id="id_tipo_profissional" value="{{ form.tipo_profissional.value }}">
+    {#    <input type="hidden" name="tipo_profissional" id="id_tipo_profissional" value="{{ form.tipo_profissional.value }}">#}
+
     <div class="row">
-        <div class="col-md-3 form-group ">
+        <div class="col-sm-12 col-md-3 col-lg-3  form-group ">
             {{ form.departamento.label_tag }}
             {{ form.departamento }}
             {{ form.departamento.errors }}
         </div>
-        <div class="col-md-3 form-group ">
+        <div class="col-sm-12 col-md-3 col-lg-3 form-group ">
+            {{ form.tipo_profissional.label_tag }}
+            {{ form.tipo_profissional }}
+            {{ form.tipo_profissional.errors }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-6 form-group ">
             {{ form.tipo_atendimento.label_tag }}
             {{ form.tipo_atendimento }}
             {{ form.tipo_atendimento.errors }}
         </div>
-        <div class="col-md-1 form-group ">
-            {{ form.publico.label_tag }}
-            {{ form.publico }}
-            {{ form.publico.errors }}
-        </div>
-        <div class="col-md-5 form-group ">
+
+
+    </div>
+
+    <div class="row ">
+
+        <div class="col-sm-12 col-md-3 col-lg-1 form-group ">
             {{ form.valor_padrao.label_tag }}
             {{ form.valor_padrao }}
             {{ form.valor_padrao.errors }}
+        </div>
+        <div class="col-sm-12 col-md-1 col-lg-1 form-group ">
+            {{ form.publico.label_tag }}
+            {{ form.publico }}
+            {{ form.publico.errors }}
         </div>
     </div>
 
