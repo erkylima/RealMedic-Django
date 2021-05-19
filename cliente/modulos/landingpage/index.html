@@ -44,72 +44,83 @@
     <!-- our_project part start-->
     <section class="our_project section_padding single_page_project" id="portfolio">
         <div class="container-fluid">
-            <div class="row justify-content-center align-items-center mb-4">
-                <div class="col-lg-1">
-                    <label for="especialidade">Especialidade</label>
+            <div class="row">
+                <div class="col-3">
+                    <h1 class="ml-5">Filtros</h1>
+                    <div class="container ml-5">
+                        <div class="row">
+                            <label for="especialidade">Especialidade:</label>
+                        </div>
+                        <div class="row">
+                            <select onchange="pesquisar()" name="especialidade" id="especialidade">
+                                <option value="">Todas as Especialidades</option>
+                                {#                        <option {% if  pesquisa == 'cirurgião dentista'%} selected {% endif %} value="cirurgião dentista">Cirurgião Dentista</option>#}
 
-                    <select onchange="pesquisar()" name="especialidade" id="especialidade">
-                        <option value="">Todas as Especialidades</option>
-                        {#                        <option {% if  pesquisa == 'cirurgião dentista'%} selected {% endif %} value="cirurgião dentista">Cirurgião Dentista</option>#}
+                                {% for especialidade in especialidades %}
+                                    <option {% if  pesquisa == especialidade.descricao %} selected {% endif %} value="{{ especialidade.descricao }}">{{especialidade.descricao}}</option>
+                                {% endfor %}
 
-                        {% for especialidade in especialidades %}
-                            <option {% if  pesquisa == especialidade.descricao %} selected {% endif %} value="{{ especialidade.descricao }}">{{especialidade.descricao}}</option>
-                        {% endfor %}
-
-                    </select>
-                </div>
-            </div>
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-12">
-                    <div class="filters portfolio-filter project_menu_item text-center">
-                        <ul>
-                            <li class="active" data-filter="*">Todas</li>
-                            {% for empresa in empresas %}
-                                <li data-filter=".{{empresa.nome_slug}}">{{ empresa.nome }}</li>
-                            {% endfor %}
-
-                        </ul>
+                            </select>
+                            <hr>
+                        </div>
                     </div>
-
                 </div>
-            </div>
-            <div class="filters-content">
-                <div class="row justify-content-between portfolio-grid">
-                    {% for profissional in lista %}
-                        <div class="col-lg-3  all {{profissional.listaempresa.nome_slug}}">
-                            <div class="single_our_project">
-                                <div class="single_offer">
-                                    <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
-                                    <div class="hover_text">
-                                        <div id="inline{{profissional.pk}}" style="display:none;">
-                                            <img src="{{ profissional.imagem.url }}" alt="">
-                                            <h1>{{ profissional.nome }}
-                                            </h1>
-                                            <h4>
-                                                {% for atends in profissional.especi.values %}
-                                                    {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
-                                                {% endfor %}
-                                                {{ profissional.especialidade }}</h4>
-                                            <p>{{ profissional.agenda }}</p>
-                                            <p>{{ profissional.local_atendimento }}</p>
-                                            <p>Serviços:</p>
-                                            <p>{{ profissional.servicos | linebreaks  }}
-                                            </p>
+                <div class="col-9">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-lg-12">
+                                <div class="filters portfolio-filter project_menu_item text-center">
+                                    <ul>
+                                        <li class="active" data-filter="*">Todas</li>
+                                        {% for empresa in empresas %}
+                                            <li data-filter=".{{empresa.nome_slug}}">{{ empresa.nome }}</li>
+                                        {% endfor %}
 
-                                        </div>
-                                        <p>{% for atends in profissional.especi.values %}
-                                            {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
-                                        {% endfor %}</p>
-
-                                        <a style="color: #24BFB6;" href="#">
-                                            <h3>{{ profissional.nome }} <a href="#" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
-                                            </h3>
-                                        </a>
-                                    </div>
+                                    </ul>
                                 </div>
+
                             </div>
                         </div>
-                    {% endfor %}
+                        <div class="filters-content">
+                            <div class="row justify-content-between portfolio-grid">
+                                {% for profissional in lista %}
+                                    <div class="col-lg-3  all {{profissional.listaempresa.nome_slug}}">
+                                        <div class="single_our_project">
+                                            <div class="single_offer">
+                                                <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
+                                                <div class="hover_text">
+                                                    <div id="inline{{profissional.pk}}" style="display:none;">
+                                                        <img src="{{ profissional.imagem.url }}" alt="">
+                                                        <h1>{{ profissional.nome }}
+                                                        </h1>
+                                                        <h4>
+                                                            {% for atends in profissional.especi.values %}
+                                                                {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                                            {% endfor %}
+                                                            {{ profissional.especialidade }}</h4>
+                                                        <p>{{ profissional.agenda }}</p>
+                                                        <p>{{ profissional.local_atendimento }}</p>
+                                                        <p>Serviços:</p>
+                                                        <p>{{ profissional.servicos | linebreaks  }}
+                                                        </p>
+
+                                                    </div>
+                                                    <p>{% for atends in profissional.especi.values %}
+                                                        {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                                    {% endfor %}</p>
+
+                                                    <a style="color: #24BFB6;" href="#">
+                                                        <h3>{{ profissional.nome }} <a href="#" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
+                                                        </h3>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
