@@ -85,7 +85,7 @@ class ProfissionalForm(forms.ModelForm):
                 'nome')
             self.fields['departamento'].initial = dep
             self.fields['tiposAtendimentos'].queryset = AtendimentosDepartamento.objects.filter(
-                departamento_id=dep.pk,tipo_profissional=tipo.pk).order_by(
+                departamento_id=dep.pk,tipo_atendimento__tipo_profissional_id=tipo.pk).order_by(
                 'tipo_atendimento__descricao')
 
             self.fields['tiposAtendimentos'].initial = inicio.profissional.tiposAtendimentos
