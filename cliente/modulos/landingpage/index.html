@@ -110,7 +110,7 @@
                                                     {% endfor %}</p>
 
                                                     <a style="color: #24BFB6;" href="#">
-                                                        <h3>{{ profissional.nome }} <a href="#" onclick="clicou()" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
+                                                        <h3>{{ profissional.nome }} <a href="#" onclick="clicou({{ profissional.nome }})" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
                                                         </h3>
                                                     </a>
                                                 </div>
@@ -140,8 +140,8 @@
         function pesquisar() {
             window.location.href = baseurl + "?q=" + $( "#especialidade option:selected" ).val();
         }
-        function clicou(){
-            mixpanel.track("Video play", {"genre": "hip-hop", "duration in seconds": 42});
+        function clicou(nome){
+            mixpanel.track("Video play", {"title": nome, "duration in seconds": 42});
         }
     </script>
 {% endblock %}
