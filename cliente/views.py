@@ -1,9 +1,10 @@
-
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views.generic import TemplateView
 
+from cliente.models import ContactForm, Contact
 from cliente.modulos.landingpage.ListaProfissional import ListaProfissional, ListaEmpresa
 from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 
@@ -28,3 +29,18 @@ class ListaProfissionalListView(TemplateView):
 
 class SobreListView(TemplateView):
     template_name ='landingpage/about.html'
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contato = Contact.objects.get_or_create(email=request.POST.get('email'))
+            contato = Contact.objects.get(email=request.POST.get('email'))
+            contato.name = request.POST.get('name')
+            contato.save()
+            messages.success(request, 'Que bom que você deseja tornar a saúde mais acessível! Entraremos em contato em breve.')
+        else:
+            messages.error(request, 'Preencha todos os campos.')
+        return redirect("core:cliente:sobre")
+    

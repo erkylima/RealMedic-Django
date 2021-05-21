@@ -66,6 +66,7 @@
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
+
 </head>
 
 <body>
@@ -94,8 +95,8 @@
                         </ul>
                     </div>
                     <div class="social_icon d-none d-lg-block">
-                        <a href="#"><i class="ti-facebook"></i></a>
-                        <a href="#"><i class="ti-instagram"></i></a>
+                        {#                        <a href=""><i class="ti-facebook"></i></a>#}
+                        <a href="https://instagram.com/forclin"><i class="ti-instagram"></i></a>
                     </div>
                 </nav>
             </div>
@@ -112,20 +113,7 @@
 {% endblock content %}
 
 
-<!--::cta_part start::-->
-<div class="cta_part">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-7">
-                <div class="cta_iner">
-                    <h1>Vamos facilitar o seu acesso à médicos</h1>
-                    <a href="{% url 'core:cliente:sobre' %}" class="btn_1">Nos conheça</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--::cta_part end::-->
+
 
 <!-- footer part start-->
 <footer class="footer-area">
@@ -142,8 +130,8 @@
                             facilitamos o caminho para um estilo de vida saudável.</li>
                     </ul>
                     <div class="social_icon">
-                        <a href="#"><i class="ti-facebook"></i></a>
-                        <a href="#"><i class="ti-instagram"></i></a>
+                        {#                        <a href="#"><i class="ti-facebook"></i></a>#}
+                        <a href="https://instagram.com/forclin"><i class="ti-instagram"></i></a>
                     </div>
                 </div>
             </div>
@@ -196,7 +184,7 @@
                                 Copyright &copy;
                                 <script>
                                     document.write(new Date().getFullYear());
-                                </script> Todos os direitos reservados| Esse site foi criado com <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                </script> Todos os direitos reservados <!--| Esse site foi criado com <a href="https://colorlib.com" target="_blank">Colorlib</a>-->
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
