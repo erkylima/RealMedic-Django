@@ -43,6 +43,9 @@ class ListaProfissional(Timestampable):
     def __str__(self):
         return self.nome.upper()
 
+    def Especialidades(self):
+        return "\n, ".join([p.descricao for p in self.especi.all()])
+
     def getJson(self):
         return dict(
             id=self.pk,

@@ -22,8 +22,6 @@ from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 # BASE
 from core.modulos.user_profile.user_profile import UserProfile, UserComum
 
-admin.site.register(ListaEmpresa)
-admin.site.register(ListaProfissional)
 admin.site.register(AreaAtendimento)
 admin.site.register(LatLng)
 admin.site.register(Empresa)
