@@ -156,7 +156,7 @@
             window.location.href = baseurl + "?q=" + $( "#especialidade option:selected" ).val();
         }
         function clicou(nome){
-            mixpanel.track("Viu o Contato", {"title": nome});
+            mixpanel.track("Video play", {"genre": nome});
         }
     </script>
 {% endblock %}
