@@ -5,6 +5,12 @@ from django.db import models
 
 from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 
+class Pais(models.Model):
+    class Meta:
+        verbose_name = 'País'
+        verbose_name_plural = 'País'
+    nome = models.CharField(max_length=50)
+    sigla = models.CharField(max_length=10)
 
 class ListaEmpresa(Timestampable):
     class Meta:
