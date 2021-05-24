@@ -2,8 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 from cliente.models import Contact
-from cliente.modulos.landingpage.ListaProfissional import ListaEmpresa, ListaProfissional
+from cliente.modulos.landingpage.ListaProfissional import ListaEmpresa, ListaProfissional, Pais
 
+admin.site.register(Pais)
 
 @admin.register(Contact)
 class PersonAdmin(admin.ModelAdmin):
