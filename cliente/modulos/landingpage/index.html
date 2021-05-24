@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block content %}
-
+<style>
+p{
+    color: black;
+}
+</style>
     <!-- banner part start-->
     <section class="banner_part">
         <div class="container">
@@ -90,27 +94,34 @@
                                                 <img src="{{ profissional.imagem.url }}" alt="offer_img_1" />
                                                 <div class="hover_text">
                                                     <div id="inline{{profissional.pk}}" style="display:none;">
-                                                        <img src="{{ profissional.imagem.url }}" alt="">
-                                                        <h1>{{ profissional.nome }}
-                                                        </h1>
-                                                        <h4>
-                                                            {% for atends in profissional.especi.values %}
-                                                                {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
-                                                            {% endfor %}
-                                                            {{ profissional.especialidade }}</h4>
-                                                        <p>{{ profissional.agenda }}</p>
-                                                        <p>{{ profissional.local_atendimento }}</p>
-                                                        <p>Serviços:</p>
-                                                        <p>{{ profissional.servicos | linebreaks  }}
-                                                        </p>
-
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-lg-6 col-sm-12">
+                                                                    <img src="{{ profissional.imagem.url }}" alt="">
+                                                                </div>
+                                                                <div class="col-lg-6 col-sm-12">
+                                                                    <h1>{{ profissional.nome }}
+                                                                    </h1>
+                                                                    <h4>
+                                                                        {% for atends in profissional.especi.values %}
+                                                                            {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                                                        {% endfor %}
+                                                                        {{ profissional.especialidade }}</h4>
+                                                                    <p>{{ profissional.agenda }}</p>
+                                                                    <p>{{ profissional.local_atendimento }}</p>
+                                                                    <p>Serviços:</p>
+                                                                    <p>{{ profissional.servicos | linebreaks  }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <p>{% for atends in profissional.especi.values %}
                                                         {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
                                                     {% endfor %}</p>
 
                                                     <a style="color: #24BFB6;" href="#">
-                                                        <h3>{{ profissional.nome }} <a href="#" onclick="clicou('{{ profissional.nome }}')" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
+                                                        <h3>{{ profissional.nome }} <a href="#" onclick="" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
                                                         </h3>
                                                     </a>
                                                 </div>
