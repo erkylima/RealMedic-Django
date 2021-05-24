@@ -7,15 +7,13 @@ class ContactForm(forms.Form):
 	email = forms.EmailField(max_length = 150)
 
 class Contact(models.Model):
-
-    class Meta:
-        verbose_name = 'CONTATO'
-        verbose_name_plural = 'CONTATOS'
-
     name = models.CharField(max_length=50)
     email = models.EmailField()
     lido = models.BooleanField(default=False)
-    
+
+    class Meta:
+        verbose_name = 'Contato'
+        verbose_name_plural = 'Contatos'
+
     def __str__(self):
-        if self.lido:
-            return self.name
+        return self.name

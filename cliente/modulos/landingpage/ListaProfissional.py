@@ -7,17 +7,22 @@ from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 
 class Pais(models.Model):
     class Meta:
-        verbose_name = 'País'
-        verbose_name_plural = 'País'
+        verbose_name = 'PAÍS'
+        verbose_name_plural = 'PAÍSES'
     nome = models.CharField(max_length=50)
     sigla = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.nome
 
 class ListaEmpresa(Timestampable):
     class Meta:
         verbose_name = 'Lista de Empresa LandingPage'
         verbose_name_plural = 'Lista de Empresa LandingPage'
+    pais = models.ForeignKey(Pais, on_delete=models.PROTECT, default=1)
     nome = models.CharField(max_length=100,default='')
     nome_slug = models.CharField(max_length=50, default='all')
+    ativo = models.BooleanField(default=True)
     def __str__(self):
         return self.nome.upper()
 
@@ -45,7 +50,7 @@ class ListaProfissional(Timestampable):
     local_atendimento = models.CharField(max_length=100,default='')
     imagem = models.ImageField(upload_to='images/profs', name='', storage=OverwriteStorage(),default='')
     servicos = models.TextField(default='')
-
+    ativo = models.BooleanField(default=True)
     def __str__(self):
         return self.nome.upper()
 
