@@ -16,3 +16,6 @@ scp -r root@165.22.191.46:/webapps/covid_19/COVID-19-ST-Backend/config/base.json
 
 
 psql -h localhost -U postgres -d covid_19 -f local_arquivo.sql
+
+
+
