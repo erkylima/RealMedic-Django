@@ -15,6 +15,7 @@ class ListaProfissionalListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ListaProfissionalListView, self).get_context_data(**kwargs)
         context['empresas'] = ListaEmpresa.objects.filter(pais__nome__icontains="Brasil").order_by('?')
+        context['cidade'] = 'Floresta-PE'
         context['especialidades'] = TipoProfissional.objects.all().order_by('descricao')
         pesquisa = self.request.GET.get('q')
         context['pesquisa'] = str(pesquisa)
@@ -31,6 +32,7 @@ class ListaProfissionalAngolaListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ListaProfissionalAngolaListView, self).get_context_data(**kwargs)
         context['empresas'] = ListaEmpresa.objects.filter(pais__nome__icontains="Angola").order_by('?')
+        context['municipio'] = 'Luanda-LU'
         print(ListaEmpresa.objects.filter(pais__nome__icontains="Angola").order_by('?'))
         context['especialidades'] = TipoProfissional.objects.all().order_by('descricao')
         pesquisa = self.request.GET.get('q')

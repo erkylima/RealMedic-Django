@@ -85,9 +85,9 @@
                     <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
                         <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
                     </a>
-                    <label style="color: white" for="cidade" class="mr-1">Cidade: </label>
+                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% else %}Cidade: {% endif %}</label>
                     <select name="cidade" id="cidade">
-                        <option value="">Floresta-PE</option>
+                        <option value="">{{ municipio }}{{ cidade }}</option>
                     </select>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="ti-menu"></span>
