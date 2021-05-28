@@ -100,8 +100,8 @@ p{
                                                                     <img src="{{ profissional.imagem.url }}" alt="">
                                                                 </div>
                                                                 <div class="col-lg-6 col-sm-12">
-                                                                    <h1>{{ profissional.nome }}
-                                                                    </h1>
+                                                                    <h2>{{ profissional.nome }}
+                                                                    </h2>
                                                                     <h4>
                                                                         {% for atends in profissional.especi.values %}
                                                                             {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
@@ -116,13 +116,13 @@ p{
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <p>{% for atends in profissional.especi.values %}
+                                                    <p style="font-size: 10pt">{% for atends in profissional.especi.values %}
                                                         {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
                                                     {% endfor %}</p>
 
                                                     <a style="color: #24BFB6;" href="#">
-                                                        <h3>{{ profissional.nome }} <a href="#" onclick="clicou('{{ profissional.nome }}')" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
-                                                        </h3>
+                                                        <h4>{{ profissional.nome }} <a href="#" onclick="clicou('{{ profissional.nome }}')" class="genric-btn primary small inline{{profissional.pk}}">Ver Contato</a>
+                                                        </h4>
                                                     </a>
                                                 </div>
                                             </div>

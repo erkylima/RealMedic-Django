@@ -14,14 +14,32 @@ class ListaProfissionalListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ListaProfissionalListView, self).get_context_data(**kwargs)
-        context['empresas'] = ListaEmpresa.objects.all().order_by('?')
+        context['empresas'] = ListaEmpresa.objects.filter(pais__nome__icontains="Brasil").order_by('?')
         context['especialidades'] = TipoProfissional.objects.all().order_by('descricao')
         pesquisa = self.request.GET.get('q')
         context['pesquisa'] = str(pesquisa)
-        if(pesquisa!=None):
-            context['lista'] = ListaProfissional.objects.all().order_by('?').filter(especi__descricao__icontains=str(pesquisa))
+        if (pesquisa != None):
+            context['lista'] = ListaProfissional.objects.filter(especi__descricao__icontains=str(pesquisa),
+                                                                listaempresa__pais__nome__icontains='Brasil').order_by('?')
         else:
-            context['lista'] = ListaProfissional.objects.all().order_by('?')
+            context['lista'] = ListaProfissional.objects.filter(listaempresa__pais__nome__icontains='Brasil').order_by('?')
+        return context
+
+class ListaProfissionalAngolaListView(TemplateView):
+    template_name ='landingpage/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ListaProfissionalAngolaListView, self).get_context_data(**kwargs)
+        context['empresas'] = ListaEmpresa.objects.filter(pais__nome__icontains="Angola").order_by('?')
+        print(ListaEmpresa.objects.filter(pais__nome__icontains="Angola").order_by('?'))
+        context['especialidades'] = TipoProfissional.objects.all().order_by('descricao')
+        pesquisa = self.request.GET.get('q')
+        context['pesquisa'] = str(pesquisa)
+        if (pesquisa != None):
+            context['lista'] = ListaProfissional.objects.filter(especi__descricao__icontains=str(pesquisa),
+                                                                listaempresa__pais__nome__icontains='Angola').order_by('?')
+        else:
+            context['lista'] = ListaProfissional.objects.filter(listaempresa__pais__nome__icontains='Angola').order_by('?')
         return context
 
 
