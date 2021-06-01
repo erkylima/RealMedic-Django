@@ -1,0 +1,34 @@
+{% load static %}
+<div class="main-header">
+    <!-- Logo Header -->
+    <div class="logo-header" data-background-color="blue">
+
+        <a href="{% url 'core:modulo:dashboard'%}" class="logo">
+            <img src="{% static 'core/base/assets/img/logo.png' %}" alt="navbar brand" class="navbar-brand">
+        </a>
+
+    </div>
+    <!-- End Logo Header -->
+
+    <!-- Navbar Header -->
+    <nav class="navbar navbar-expand-lg bg-secondary">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Features</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Pricing</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+    <!-- End Navbar -->
+
+</div>

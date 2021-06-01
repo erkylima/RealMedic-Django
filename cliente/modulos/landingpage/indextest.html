@@ -1,0 +1,41 @@
+{% extends 'core/base/layout_base_cliente.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-9">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+							<div class="card card-post card-round">
+								<img class="card-img-top" src="{% static 'core/base/assets/img/maria eunice.jpeg' %}" alt="Card image cap">
+								<div class="card-body">
+									<div class="user-profile text-center">
+										<h3 class="name">Dra. Eunice Lima</h3>
+										<div class="job">Psicóloga Clinica</div>
+										<div class="social-media">
+											<a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#">
+												<span class="btn-label just-icon"><i class="flaticon-instagram"></i> </span>
+											</a>
+										</div>
+										<div class="view-profile">
+											<a href="#" class="btn btn-secondary btn-block">Ver Contato</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+{% endblock %}

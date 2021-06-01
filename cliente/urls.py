@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from cliente.views import ListaProfissionalListView, SobreListView, contact, ListaProfissionalAngolaListView
+from cliente.views import ListaProfissionalListView, SobreListView, contact, ListaProfissionalAngolaListView, IndexTest
 from core import views_core
 
 app_name = 'cliente'
@@ -9,5 +9,6 @@ urlpatterns = [
     path('', ListaProfissionalListView.as_view(), name="lista_prof"),
     path('ao', ListaProfissionalAngolaListView.as_view(), name="lista_angola"),
     path('sobre', SobreListView.as_view(), name="sobre"),
-    path('contato',contact,name='contato')
+    path('contato',contact,name='contato'),
+    path('indextest', IndexTest.as_view(), name="teste"),
 ]

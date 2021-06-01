@@ -9,6 +9,9 @@ from cliente.modulos.landingpage.ListaProfissional import ListaProfissional, Lis
 from core.modulos.tipo_profissional.tipo_profissional import TipoProfissional
 
 
+class IndexTest(TemplateView):
+    template_name = 'landingpage/indextest.html'
+
 class ListaProfissionalListView(TemplateView):
     template_name ='landingpage/index.html'
 
