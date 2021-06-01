@@ -91,10 +91,10 @@
                         <div class="filters-content">
                             <div class="row justify-content-between portfolio-grid">
                                 {% for profissional in lista %}
-                                    <div class="col-md-4 col-lg-3 all {{profissional.listaempresa.nome_slug}}">
+                                    <div class="col-md-4 mb-3 col-lg-3 all {{profissional.listaempresa.nome_slug}}">
                                         <div class="card card-post card-round">
                                             <img class="card-img-top" src="{{ profissional.imagem.url }}" alt="Card image cap">
-                                            <div class="card-body">
+                                            <div class="card-body ">
                                                 <div class="user-profile text-center">
                                                     <h3 style="color: #24BFB6;" class="name">{{ profissional.nome }}</h3>
                                                     <div>
