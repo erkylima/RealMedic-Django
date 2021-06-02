@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{% static 'landingpage/css/bootstrap.min.css'%}" />
     <!-- animate CSS -->
     <link rel="stylesheet" href="{% static 'landingpage/css/animate.css' %}" />
+    <!-- aos Animate CSS -->
+    <link rel="stylesheet" href="{% static 'landingpage/css/aos.css' %}" />
     <!-- owl carousel CSS -->
     <link rel="stylesheet" href="{% static 'landingpage/css/owl.carousel.min.css' %}" />
     <!-- themify CSS -->
@@ -34,6 +36,21 @@
     <link rel="stylesheet" href="{% static 'landingpage/css/slick.css' %}" />
     <!-- style CSS -->
     <link rel="stylesheet" href="{% static 'landingpage/css/style.css' %}" />
+
+    <!-- Fonts and icons -->
+    <script src="{% static 'core/base/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+        WebFont.load({
+            google: {"families": ["Lato:300,400,700,900"]},
+            custom: {
+                "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                urls: ["{% static 'core/base/assets/css/fonts.min.css'%}"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
     <!-- animated Modal -->
     <link rel="stylesheet" type="text/css" href="{% static 'landingpage/css/modaal.min.css' %}">
     <style>
@@ -83,9 +100,9 @@
                     <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
                         <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
                     </a>
-                    <label style="color: white" for="cidade" class="mr-1">Cidade: </label>
+                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% else %}Cidade: {% endif %}</label>
                     <select name="cidade" id="cidade">
-                        <option value="">Floresta-PE</option>
+                        <option value="">{{ municipio }}{{ cidade }}</option>
                     </select>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="ti-menu"></span>
@@ -218,6 +235,8 @@
 <script src="{% static 'landingpage/js/swiper.min.js'%}"></script>
 <!-- isotope js -->
 <script src="{% static 'landingpage/js/isotope.pkgd.min.js'%}"></script>
+<!-- aos animate js -->
+<script src="{% static 'landingpage/js/aos.js'%}"></script>
 <!-- particles js -->
 <script src="{% static 'landingpage/js/owl.carousel.min.js'%}"></script>
 <script src="{% static 'landingpage/js/jquery.nice-select.min.js'%}"></script>

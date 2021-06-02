@@ -1850,7 +1850,7 @@ ul {
         position: absolute;
         bottom: 0;
         z-index: 100;
-        opacity: 0;
+        opacity: 1;/* se for 1 texto na foto fica sempre visivel se for 0 só mostra com mouse em cima*/
         -webkit-transition: 0.5s;
         transition: 0.5s;
         background-color: #fff;
@@ -2035,7 +2035,7 @@ ul {
 .cta_part {
   position: relative;
   z-index: 1;
-  background-image: url("../img/cta_bg.png");
+  background-image: url("../img/cta_bg.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

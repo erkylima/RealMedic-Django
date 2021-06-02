@@ -9,6 +9,8 @@
         }
     });
 
+      AOS.init();
+
     $(".popup-youtube, .popup-vimeo").magnificPopup({
         // disableOn: 700,
         type: "iframe",
