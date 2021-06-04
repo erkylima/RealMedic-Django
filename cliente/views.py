@@ -24,9 +24,9 @@ class ListaProfissionalListView(TemplateView):
         context['pesquisa'] = str(pesquisa)
         if (pesquisa != None):
             context['lista'] = ListaProfissional.objects.filter(especi__descricao__icontains=str(pesquisa),
-                                                                listaempresa__pais__nome__icontains='Brasil').order_by('?')
+                                                                listaempresa__pais__nome__icontains='Brasil', ativo=True).order_by('?')
         else:
-            context['lista'] = ListaProfissional.objects.filter(listaempresa__pais__nome__icontains='Brasil').order_by('?')
+            context['lista'] = ListaProfissional.objects.filter(listaempresa__pais__nome__icontains='Brasil', ativo=True).order_by('?')
         return context
 
 class ListaProfissionalAngolaListView(TemplateView):
