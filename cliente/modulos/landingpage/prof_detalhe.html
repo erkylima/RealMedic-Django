@@ -1,0 +1,166 @@
+{% extends 'landingpage/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <section class="breadcrumb breadcrumb_bg align-items-center">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-sm-6">
+                    <div class="breadcrumb_tittle">
+                        <p>Início . Detalhes do Profissional</p>
+                        <h2>Mais Informações</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog_area single-post-area padding_top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 posts-list">
+                    <div class="single-post">
+                    <div class="view-profile">
+                                    <a href="#" style="background: #01c4ba; color: #fff; " class="btn">Agendar Consulta</a>
+
+                                </div>
+                        <div class="mb-5 all {{object.listaempresa.nome_slug}}">
+                            <div class="card card-post card-round">
+
+                                <div class="card-header">
+                                    <div class="user-profile text-left">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <img class="m-4" src="{{ object.imagem.url }}" alt="Card image cap">
+                                            </div>
+                                            <div class="col-8">
+                                                <h3 style="color: #24BFB6;" class="ml-4 mt-5 name">{{ object.nome }}</h3>
+                                                <div class="ml-4 mt-2">
+                                                    <span class="text-left">
+                                                        <i class="fas fa-stethoscope"></i>
+                                                        {% for atends in object.especi.values %}
+                                                            {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
+                                                        {% endfor %}
+                                                    </span>
+
+                                                </div>
+
+
+                                                <div class="social-media">
+                                                    <a class="btn btn-sm btn-link" rel="publisher" href="#">
+                                                        {#                                                        <span class="btn-label just-icon"><i class="flaticon-instagram"></i> </span>#}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-body ">
+
+
+                                </div>
+                                <div class="card-footer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blog_details">
+                            <p>
+                                Texto qualquer. However, who has
+                                the willpower to actually sit through a self-imposed MCSE
+                                training.
+                            </p>
+                            <div class="quote-wrapper">
+                                <div class="quotes">
+                                    MCSE boot camps have its supporters and its detractors. Some
+                                    people do not understand why you should have to spend money
+                                    on boot camp when you can get the MCSE study materials
+                                    yourself at a fraction of the camp price. However, who has
+                                    the willpower to actually sit through a self-imposed MCSE
+                                    training.
+                                </div>
+                            </div>
+
+                            <p>
+                                Texto qualquer. However, who has
+                                the willpower to actually sit through a self-imposed MCSE
+                                training.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="navigation-top">
+                        <div class="d-sm-flex justify-content-between text-center">
+                            <p class="like-info">
+
+                            </p>
+                            <div class="col-sm-4 text-center my-2 my-sm-0">
+
+                            </div>
+                            <ul class="social-icons">
+                                <li>
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fab fa-dribbble"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fab fa-behance"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="navigation-area">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                                    <div class="thumb">
+                                        <a href="#">
+                                            <img class="img-fluid" src="img/post/preview.png" alt="" data-pagespeed-url-hash="3709936558" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                                        </a>
+                                    </div>
+                                    <div class="arrow">
+                                        <a href="#">
+                                            <span class="lnr text-white ti-arrow-left"></span>
+                                        </a>
+                                    </div>
+                                    <div class="detials">
+                                        <p>Prev Post</p>
+                                        <a href="#">
+                                            <h4>Space The Final Frontier</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                                    <div class="detials">
+                                        <p>Next Post</p>
+                                        <a href="#">
+                                            <h4>Telescopes 101</h4>
+                                        </a>
+                                    </div>
+                                    <div class="arrow">
+                                        <a href="#">
+                                            <span class="lnr text-white ti-arrow-right"></span>
+                                        </a>
+                                    </div>
+                                    <div class="thumb">
+                                        <a href="#">
+                                            <img class="img-fluid" src="img/post/next.png" alt="" data-pagespeed-url-hash="4198664587" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
