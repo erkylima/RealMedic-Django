@@ -38,6 +38,10 @@ class OverwriteStorage(FileSystemStorage):
             self.delete(name)
         return name
 
+class Cidade(models.Model):
+    nome = models.CharField(max_length=30)
+    uf = models.CharField(max_length=4)
+    slug = models.SlugField()
 
 class ListaProfissional(Timestampable):
     class Meta:
@@ -51,6 +55,9 @@ class ListaProfissional(Timestampable):
     imagem = models.ImageField(upload_to='images/profs', name='', storage=OverwriteStorage(),default='')
     servicos = models.TextField(default='')
     ativo = models.BooleanField(default=True)
+    telefone1 = models.CharField(max_length=50,default='')
+    telefone2 = models.CharField(max_length=50, default='', null=True, blank=True)
+
     def __str__(self):
         return self.nome.upper()
 

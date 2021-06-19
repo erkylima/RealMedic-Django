@@ -100,10 +100,12 @@
                     <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
                         <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
                     </a>
-                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% else %}Cidade: {% endif %}</label>
+                    {% if municipio or cidade %}
+                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% elif cidade %}Cidade: {% endif %}</label>
                     <select name="cidade" id="cidade">
-                        <option value="">{{ municipio }}{{ cidade }}</option>
+                        <option value="">{% if municipio %}{{ municipio }}{% elif cidade %}{{ cidade }}{% endif %}</option>
                     </select>
+                    {% endif %}
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="ti-menu"></span>
                     </button>

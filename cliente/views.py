@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 from cliente.models import ContactForm, Contact
 from cliente.modulos.landingpage.ListaProfissional import ListaProfissional, ListaEmpresa
@@ -48,11 +48,14 @@ class ListaProfissionalAngolaListView(TemplateView):
         return context
 
 
+class ProfissionalDetail(DetailView):
+    template_name = 'landingpage/prof_detalhe.html'
+    model = ListaProfissional
 
 
 class SobreListView(TemplateView):
     template_name ='landingpage/about.html'
-
+        
 
 def contact(request):
     if request.method == 'POST':

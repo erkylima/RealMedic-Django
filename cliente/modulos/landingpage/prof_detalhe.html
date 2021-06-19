@@ -22,47 +22,62 @@
             <div class="row">
                 <div class="col-lg-12 posts-list">
                     <div class="single-post">
-                    <div class="view-profile">
-                                    <a href="#" style="background: #01c4ba; color: #fff; " class="btn">Agendar Consulta</a>
-
-                                </div>
                         <div class="mb-5 all {{object.listaempresa.nome_slug}}">
                             <div class="card card-post card-round">
-
-                                <div class="card-header">
+                                <div class="card-body">
                                     <div class="user-profile text-left">
                                         <div class="row">
-                                            <div class="col-4">
+                                            <div class="col-lg-4">
                                                 <img class="m-4" src="{{ object.imagem.url }}" alt="Card image cap">
                                             </div>
-                                            <div class="col-8">
+                                            <div class="col-lg-8">
                                                 <h3 style="color: #24BFB6;" class="ml-4 mt-5 name">{{ object.nome }}</h3>
                                                 <div class="ml-4 mt-2">
-                                                    <span class="text-left">
+                                                    <span class="text-left" style="display: inline-block">
                                                         <i class="fas fa-stethoscope"></i>
                                                         {% for atends in object.especi.values %}
                                                             {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
                                                         {% endfor %}
                                                     </span>
-
                                                 </div>
-
+                                                <hr>
 
                                                 <div class="social-media">
                                                     <a class="btn btn-sm btn-link" rel="publisher" href="#">
-                                                        {#                                                        <span class="btn-label just-icon"><i class="flaticon-instagram"></i> </span>#}
+                                                        {#                                                        <span class="btn-label just-icon" style="color: purple"><i class="flaticon-instagram"></i> </span>#}
                                                     </a>
+                                                </div>
+
+                                                <div class="ml-4">
+                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content" id="myTabContent">
+                                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                            <div class="quotes mt-3">
+                                                                Endereço: {{object.local_atendimento}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                                                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="card-body ">
-
-
-                                </div>
                                 <div class="card-footer">
+                                    <a class="genric-btn clearfix" style="background: #01c4ba; color: #fff;" href="https://wa.me/55{{object.telefone1}}?&text=Olá,%20tudo%20bem?%20Quero%20fazer%20um%20atendimento%20com%20{{ object.nome }}" >Agendar Consulta</a>
                                 </div>
                             </div>
                         </div>
