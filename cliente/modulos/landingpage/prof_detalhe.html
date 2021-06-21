@@ -3,43 +3,43 @@
 
 {% block header %}
     <header class="main_menu home_menu" style="background: #16a099">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-12">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
-                        <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
-                    </a>
-                    {% if municipio or cidade %}
-                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% elif cidade %}Cidade: {% endif %}</label>
-                    <select name="cidade" id="cidade">
-                        <option value="">{% if municipio %}{{ municipio }}{% elif cidade %}{{ cidade }}{% endif %}</option>
-                    </select>
-                    {% endif %}
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="ti-menu"></span>
-                    </button>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
+                            <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
+                        </a>
+                        {% if municipio or cidade %}
+                            <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% elif cidade %}Cidade: {% endif %}</label>
+                            <select name="cidade" id="cidade">
+                                <option value="">{% if municipio %}{{ municipio }}{% elif cidade %}{{ cidade }}{% endif %}</option>
+                            </select>
+                        {% endif %}
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="ti-menu"></span>
+                        </button>
 
-                    <div class="collapse navbar-collapse main-menu-item justify-content-center" id="navbarSupportedContent">
-                        <ul class="navbar-nav align-items-center">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'core:cliente:lista_prof' %}">Início</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'core:cliente:sobre' %}">Sobre</a>
-                            </li>
+                        <div class="collapse navbar-collapse main-menu-item justify-content-center" id="navbarSupportedContent">
+                            <ul class="navbar-nav align-items-center">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'core:cliente:lista_prof' %}">Início</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'core:cliente:sobre' %}">Sobre</a>
+                                </li>
 
-                        </ul>
-                    </div>
-                    <div class="social_icon d-none d-lg-block">
-                        {#                        <a href=""><i class="ti-facebook"></i></a>#}
-                        <a href="https://instagram.com/forclin"><i class="ti-instagram"></i></a>
-                    </div>
-                </nav>
+                            </ul>
+                        </div>
+                        <div class="social_icon d-none d-lg-block">
+                            {#                        <a href=""><i class="ti-facebook"></i></a>#}
+                            <a href="https://instagram.com/forclin"><i class="ti-instagram"></i></a>
+                        </div>
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
 {% endblock %}
 
@@ -52,7 +52,7 @@
                         <div class="mb-5 all {{object.listaempresa.nome_slug}}">
                             <div class="card card-post card-round">
                                 <div class="card-header">
-                                    <a href="javascript:history.back()">Go Back</a>
+                                    <a style="color: #0a0b11" href="javascript:history.back()">Voltar</a>
                                 </div>
                                 <div class="card-body">
                                     <div class="user-profile text-left">
@@ -69,15 +69,15 @@
                                                             {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
                                                         {% endfor %}
                                                     </span>
+                                                <div class="social_icon">
+                                                    {% if object.facebook %}<a style="color:#01c4ba;" href="https://facebook.com/{{ object.facebook }}"><i class="ti-facebook"></i></a>{% endif %}
+                                                    {% if object.instagram %}<a style="color:#01c4ba;" href="https://instagram.com/{{ object.instagram }}"><i class="ti-instagram"></i></a>{% endif %}
+                                                </div>
                                                 </div>
 
                                                 <hr>
 
-                                                <div class="social-media">
-                                                    <a class="btn btn-sm btn-link" rel="publisher" href="#">
-                                                        {#                                                        <span class="btn-label just-icon" style="color: purple"><i class="flaticon-instagram"></i> </span>#}
-                                                    </a>
-                                                </div>
+
 
                                                 <div class="ml-4">
                                                     <h3>Atendimentos:</h3>
@@ -93,7 +93,7 @@
 
                                                         <h3>
                                                             Endereços na Clínica {{ empresa.nome }}
-                                                            <a target="_blank" class="genric-btn clearfix" style="background: #01c4ba; color: #fff;" href="https://wa.me/55{{object.telefone1}}?&text=Olá,%20tudo%20bem?%20Quero%20fazer%20um%20atendimento%20com%20{{ object.nome }}" >Agendar Consulta</a>
+                                                            <a target="_blank" class="genric-btn" style="background: #01c4ba; color: #fff;" href="https://wa.me/55{{object.telefone1}}?&text=Olá,%20tudo%20bem?%20Quero%20fazer%20um%20atendimento%20com%20{{ object.nome }}" >Agendar Consulta</a>
                                                         </h3>
 
 

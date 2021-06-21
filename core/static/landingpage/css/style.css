@@ -408,7 +408,7 @@ ul {
 .latest-blog-area .area-heading {
   margin-bottom: 70px; }
 
-.blog_area a {
+.blog_area nav-link a {
   color: #848484 !important;
   text-decoration: none;
   -webkit-transition: 0.5s;
@@ -2547,7 +2547,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid #f9f9ff;
     background: #fff; }
     .genric-btn.default-border:hover {
-      color: #415094;
+      color: #fff;
       background: #f9f9ff;
       border: 1px solid transparent; }
   .genric-btn.primary {
@@ -2631,7 +2631,7 @@ h1, h2, h3, h4, h5, h6 {
       background: #f44a40;
       border: 1px solid transparent; }
   .genric-btn.link {
-    color: #415094;
+    color: #fff;
     background: #f9f9ff;
     text-decoration: underline;
     border: 1px solid transparent; }
@@ -2649,7 +2649,7 @@ h1, h2, h3, h4, h5, h6 {
       background: #f9f9ff;
       border: 1px solid transparent; }
   .genric-btn.disable {
-    color: #222222, 0.3;
+    color: #222222;
     background: #f9f9ff;
     border: 1px solid transparent;
     cursor: not-allowed; }

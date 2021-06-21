@@ -16,7 +16,7 @@ copy_items.short_description = 'Copy Items'
 
 class CidadeAdmin(admin.ModelAdmin):
     list_display = [
-        'nome','uf'
+        'Endereco','uf'
     ]
     list_filter = ['nome', 'uf']
     search_fields = ['nome', 'uf']

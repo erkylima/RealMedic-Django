@@ -38,9 +38,12 @@ class Endereco(models.Model):
     cep = models.IntegerField(default=0)
     uf = models.CharField(max_length=4)
     slug = models.SlugField()
+
     def __str__(self):
         return self.nome + "-" +self.uf
 
+    def Endereco(self):
+        return "Endereço da " + self.empresa.nome
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length):
@@ -69,6 +72,8 @@ class ListaProfissional(Timestampable):
     ativo = models.BooleanField(default=True)
     telefone1 = models.CharField(max_length=50,default='')
     telefone2 = models.CharField(max_length=50, default='', null=True, blank=True)
+    instagram = models.CharField(max_length=50, default='', null=True, blank=True)
+    facebook = models.CharField(max_length=50, default='', null=True, blank=True)
 
     def __str__(self):
         return self.nome.upper()
