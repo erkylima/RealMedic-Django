@@ -52,6 +52,14 @@ class ProfissionalDetail(DetailView):
     template_name = 'landingpage/prof_detalhe.html'
     model = ListaProfissional
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfissionalDetail, self).get_context_data(**kwargs)
+        context['empresas'] = ListaEmpresa.objects.filter(listaprofissional=self.object)
+        return context
+
+
+
+
 
 class SobreListView(TemplateView):
     template_name ='landingpage/about.html'

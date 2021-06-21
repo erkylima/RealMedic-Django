@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from cliente.models import Contact
-from cliente.modulos.landingpage.ListaProfissional import ListaEmpresa, ListaProfissional, Pais, Cidade
+from cliente.modulos.landingpage.ListaProfissional import ListaEmpresa, ListaProfissional, Pais, Endereco
 
 
 def copy_items(modeladmin, request, queryset):
@@ -35,4 +35,4 @@ class ListaProfissional(admin.ModelAdmin):
     list_display = ("nome", "Especialidades")
 
 admin.site.register(Pais)
-admin.site.register(Cidade, CidadeAdmin)
+admin.site.register(Endereco, CidadeAdmin)

@@ -15,7 +15,9 @@ class Pais(models.Model):
     def __str__(self):
         return self.nome
 
+
 class ListaEmpresa(Timestampable):
+
     class Meta:
         verbose_name = 'Lista de Empresa LandingPage'
         verbose_name_plural = 'Lista de Empresa LandingPage'
@@ -23,8 +25,21 @@ class ListaEmpresa(Timestampable):
     nome = models.CharField(max_length=100,default='')
     nome_slug = models.CharField(max_length=50, default='all')
     ativo = models.BooleanField(default=True)
+
     def __str__(self):
         return self.nome.upper()
+
+class Endereco(models.Model):
+    empresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT, related_name='enderecos',default=1)
+    nome = models.CharField(max_length=30)
+    rua = models.CharField(max_length=100, default="")
+    numero = models.IntegerField(default=0)
+    cidade = models.CharField(max_length=50, default="")
+    cep = models.IntegerField(default=0)
+    uf = models.CharField(max_length=4)
+    slug = models.SlugField()
+    def __str__(self):
+        return self.nome + "-" +self.uf
 
 
 class OverwriteStorage(FileSystemStorage):
@@ -38,16 +53,13 @@ class OverwriteStorage(FileSystemStorage):
             self.delete(name)
         return name
 
-class Cidade(models.Model):
-    nome = models.CharField(max_length=30)
-    uf = models.CharField(max_length=4)
-    slug = models.SlugField()
 
 class ListaProfissional(Timestampable):
+
     class Meta:
         verbose_name = 'Lista de LandingPage'
         verbose_name_plural = 'Lista de LandingPage'
-    listaempresa = models.ForeignKey(ListaEmpresa, on_delete=models.PROTECT,related_name='prof',default=1)
+    listaempresa = models.ManyToManyField(ListaEmpresa)
     nome = models.CharField(max_length=100,default='')
     especi = models.ManyToManyField(TipoProfissional, related_name='espec')
     agenda = models.CharField(max_length=100,default='')

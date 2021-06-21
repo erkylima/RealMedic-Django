@@ -1,22 +1,49 @@
 {% extends 'landingpage/base.html' %}
 {% load static %}
 
+{% block header %}
+    <header class="main_menu home_menu" style="background: #16a099">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="{% url 'core:cliente:lista_prof' %}">
+                        <img src="{% static 'landingpage/img/logo.png' %}" alt="logo" />
+                    </a>
+                    {% if municipio or cidade %}
+                    <label style="color: white" for="cidade" class="mr-1">{% if municipio  %} Município: {% elif cidade %}Cidade: {% endif %}</label>
+                    <select name="cidade" id="cidade">
+                        <option value="">{% if municipio %}{{ municipio }}{% elif cidade %}{{ cidade }}{% endif %}</option>
+                    </select>
+                    {% endif %}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="ti-menu"></span>
+                    </button>
 
-{% block content %}
+                    <div class="collapse navbar-collapse main-menu-item justify-content-center" id="navbarSupportedContent">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'core:cliente:lista_prof' %}">Início</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'core:cliente:sobre' %}">Sobre</a>
+                            </li>
 
-    <section class="breadcrumb breadcrumb_bg align-items-center">
-        <div class="container">
-            <div class="row align-items-center justify-content-between">
-                <div class="col-sm-6">
-                    <div class="breadcrumb_tittle">
-                        <p>Início . Detalhes do Profissional</p>
-                        <h2>Mais Informações</h2>
+                        </ul>
                     </div>
-                </div>
+                    <div class="social_icon d-none d-lg-block">
+                        {#                        <a href=""><i class="ti-facebook"></i></a>#}
+                        <a href="https://instagram.com/forclin"><i class="ti-instagram"></i></a>
+                    </div>
+                </nav>
             </div>
         </div>
-    </section>
+    </div>
+</header>
 
+{% endblock %}
+
+{% block content %}
     <section class="blog_area single-post-area padding_top">
         <div class="container">
             <div class="row">
@@ -24,6 +51,9 @@
                     <div class="single-post">
                         <div class="mb-5 all {{object.listaempresa.nome_slug}}">
                             <div class="card card-post card-round">
+                                <div class="card-header">
+                                    <a href="javascript:history.back()">Go Back</a>
+                                </div>
                                 <div class="card-body">
                                     <div class="user-profile text-left">
                                         <div class="row">
@@ -40,6 +70,7 @@
                                                         {% endfor %}
                                                     </span>
                                                 </div>
+
                                                 <hr>
 
                                                 <div class="social-media">
@@ -49,62 +80,73 @@
                                                 </div>
 
                                                 <div class="ml-4">
-                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                                        <li class="nav-item" role="presentation">
-                                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
-                                                        </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-                                                        </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-                                                        </li>
-                                                    </ul>
-                                                    <div class="tab-content" id="myTabContent">
-                                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                                            <div class="quotes mt-3">
-                                                                Endereço: {{object.local_atendimento}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                                                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-                                                    </div>
+                                                    <h3>Atendimentos:</h3>
 
+                                                    <p>
+                                                        {{ object.servicos | linebreaks }}
+                                                    </p>
                                                 </div>
+                                                <div class="ml-4  mt-2">
+
+
+                                                    {% for empresa in empresas %}
+
+                                                        <h3>
+                                                            Endereços na Clínica {{ empresa.nome }}
+                                                            <a target="_blank" class="genric-btn clearfix" style="background: #01c4ba; color: #fff;" href="https://wa.me/55{{object.telefone1}}?&text=Olá,%20tudo%20bem?%20Quero%20fazer%20um%20atendimento%20com%20{{ object.nome }}" >Agendar Consulta</a>
+                                                        </h3>
+
+
+                                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                                                            <br>
+                                                            {% for cidade in empresa.enderecos.values %}
+                                                                {% if forloop.counter == 1 %}
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <a class="nav-link active" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="true">{{ cidade.nome }}-{{ cidade.uf }}</a>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <a class="nav-link" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="false">{{ cidade.nome }}-{{ cidade.uf }}</a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            <li class="nav-item" role="presentation">
+
+                                                            </li>
+                                                        </ul>
+
+
+                                                        <div class="tab-content mb-5" id="myTabContent">
+
+
+                                                            {% for endereco in empresa.enderecos.values_list %}
+
+                                                                <div class="tab-pane fade show active" id="{{ cidade.slug }}{{forloop.counter}}" role="tabpanel" aria-labelledby="{{ cidade.slug }}-tab">
+                                                                    <div class="quotes mt-3">
+                                                                        Nome da Clinica: {{ empresa.nome }}<br>
+                                                                        Endereço: {{object.local_atendimento}}
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+
+
+
+                                                        </div>
+
+                                                        </div>
+                                                    {% endfor %}
+
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="card-footer">
-                                    <a class="genric-btn clearfix" style="background: #01c4ba; color: #fff;" href="https://wa.me/55{{object.telefone1}}?&text=Olá,%20tudo%20bem?%20Quero%20fazer%20um%20atendimento%20com%20{{ object.nome }}" >Agendar Consulta</a>
-                                </div>
+
                             </div>
                         </div>
 
-                        <div class="blog_details">
-                            <p>
-                                Texto qualquer. However, who has
-                                the willpower to actually sit through a self-imposed MCSE
-                                training.
-                            </p>
-                            <div class="quote-wrapper">
-                                <div class="quotes">
-                                    MCSE boot camps have its supporters and its detractors. Some
-                                    people do not understand why you should have to spend money
-                                    on boot camp when you can get the MCSE study materials
-                                    yourself at a fraction of the camp price. However, who has
-                                    the willpower to actually sit through a self-imposed MCSE
-                                    training.
-                                </div>
-                            </div>
 
-                            <p>
-                                Texto qualquer. However, who has
-                                the willpower to actually sit through a self-imposed MCSE
-                                training.
-                            </p>
-                        </div>
                     </div>
                     <div class="navigation-top">
                         <div class="d-sm-flex justify-content-between text-center">
