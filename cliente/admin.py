@@ -32,7 +32,7 @@ class ListaEmpresa(admin.ModelAdmin):
 
 @admin.register(ListaProfissional)
 class ListaProfissional(admin.ModelAdmin):
-    list_display = ("nome", "Especialidades")
+    list_display = ("nome", "Especialidades", "ativo")
 
 admin.site.register(Pais)
 admin.site.register(Endereco, CidadeAdmin)
