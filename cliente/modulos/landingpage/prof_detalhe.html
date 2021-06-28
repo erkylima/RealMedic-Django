@@ -103,11 +103,11 @@
                                                             {% for cidade in empresa.enderecos.values %}
                                                                 {% if forloop.counter == 1 %}
                                                                     <li class="nav-item" role="presentation">
-                                                                        <a class="nav-link active" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="true">{{ cidade.nome }}-{{ cidade.uf }}</a>
+                                                                        <a class="nav-link active" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="true">{{ cidade.cidade }}-{{ cidade.uf }}</a>
                                                                     </li>
                                                                 {% else %}
                                                                     <li class="nav-item" role="presentation">
-                                                                        <a class="nav-link" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="false">{{ cidade.nome }}-{{ cidade.uf }}</a>
+                                                                        <a class="nav-link" id="{{ cidade.slug }}-tab" data-toggle="tab" href="#{{ cidade.slug }}{{forloop.counter}}" role="tab" aria-controls="{{ cidade.slug }}{{forloop.counter}}" aria-selected="false">{{ cidade.cidade }}-{{ cidade.uf }}</a>
                                                                     </li>
                                                                 {% endif %}
                                                             {% endfor %}
