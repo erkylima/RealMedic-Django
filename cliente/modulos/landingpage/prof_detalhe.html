@@ -1,6 +1,19 @@
 {% extends 'landingpage/base.html' %}
 {% load static %}
 
+{% block metainfo %}
+
+    <meta name="title" content="ForClin - Conectando você à saúde">
+    <meta name="keywords" content="ForClin, medicos, RealMedic, Real, Medic, consulta, médico, quero médico, quero consulta, medicos floresta, floresta, medico, {{ object.nome }}">
+    <link rel='preload' as='image' href="{{object.imagem.url}}">
+    <meta name="msapplication-TileImage" content="https://{{ request.META.HTTP_HOST }}{{ object.imagem.url }}">
+    <meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{{ object.imagem.url }}"/>
+    <meta property="og:site_name" content="{{object.nome}}"/>
+    <meta property="og:image:width" content="640"/>
+    <meta property="og:image:height" content="360"/>
+
+{% endblock %}
+
 {% block header %}
     <header class="main_menu home_menu" style="background: #16a099">
         <div class="container">
@@ -69,10 +82,10 @@
                                                             {{ atends.descricao | lower|capfirst  }} {% if not forloop.last %} e {% endif %}
                                                         {% endfor %}
                                                     </span>
-                                                <div class="social_icon">
-                                                    {% if object.facebook %}<a style="color:#01c4ba;" href="https://facebook.com/{{ object.facebook }}"><i class="ti-facebook"></i></a>{% endif %}
-                                                    {% if object.instagram %}<a style="color:#01c4ba;" href="https://instagram.com/{{ object.instagram }}"><i class="ti-instagram"></i></a>{% endif %}
-                                                </div>
+                                                    <div class="social_icon">
+                                                        {% if object.facebook %}<a style="color:#01c4ba;" href="https://facebook.com/{{ object.facebook }}"><i class="ti-facebook"></i></a>{% endif %}
+                                                        {% if object.instagram %}<a style="color:#01c4ba;" href="https://instagram.com/{{ object.instagram }}"><i class="ti-instagram"></i></a>{% endif %}
+                                                    </div>
                                                 </div>
 
                                                 <hr>
