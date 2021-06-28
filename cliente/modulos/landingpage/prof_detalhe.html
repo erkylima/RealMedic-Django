@@ -120,12 +120,12 @@
                                                         <div class="tab-content mb-5" id="myTabContent">
 
 
-                                                            {% for endereco in empresa.enderecos.values_list %}
+                                                            {% for endereco in empresa.enderecos.values %}
 
                                                                 <div class="tab-pane fade show active" id="{{ cidade.slug }}{{forloop.counter}}" role="tabpanel" aria-labelledby="{{ cidade.slug }}-tab">
                                                                     <div class="quotes mt-3">
                                                                         Nome da Clinica: {{ empresa.nome }}<br>
-                                                                        Endereço: {{object.local_atendimento}}
+                                                                        Endereço: {{endereco.rua}}, Nº {{ endereco.numero }}, {{endereco.cidade}}-{{ endereco.uf }}
                                                                     </div>
                                                                 </div>
                                                             {% endfor %}
